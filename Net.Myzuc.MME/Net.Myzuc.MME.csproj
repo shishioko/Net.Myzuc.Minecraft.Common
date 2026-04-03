@@ -14,4 +14,12 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Me.Shiokawaii.IO" Version="1.0.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Net.Myzuc.MME.Data\Net.Myzuc.MME.Data.csproj" />
+    </ItemGroup>
+
 </Project>
