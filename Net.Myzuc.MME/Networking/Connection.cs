@@ -22,8 +22,8 @@ namespace Net.Myzuc.MME.Networking
         internal int CompressionThreshold { get; set; } = -1;
         public Packet.ProtocolStageEnum ProtocolStage { get; internal set; } = Packet.ProtocolStageEnum.Handshake;
         
-        public event EventHandler<PacketEventArgs> OnPacketRead = (sender, args) => {};
-        public event EventHandler<PacketEventArgs> OnPacketWrite = (sender, args) => {};
+        public event EventHandler<Packet> OnPacketRead = (sender, args) => {};
+        public event EventHandler<Packet> OnPacketWrite = (sender, args) => {};
         public event EventHandler OnDispose = (sender, args) => { };
         
         public Connection(Stream stream)
@@ -36,11 +36,7 @@ namespace Net.Myzuc.MME.Networking
             int id = ms.ReadS32V();
             Packet packet = Packet.Create(true, ProtocolStage, id) ?? throw new ProtocolViolationException($"Unknown Packet 0x{id:X2}!");
             packet.Deserialize(ms);
-            PacketEventArgs args = new()
-            {
-                Packet = packet,
-            };
-            OnPacketRead(this, args);
+            OnPacketRead(this, packet);
             return packet;
             
             async Task<MemoryStream> readRawAsync()
@@ -56,11 +52,7 @@ namespace Net.Myzuc.MME.Networking
         }
         public async Task WriteAsync(Packet packet)
         {
-            PacketEventArgs args = new()
-            {
-                Packet = packet,
-            };
-            OnPacketWrite(this, args);
+            OnPacketWrite(this, packet);
             using MemoryStream ms = new();
             ms.WriteS32V(packet.Id);
             packet.Serialize(ms);
