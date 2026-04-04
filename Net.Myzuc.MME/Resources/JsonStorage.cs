@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Net.Myzuc.MME.Objects.JsonConverters;
 
 namespace Net.Myzuc.MME.Resources
 {
@@ -11,7 +12,11 @@ namespace Net.Myzuc.MME.Resources
         {
             JsonSerializerOptions = new(jsonSerializerOptions ?? new(JsonSerializerDefaults.General))
             {
-                Converters = {  },
+               
+                Converters =
+                {
+                    new IPEndPointConverter()
+                },
                 PreferredObjectCreationHandling = JsonObjectCreationHandling.Replace,
             
                 NumberHandling =  JsonNumberHandling.AllowReadingFromString |  JsonNumberHandling.AllowNamedFloatingPointLiterals,
