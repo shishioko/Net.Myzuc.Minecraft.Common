@@ -12,11 +12,11 @@ namespace Net.Myzuc.MME
         public static event EventHandler OnUnload = (sender, args) => { };
         internal static async Task Main(string[] args)
         {
-            Logs.Info("Starting MME...");
+            Logs.Verbose("Starting MME...");
             IEnumerable<Assembly> assemblies = [];
             try
             {
-                Logs.Info("Loading libraries...");
+                Logs.Verbose("Loading libraries...");
                 FileInfo[] files = Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "Libraries")).GetFiles("*.dll", SearchOption.AllDirectories);
                 assemblies = (await Task.WhenAll(
                     files.Select(
@@ -25,7 +25,7 @@ namespace Net.Myzuc.MME
                             try
                             {
                                 Assembly assembly = await AssemblyLoadContext.Default.LoadFromAssemblyPathAsync(file.FullName);
-                                Logs.Info($"Loaded library \"{assembly.GetName().GetVersionedName()}\" from \"{file.FullName}\".");
+                                Logs.Verbose($"Loaded library \"{assembly.GetName().GetVersionedName()}\" from \"{file.FullName}\".");
                                 return assembly;
                             }
                             catch (Exception ex)
@@ -36,7 +36,7 @@ namespace Net.Myzuc.MME
                         }
                     )
                 )).Where(assembly => assembly != null)!;
-                Logs.Info("Loaded libraries.");
+                Logs.Verbose("Loaded libraries.");
             }
             catch (Exception ex)
             {
@@ -44,7 +44,7 @@ namespace Net.Myzuc.MME
             }
             try
             {
-                Logs.Info("Initializing modules...");
+                Logs.Verbose("Initializing modules...");
                 await Task.WhenAll(
                     assemblies.SelectMany(assembly =>
                         assembly.GetTypes().SelectMany(type =>
@@ -54,7 +54,7 @@ namespace Net.Myzuc.MME
                                     try
                                     {
                                         if (method.Invoke(null, null) is Task task) await task;
-                                        Logs.Info($"Initialized module \"{type.Name}\" from \"{assembly.GetName().GetVersionedName()}\" using \"{method.Name}\".");
+                                        Logs.Verbose($"Initialized module \"{type.Name}\" from \"{assembly.GetName().GetVersionedName()}\" using \"{method.Name}\".");
                                     }
                                     catch (Exception ex)
                                     {
@@ -65,7 +65,7 @@ namespace Net.Myzuc.MME
                         )
                     )
                 );
-                Logs.Info("Initialized modules.");
+                Logs.Verbose("Initialized modules.");
             }
             catch (Exception ex)
             {

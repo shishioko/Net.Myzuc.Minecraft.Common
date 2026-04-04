@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace Net.Myzuc.MME.Resources
 {
     public abstract class Resource<T> : IDisposable where T : class
@@ -10,7 +8,9 @@ namespace Net.Myzuc.MME.Resources
             get
             {
                 ObjectDisposedException.ThrowIf(Disposed, this);
-                return InternalValue ?? throw new InvalidOperationException("Tried to read unloaded resource.");
+                if (InternalValue is not null) return InternalValue;
+                Logs.Debug($"Tried to read unloaded resource \"{Identifier}\"!");
+                throw new InvalidOperationException("Tried to read unloaded resource.");
             }
             set
             {
