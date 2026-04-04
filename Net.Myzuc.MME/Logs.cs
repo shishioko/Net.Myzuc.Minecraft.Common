@@ -51,10 +51,21 @@ namespace Net.Myzuc.MME
                 Thread thread = new(
                     () =>
                     {
-                        while (true)
+                        try
                         {
-                            if (!Queue.TryDequeue(out LogMessage? message)) continue;
-                            OnLine(null, message);
+                            while (true)
+                            {
+                                if (!Queue.TryDequeue(out LogMessage? message))
+                                {
+                                    Thread.Yield();
+                                    continue;
+                                }
+                                OnLine(null, message);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error while logging: {ex}");
                         }
                     }
                 )
@@ -93,7 +104,7 @@ namespace Net.Myzuc.MME
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error while initializing Logger: {ex}");
+                Console.WriteLine($"Error while initializing logger: {ex}");
             }
         }
         public static void Debug(string message)
