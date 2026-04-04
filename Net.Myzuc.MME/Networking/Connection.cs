@@ -2,7 +2,6 @@ using System.IO.Compression;
 using System.Net;
 using Me.Shiokawaii.IO;
 using Net.Myzuc.MME.Data.Packets;
-using Net.Myzuc.MME.Events;
 
 namespace Net.Myzuc.MME.Networking
 {
