@@ -18,5 +18,9 @@
     <ItemGroup>
       <PackageReference Include="Me.Shiokawaii.IO" Version="1.0.4" />
     </ItemGroup>
+    
+    <PropertyGroup>
+        <NoWarn>$(NoWarn);NU5125</NoWarn>
+    </PropertyGroup>
 
 </Project>
