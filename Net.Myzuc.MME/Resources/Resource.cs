@@ -118,21 +118,21 @@ namespace Net.Myzuc.MME.Resources
                     NotifyFilter = NotifyFilters.FileName | NotifyFilters.Size,
                     EnableRaisingEvents = true,
                 };
-                Watcher.Created += async (sender, args) =>
+                Watcher.Created += (sender, args) =>
                 {
-                    await LoadAsync();
+                    LoadAsync().Wait();
                 };
-                Watcher.Deleted += async (sender, args) =>
+                Watcher.Deleted += (sender, args) =>
                 {
-                    await LoadAsync();
+                    LoadAsync().Wait();
                 };
-                Watcher.Renamed += async (sender, args) =>
+                Watcher.Renamed += (sender, args) =>
                 {
-                    await LoadAsync();
+                    LoadAsync().Wait();
                 };
-                Watcher.Changed += async (sender, args) =>
+                Watcher.Changed += (sender, args) =>
                 {
-                    await LoadAsync();
+                    LoadAsync().Wait();
                 };
                 return true;
             }
