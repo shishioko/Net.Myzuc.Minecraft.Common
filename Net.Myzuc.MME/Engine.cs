@@ -12,13 +12,12 @@ namespace Net.Myzuc.MME
         public static event EventHandler OnStop = (sender, args) => { };
         internal static async Task Main(string[] args)
         {
-            Logs.Verbose("Starting MME...");
-            IEnumerable<Assembly> assemblies = [];
             try
             {
+                Logs.Verbose("Starting Engine...");
                 Logs.Verbose("Loading libraries...");
                 FileInfo[] files = Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "Libraries")).GetFiles("*.dll", SearchOption.AllDirectories);
-                assemblies = (await Task.WhenAll(
+                IEnumerable<Assembly> assemblies = (await Task.WhenAll(
                     files.Select(
                         async (file) =>
                         {
@@ -37,13 +36,6 @@ namespace Net.Myzuc.MME
                     )
                 )).Where(assembly => assembly != null)!;
                 Logs.Verbose("Loaded libraries.");
-            }
-            catch (Exception ex)
-            {
-                Logs.Warning($"Error while loading libraries: {ex}");
-            }
-            try
-            {
                 Logs.Verbose("Initializing modules...");
                 await Task.WhenAll(
                     assemblies.SelectMany(assembly =>
@@ -66,14 +58,14 @@ namespace Net.Myzuc.MME
                     )
                 );
                 Logs.Verbose("Initialized modules.");
+                OnStart(null, EventArgs.Empty);
+                Logs.Verbose("Started Engine.");
             }
             catch (Exception ex)
             {
-                Logs.Warning($"Error while initializing modules: {ex}");
+                Logs.Error($"Error while starting Engine: {ex}");
             }
-            OnLoad(null, EventArgs.Empty);
             await Task.Delay(-1);
-            //todo: shutdown handler and method
         }
         public static void Stop(bool success)
         {
