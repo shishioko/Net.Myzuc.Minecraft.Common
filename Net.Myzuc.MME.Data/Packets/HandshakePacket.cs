@@ -1,5 +1,6 @@
 using System.Text;
 using Me.Shiokawaii.IO;
+using Net.Myzuc.MME.Extensions;
 
 namespace Net.Myzuc.MME.Data.Packets
 {
@@ -28,21 +29,14 @@ namespace Net.Myzuc.MME.Data.Packets
         public override void Serialize(Stream stream)
         {
             stream.WriteS32V(ProtocolVersion);
-            {
-                byte[] buffer = Encoding.UTF8.GetBytes(Address);
-                stream.WriteS32V(buffer.Length);
-                stream.WriteU8A(buffer);
-            }
+            stream.WriteMinecraftString(Address);
             stream.WriteU16(Port);
             stream.WriteS32V((int)Intent);
         }
         public override void Deserialize(Stream stream)
         {
             ProtocolVersion = stream.ReadS32V();
-            {
-                byte[] buffer = stream.ReadU8A(stream.ReadS32V());
-                Address = Encoding.UTF8.GetString(buffer);
-            }
+            Address = stream.ReadMinecraftString();
             Port = stream.ReadU16();
             Intent = (IntentEnum)stream.ReadS32V();
         }
