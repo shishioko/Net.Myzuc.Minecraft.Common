@@ -1,7 +1,7 @@
 using System.Text;
 using Me.Shiokawaii.IO;
 
-namespace Net.Myzuc.Minecraft.Server.Extensions
+namespace Net.Myzuc.Minecraft.Common.IO
 {
     public static class StreamExtension
     {
