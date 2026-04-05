@@ -1,5 +1,6 @@
 using System.IO.Compression;
 using System.Net;
+using System.Net.Sockets;
 using Me.Shiokawaii.IO;
 using Net.Myzuc.MME.Data.Packets;
 
@@ -11,12 +12,21 @@ namespace Net.Myzuc.MME.Networking
         
         public static void RegisterConnection(Connection connection)
         {
-            OnCreate(connection, EventArgs.Empty);
-            //todo: handle
+            try
+            {
+                Logs.Verbose($"Registering connection \"{connection.RemoteEndpoint}\"...");
+                OnCreate(connection, EventArgs.Empty);
+                //todo: handle
+            }
+            catch (Exception ex)
+            {
+                Logs.Warning($"Error while registering connection \"{connection.RemoteEndpoint}\": {ex}");
+            }
         }
         
         public bool Disposed { get; private set; }
         internal Stream Stream { get; set; }
+        private EndPoint? RemoteEndpoint { get; set; }
         public bool KeepStreamOpen { init; private get; } = false;
         internal int CompressionThreshold { get; set; } = -1;
         public Packet.ProtocolStageEnum ProtocolStage { get; internal set; } = Packet.ProtocolStageEnum.Handshake;
@@ -25,38 +35,55 @@ namespace Net.Myzuc.MME.Networking
         public event EventHandler<Packet> OnPacketWrite = (sender, args) => {};
         public event EventHandler OnDispose = (sender, args) => { };
         
-        public Connection(Stream stream)
+        public Connection(Stream stream, EndPoint? remoteEndpoint)
         {
             Stream = stream;
+            RemoteEndpoint = remoteEndpoint;
         }
         public async Task<Packet> ReadAsync()
         {
-            using MemoryStream ms = await readRawAsync();
-            int id = ms.ReadS32V();
-            Packet packet = Packet.Create(true, ProtocolStage, id) ?? throw new ProtocolViolationException($"Unknown Packet 0x{id:X2}!");
-            packet.Deserialize(ms);
-            OnPacketRead(this, packet);
-            return packet;
-            
-            async Task<MemoryStream> readRawAsync()
+            try
             {
-                byte[] data = await Stream.ReadU8AAsync(await Stream.ReadS32VAsync());
-                if (CompressionThreshold < 0) return new(data);
-                MemoryStream ms2 = new(data);
-                int decompressedSize = ms2.ReadS32V();
-                if (decompressedSize <= 0) return ms2;
-                await using ZLibStream zlib = new(ms2, CompressionMode.Decompress, false);
-                return new(zlib.ReadU8A(decompressedSize));
+                using MemoryStream ms = await readRawAsync();
+                int id = ms.ReadS32V();
+                Packet packet = Packet.Create(true, ProtocolStage, id) ?? throw new ProtocolViolationException($"Unknown Packet 0x{id:X2}!");
+                packet.Deserialize(ms);
+                OnPacketRead(this, packet);
+                return packet;
+
+                async Task<MemoryStream> readRawAsync()
+                {
+                    byte[] data = await Stream.ReadU8AAsync(await Stream.ReadS32VAsync());
+                    if (CompressionThreshold < 0) return new(data);
+                    MemoryStream ms2 = new(data);
+                    int decompressedSize = ms2.ReadS32V();
+                    if (decompressedSize <= 0) return ms2;
+                    await using ZLibStream zlib = new(ms2, CompressionMode.Decompress, false);
+                    return new(zlib.ReadU8A(decompressedSize));
+                }
+            }
+            catch (Exception ex)
+            {
+                Logs.Warning($"Error while reading from connection \"{RemoteEndpoint}\": {ex}");
+                throw;
             }
         }
         public async Task WriteAsync(Packet packet)
         {
-            OnPacketWrite(this, packet);
-            using MemoryStream ms = new();
-            ms.WriteS32V(packet.Id);
-            packet.Serialize(ms);
-            await writeRawAsync(ms.ToArray());
-            return;
+            try
+            {
+                OnPacketWrite(this, packet);
+                using MemoryStream ms = new();
+                ms.WriteS32V(packet.Id);
+                packet.Serialize(ms);
+                await writeRawAsync(ms.ToArray());
+                return;
+            }
+            catch (Exception ex)
+            {
+                Logs.Warning($"Error while reading writing to connection \"{RemoteEndpoint}\": {ex}");
+                throw;
+            }
             
             async Task writeRawAsync(byte[] data)
             {
