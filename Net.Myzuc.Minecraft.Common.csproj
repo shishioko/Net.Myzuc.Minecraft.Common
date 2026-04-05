@@ -4,6 +4,15 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>Net.Myzuc.Minecraft.Common</Title>
+        <Authors>shiokawaii@myzuc.net</Authors>
+        <Copyright>Copyright (c) 2026 myzuc.net</Copyright>
+        <PackageLicenseUrl>https://github.com/shishioko/Net.Myzuc.Minecraft.Common/blob/master/LICENSE.md</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/shishioko/Net.Myzuc.Minecraft.Common</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>Minecraft</PackageTags>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     </PropertyGroup>
 
     <ItemGroup>
