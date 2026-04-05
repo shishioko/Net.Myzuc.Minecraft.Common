@@ -1,3 +1,5 @@
+using System;
+
 namespace Net.Myzuc.Minecraft.Common
 {
     public static class Minecraft
