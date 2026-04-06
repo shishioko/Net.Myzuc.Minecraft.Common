@@ -109,7 +109,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
         }
         private static string SignatureToString(Packet packet)
         {
-            return $"{(packet.Serverbound ? "serverbound" : "clientbound")}/{packet.ProtocolStage}/{packet.Id:X2}";
+            return $"{(packet.Serverbound ? "Serverbound" : "Clientbound")}/{packet.ProtocolStage}/{packet.Id:X2}";
         }
     }
 }
