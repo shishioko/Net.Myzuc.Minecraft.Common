@@ -4,7 +4,6 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets
 {
     public abstract class Packet
     {
-        public enum ProtocolStageEnum
         public abstract bool Serverbound { get; }
         public abstract ProtocolStageEnum ProtocolStage { get; }
         public abstract int Id { get; }
