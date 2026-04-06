@@ -1,22 +1,23 @@
 using Me.Shiokawaii.IO;
 
-namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login;
-
-public sealed class SetCompressionPacket: Packet
+namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 {
-    public override bool Serverbound => false;
-    public override ProtocolStage ProtocolStage => ProtocolStage.Login;
-    public override int Id => 0x03;
-
-    public int Threshold = 1000;
-
-    public override void Serialize(Stream stream)
+    public sealed class SetCompressionPacket: Packet
     {
-        stream.WriteS32V(Threshold);
-    }
+        public override bool Serverbound => false;
+        public override ProtocolStage ProtocolStage => ProtocolStage.Login;
+        public override int Id => 0x03;
 
-    public override void Deserialize(Stream stream)
-    {
-        Threshold = stream.ReadS32V();
+        public int Threshold = 1000;
+
+        public override void Serialize(Stream stream)
+        {
+            stream.WriteS32V(Threshold);
+        }
+
+        public override void Deserialize(Stream stream)
+        {
+            Threshold = stream.ReadS32V();
+        }
     }
 }

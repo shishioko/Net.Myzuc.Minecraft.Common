@@ -1,23 +1,24 @@
 using Net.Myzuc.Minecraft.Common.IO;
 using Net.Myzuc.Minecraft.Common.Objects;
 
-namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login;
-
-public sealed class LogicSuccessPacket: Packet
+namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 {
-    public override bool Serverbound => false;
-    public override ProtocolStage ProtocolStage => ProtocolStage.Login;
-    public override int Id => 0x02;
-
-    public GameProfile Profile;
-
-    public override void Serialize(Stream stream)
+    public sealed class LogicSuccessPacket: Packet
     {
-        stream.writeGameProfile(Profile);
-    }
+        public override bool Serverbound => false;
+        public override ProtocolStage ProtocolStage => ProtocolStage.Login;
+        public override int Id => 0x02;
 
-    public override void Deserialize(Stream stream)
-    {
-        Profile = stream.readGameProfile();
+        public GameProfile Profile;
+
+        public override void Serialize(Stream stream)
+        {
+            stream.writeGameProfile(Profile);
+        }
+
+        public override void Deserialize(Stream stream)
+        {
+            Profile = stream.readGameProfile();
+        }
     }
 }
