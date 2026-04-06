@@ -19,11 +19,13 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
             Stream = new NetworkStream(socket, true);
             RemoteIsClient = remoteIsClient;
         }
-        public async Task<Packet> ReadAsync()
-        {
-            return await ReadAsync<Packet>();
-        }
         public async Task<TPacket> ReadAsync<TPacket>() where TPacket : Packet
+        {
+            Packet packet = await ReadAsync();
+            if (packet is not TPacket tpacket) throw new ProtocolViolationException($"Read unexpected Packet {SignatureToString(packet)}!");
+            return tpacket;
+        }
+        public async Task<Packet> ReadAsync()
         {
             using MemoryStream ms = await readRawAsync();
             int id = ms.ReadS32V();
@@ -43,8 +45,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                     break;
                 }
             }
-            if (packet is not TPacket tpacket) throw new ProtocolViolationException("Unexpected Packet!");
-            return tpacket;
+            return packet;
 
             async Task<MemoryStream> readRawAsync()
             {
@@ -59,6 +60,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
         }
         public async Task WriteAsync(Packet packet)
         {
+            if (packet.Serverbound != RemoteIsClient || packet.ProtocolStage != ProtocolStage) throw new ProtocolViolationException($"Tried writing unexpected packet: {SignatureToString(packet)}");
             using MemoryStream ms = new();
             ms.WriteS32V(packet.Id);
             packet.Serialize(ms);
@@ -103,6 +105,10 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
             Disposed = true;
             await Stream.DisposeAsync();
             GC.SuppressFinalize(this);
+        }
+        private static string SignatureToString(Packet packet)
+        {
+            return $"{(packet.Serverbound ? "serverbound" : "clientbound")}/{packet.ProtocolStage}/{packet.Id:X2}";
         }
     }
 }
