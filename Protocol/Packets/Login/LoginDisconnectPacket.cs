@@ -9,11 +9,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage NextProtocolStage => ProtocolStage.Disconnected;
         protected internal override int PacketId => 0x00;
 
-        public string Message = "{}";
+        public string Message = string.Empty;
 
         public override void Serialize(Stream stream)
         {
-            stream.WriteMinecraftString(Message); // Not sure if components are strings, I forgor
+            stream.WriteMinecraftString($"{{\"text\":\"{System.Web.HttpUtility.JavaScriptStringEncode(Message, false)}\"}}");
         }
         public override void Deserialize(Stream stream)
         {
