@@ -25,7 +25,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
         {
             using MemoryStream ms = await readRawAsync();
             int id = ms.ReadS32V();
-            Packet packet = Packet.Create(true, ProtocolStage, id) ?? throw new ProtocolViolationException($"Unknown Packet 0x{id:X2}!");
+            Packet packet = PacketRegistry.Create(true, ProtocolStage, id) ?? throw new ProtocolViolationException($"Unknown Packet 0x{id:X2}!");
             packet.Deserialize(ms);
             switch (packet)
             {
@@ -33,9 +33,9 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                 {
                     ProtocolStage = handshakePacket.Intent switch
                     {
-                        HandshakePacket.IntentEnum.Status => Packet.ProtocolStageEnum.Status,
-                        HandshakePacket.IntentEnum.Login => Packet.ProtocolStageEnum.Login,
-                        HandshakePacket.IntentEnum.Transfer => Packet.ProtocolStageEnum.Login,
+                        HandshakePacket.IntentEnum.Status => ProtocolStage.Status,
+                        HandshakePacket.IntentEnum.Login => ProtocolStage.Login,
+                        HandshakePacket.IntentEnum.Transfer => ProtocolStage.Login,
                         _ => throw new ProtocolViolationException("Unknown Intent!")
                     };
                     break;

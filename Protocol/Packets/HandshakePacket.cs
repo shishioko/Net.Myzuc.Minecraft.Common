@@ -13,13 +13,9 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets
             Transfer = 3,
         }
 
-        internal const bool _Serverbound = true;
-        internal const ProtocolStageEnum _ProtocolStage = ProtocolStageEnum.Handshake;
-        internal const int _Id = 0x00;
-
-        public override bool Serverbound => _Serverbound;
-        public override ProtocolStageEnum ProtocolStage => _ProtocolStage;
-        public override int Id => _Id;
+        public override bool Serverbound => true;
+        public override ProtocolStage ProtocolStage => ProtocolStage.Handshake;
+        public override int Id => 0x00;
         
         public int ProtocolVersion = 0;
         public string Address = "";
