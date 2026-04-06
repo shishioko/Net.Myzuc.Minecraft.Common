@@ -8,16 +8,16 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         public override int Id => 0x00;
 
-        public string Reason = "{}";
+        public string Message = "{}";
 
         public override void Serialize(Stream stream)
         {
-            stream.WriteMinecraftString(Reason); // Not sure if components are strings, I forgor
+            stream.WriteMinecraftString(Message); // Not sure if components are strings, I forgor
         }
 
         public override void Deserialize(Stream stream)
         {
-            Reason = stream.ReadMinecraftString();
+            Message = stream.ReadMinecraftString();
         }
     }
 }

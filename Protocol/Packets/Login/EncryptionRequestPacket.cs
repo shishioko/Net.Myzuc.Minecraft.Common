@@ -10,15 +10,15 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         public override int Id => 0x01;
 
-        public string ServerID = string.Empty;
+        public string ServerId = string.Empty;
     
         public byte[] PublicKey = [];
         public byte[] VerifyToken = [];
-        public bool ShouldAuth = false;
+        public bool Authenticate = false;
 
         public override void Serialize(Stream stream)
         {
-            stream.WriteMinecraftString(ServerID);
+            stream.WriteMinecraftString(ServerId);
 
             stream.WriteS32V(PublicKey.Length);
             stream.WriteU8A(PublicKey);
@@ -26,18 +26,18 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
             stream.WriteS32V(VerifyToken.Length);
             stream.WriteU8A(VerifyToken);
         
-            stream.WriteBool(ShouldAuth);
+            stream.WriteBool(Authenticate);
         }
 
         public override void Deserialize(Stream stream)
         {
-            ServerID = stream.ReadMinecraftString();
-            if (ServerID.Length > 20) throw new SerializationException("server_id > 20");
+            ServerId = stream.ReadMinecraftString();
+            if (ServerId.Length > 20) throw new SerializationException("server_id > 20");
 
             PublicKey = stream.ReadU8A(stream.ReadS32V());
             VerifyToken = stream.ReadU8A(stream.ReadS32V());
 
-            ShouldAuth = stream.ReadBool();
+            Authenticate = stream.ReadBool();
         }
     }
 }

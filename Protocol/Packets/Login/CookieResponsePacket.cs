@@ -9,12 +9,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         public override int Id => 0x04;
 
-        public string CookieID = string.Empty;
+        public string CookieId = string.Empty;
         public byte[]? Payload = null;
 
         public override void Serialize(Stream stream)
         {
-            stream.WriteMinecraftString(CookieID);
+            stream.WriteMinecraftString(CookieId);
         
             stream.WriteBool(Payload != null);
 
@@ -27,7 +27,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         public override void Deserialize(Stream stream)
         {
-            CookieID = stream.ReadMinecraftString();
+            CookieId = stream.ReadMinecraftString();
         
             if(stream.ReadBool())
             {

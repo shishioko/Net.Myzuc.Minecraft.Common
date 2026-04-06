@@ -9,19 +9,19 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override int Id => 0x00;
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
 
-        public string PlayerName = string.Empty;
-        public Guid PlayerUUID = Guid.Empty;
+        public string Name = string.Empty;
+        public Guid Guid = Guid.Empty;
 
         public override void Serialize(Stream stream)
         {
-            stream.WriteMinecraftString(PlayerName);
-            stream.WriteGuid(PlayerUUID);
+            stream.WriteMinecraftString(Name);
+            stream.WriteGuid(Guid);
         }
 
         public override void Deserialize(Stream stream)
         {
-            PlayerName = stream.ReadMinecraftString();
-            PlayerUUID = stream.ReadGuid();
+            Name = stream.ReadMinecraftString();
+            Guid = stream.ReadGuid();
         }
     }
 }

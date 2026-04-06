@@ -9,21 +9,21 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         public override int Id => 0x04;
 
-        public int MessageID = 0;
+        public int SequenceId = 0;
         public string Channel = string.Empty;
 
         public byte[] Data = [];
 
         public override void Serialize(Stream stream)
         {
-            stream.WriteS32V(MessageID);
+            stream.WriteS32V(SequenceId);
             stream.WriteMinecraftString(Channel);
             stream.WriteU8A(Data);
         }
 
         public override void Deserialize(Stream stream)
         {
-            MessageID = stream.ReadS32V();
+            SequenceId = stream.ReadS32V();
             Channel = stream.ReadMinecraftString();
             using MemoryStream ms = new();
             stream.CopyTo(ms);
