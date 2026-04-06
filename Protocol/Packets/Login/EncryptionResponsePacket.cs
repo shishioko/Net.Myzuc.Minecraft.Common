@@ -8,21 +8,21 @@ public sealed class EncryptionResponsePacket : Packet
     public override ProtocolStage ProtocolStage => ProtocolStage.Login;
     public override int Id => 0x01;
 
-    public byte[] shared_secret = new byte[] { };
-    public byte[] verify_token = new byte[] { };
+    public byte[] SharedSecret = new byte[] { };
+    public byte[] VerifyToken = new byte[] { };
 
     public override void Serialize(Stream stream)
     {
-        stream.WriteS32V(shared_secret.Length);
-        stream.WriteU8A(shared_secret);
+        stream.WriteS32V(SharedSecret.Length);
+        stream.WriteU8A(SharedSecret);
         
-        stream.WriteS32V(verify_token.Length);
-        stream.WriteU8A(verify_token);
+        stream.WriteS32V(VerifyToken.Length);
+        stream.WriteU8A(VerifyToken);
     }
 
     public override void Deserialize(Stream stream)
     {
-        shared_secret = stream.ReadU8A(stream.ReadS32V());
-        verify_token = stream.ReadU8A(stream.ReadS32V());
+        SharedSecret = stream.ReadU8A(stream.ReadS32V());
+        VerifyToken = stream.ReadU8A(stream.ReadS32V());
     }
 }

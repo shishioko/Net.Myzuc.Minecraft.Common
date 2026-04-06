@@ -9,29 +9,29 @@ public sealed class CookieResponsePacket : Packet
     public override ProtocolStage ProtocolStage => ProtocolStage.Login;
     public override int Id => 0x04;
 
-    public String id = "";
-    public byte[]? payload;
+    public String CookieID = "";
+    public byte[]? Payload;
 
     public override void Serialize(Stream stream)
     {
-        stream.WriteMinecraftString(id);
+        stream.WriteMinecraftString(CookieID);
         
-        stream.WriteBool(payload != null);
+        stream.WriteBool(Payload != null);
 
-        if (payload != null)
+        if (Payload != null)
         {
-            stream.WriteS32V(payload.Length);
-            stream.WriteU8A(payload);
+            stream.WriteS32V(Payload.Length);
+            stream.WriteU8A(Payload);
         }
     }
 
     public override void Deserialize(Stream stream)
     {
-        id = stream.ReadMinecraftString();
+        CookieID = stream.ReadMinecraftString();
         
         if(stream.ReadBool())
         {
-            payload = stream.ReadU8A(stream.ReadS32V());
+            Payload = stream.ReadU8A(stream.ReadS32V());
         }
     }
 }

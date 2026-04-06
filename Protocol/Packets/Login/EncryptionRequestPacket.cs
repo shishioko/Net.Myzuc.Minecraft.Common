@@ -10,33 +10,33 @@ public sealed class EncryptionRequestPacket: Packet
     public override ProtocolStage ProtocolStage => ProtocolStage.Login;
     public override int Id => 0x01;
 
-    public String server_id = "";
+    public String ServerID = "";
     
-    public byte[] public_key = new byte[] {};
-    public byte[] verify_token = new byte[] {};
-    public bool should_auth = false;
+    public byte[] PublicKey = new byte[] {};
+    public byte[] VerifyToken = new byte[] {};
+    public bool ShouldAuth = false;
 
     public override void Serialize(Stream stream)
     {
-        stream.WriteMinecraftString(server_id);
+        stream.WriteMinecraftString(ServerID);
 
-        stream.WriteS32V(public_key.Length);
-        stream.WriteU8A(public_key);
+        stream.WriteS32V(PublicKey.Length);
+        stream.WriteU8A(PublicKey);
 
-        stream.WriteS32V(verify_token.Length);
-        stream.WriteU8A(verify_token);
+        stream.WriteS32V(VerifyToken.Length);
+        stream.WriteU8A(VerifyToken);
         
-        stream.WriteBool(should_auth);
+        stream.WriteBool(ShouldAuth);
     }
 
     public override void Deserialize(Stream stream)
     {
-        server_id = stream.ReadMinecraftString();
-        if (server_id.Length > 20) throw new SerializationException("server_id > 20");
+        ServerID = stream.ReadMinecraftString();
+        if (ServerID.Length > 20) throw new SerializationException("server_id > 20");
 
-        public_key = stream.ReadU8A(stream.ReadS32V());
-        verify_token = stream.ReadU8A(stream.ReadS32V());
+        PublicKey = stream.ReadU8A(stream.ReadS32V());
+        VerifyToken = stream.ReadU8A(stream.ReadS32V());
 
-        should_auth = stream.ReadBool();
+        ShouldAuth = stream.ReadBool();
     }
 }
