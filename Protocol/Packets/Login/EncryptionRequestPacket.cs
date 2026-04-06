@@ -27,7 +27,6 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override void Deserialize(Stream stream)
         {
             ServerId = stream.ReadMinecraftString();
-            if (ServerId.Length > 20) throw new SerializationException("server_id > 20");
             PublicKey = stream.ReadU8A(stream.ReadS32V());
             VerifyToken = stream.ReadU8A(stream.ReadS32V());
             Authenticate = stream.ReadBool();
