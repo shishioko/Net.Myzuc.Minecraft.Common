@@ -105,7 +105,6 @@ namespace Net.Myzuc.Minecraft.Common.IO
                     {
                         property.Signature = stream.ReadMinecraftString();
                     }
-                    else property.Signature = null;
                     profile.Properties[i] = property;
                 }
                 return profile;
