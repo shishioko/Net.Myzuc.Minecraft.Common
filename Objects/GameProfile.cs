@@ -6,6 +6,11 @@ namespace Net.Myzuc.Minecraft.Common.Objects
         public String username; // 16 max len
 
         public GameProfileProperty[] properties;
+
+        public GameProfile()
+        {
+            
+        }
     }
 
     public class GameProfileProperty
@@ -13,5 +18,10 @@ namespace Net.Myzuc.Minecraft.Common.Objects
         public String name; // 64 max len
         public String value; // 32k max len
         public String? signature; // 1024 max len
+
+        public GameProfileProperty()
+        {
+            
+        }
     }
 }

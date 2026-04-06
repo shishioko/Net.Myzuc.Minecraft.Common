@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Me.Shiokawaii.IO;
+using Net.Myzuc.Minecraft.Common.Objects;
 
 namespace Net.Myzuc.Minecraft.Common.IO
 {
@@ -70,6 +71,54 @@ namespace Net.Myzuc.Minecraft.Common.IO
             public void WriteMinecraftJson<T>(T data)
             {
                 stream.WriteMinecraftString(JsonSerializer.Serialize(data, JsonSerializerOptions));
+            }
+
+            public void writeGameProfile(GameProfile gameProfile)
+            {
+                stream.WriteGuid(gameProfile.uuid);
+                stream.WriteMinecraftString(gameProfile.username);
+
+                stream.WriteS32V(gameProfile.properties.Length);
+                
+                foreach(GameProfileProperty property in gameProfile.properties)
+                {
+                    stream.WriteMinecraftString(property.name);
+                    stream.WriteMinecraftString(property.value);
+                    
+                    stream.WriteBool(property.signature != null);
+                    
+                    if(property.signature != null) stream.WriteMinecraftString(property.signature);
+                }
+            }
+
+            public GameProfile readGameProfile()
+            {
+                GameProfile profile = new GameProfile();
+
+                profile.uuid = stream.ReadGuid();
+                profile.username = stream.ReadMinecraftString();
+
+                int len = stream.ReadS32V();
+
+                profile.properties = new GameProfileProperty[16];
+
+                for (int i = 0; i < len; ++i)
+                {
+                    GameProfileProperty property = new GameProfileProperty();
+
+                    property.name = stream.ReadMinecraftString();
+                    property.value = stream.ReadMinecraftString();
+
+                    if (stream.ReadBool())
+                    {
+                        property.signature = stream.ReadMinecraftString();
+                    }
+                    else property.signature = null;
+
+                    profile.properties[i] = property;
+                }
+
+                return profile;
             }
         }
     }
