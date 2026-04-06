@@ -12,7 +12,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public int MessageID = 0;
         public string Channel = string.Empty;
 
-        public byte[] Data;
+        public byte[] Data = [];
 
         public override void Serialize(Stream stream)
         {
