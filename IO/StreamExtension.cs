@@ -77,47 +77,38 @@ namespace Net.Myzuc.Minecraft.Common.IO
             {
                 stream.WriteGuid(gameProfile.Guid);
                 stream.WriteMinecraftString(gameProfile.Name);
-
-                stream.WriteS32V(gameProfile.Properties.Count());
-                
+                stream.WriteS32V(gameProfile.Properties.Length);
                 foreach(GameProfile.Property property in gameProfile.Properties)
                 {
                     stream.WriteMinecraftString(property.Name);
                     stream.WriteMinecraftString(property.Value);
-                    
-                    stream.WriteBool(property.Signature != null);
-                    
-                    if(property.Signature != null) stream.WriteMinecraftString(property.Signature);
+                    stream.WriteBool(property.Signature is not null);
+                    if (property.Signature is not null)
+                    {
+                        stream.WriteMinecraftString(property.Signature);
+                    }
                 }
             }
 
             public GameProfile ReadGameProfile()
             {
-                GameProfile profile = new GameProfile();
-
+                GameProfile profile = new();
                 profile.Guid = stream.ReadGuid();
                 profile.Name = stream.ReadMinecraftString();
-
                 int len = stream.ReadS32V();
-
                 profile.Properties = new GameProfile.Property[16];
-
                 for (int i = 0; i < len; ++i)
                 {
-                    GameProfile.Property property = new GameProfile.Property();
-
+                    GameProfile.Property property = new();
                     property.Name = stream.ReadMinecraftString();
                     property.Value = stream.ReadMinecraftString();
-
                     if (stream.ReadBool())
                     {
                         property.Signature = stream.ReadMinecraftString();
                     }
                     else property.Signature = null;
-
                     profile.Properties[i] = property;
                 }
-
                 return profile;
             }
         }
