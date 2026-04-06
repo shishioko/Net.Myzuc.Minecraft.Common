@@ -1,4 +1,3 @@
-using Net.Myzuc.Minecraft.Common.IO;
 using Net.Myzuc.Minecraft.Common.Objects;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
