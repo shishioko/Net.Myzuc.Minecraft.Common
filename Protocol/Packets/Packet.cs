@@ -5,14 +5,6 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets
     public abstract class Packet
     {
         public enum ProtocolStageEnum
-        {
-            Handshake,
-            Status,
-            Login,
-            Configuration,
-            Play,
-        }
-        
         public abstract bool Serverbound { get; }
         public abstract ProtocolStageEnum ProtocolStage { get; }
         public abstract int Id { get; }
