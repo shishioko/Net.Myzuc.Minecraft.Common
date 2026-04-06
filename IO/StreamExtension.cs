@@ -78,9 +78,9 @@ namespace Net.Myzuc.Minecraft.Common.IO
                 stream.WriteGuid(gameProfile.Guid);
                 stream.WriteMinecraftString(gameProfile.Name);
 
-                stream.WriteS32V(gameProfile.Properties.Length);
+                stream.WriteS32V(gameProfile.Properties.Count());
                 
-                foreach(GameProfileProperty property in gameProfile.Properties)
+                foreach(GameProfile.Property property in gameProfile.Properties)
                 {
                     stream.WriteMinecraftString(property.Name);
                     stream.WriteMinecraftString(property.Value);
@@ -100,11 +100,11 @@ namespace Net.Myzuc.Minecraft.Common.IO
 
                 int len = stream.ReadS32V();
 
-                profile.Properties = new GameProfileProperty[16];
+                profile.Properties = new GameProfile.Property[16];
 
                 for (int i = 0; i < len; ++i)
                 {
-                    GameProfileProperty property = new GameProfileProperty();
+                    GameProfile.Property property = new GameProfile.Property();
 
                     property.Name = stream.ReadMinecraftString();
                     property.Value = stream.ReadMinecraftString();
