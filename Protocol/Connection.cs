@@ -10,12 +10,14 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
     {
         private bool Disposed { get; set; }
         private Stream Stream { get; set; }
+        private bool RemoteIsClient { get; }
         private int CompressionThreshold { get; set; } = -1;
         public ProtocolStage ProtocolStage { get; private set; } = ProtocolStage.Handshake;
         
-        public Connection(Socket socket)
+        public Connection(Socket socket, bool remoteIsClient)
         {
             Stream = new NetworkStream(socket, true);
+            RemoteIsClient = remoteIsClient;
         }
         public async Task<Packet> ReadAsync()
         {
@@ -25,7 +27,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
         {
             using MemoryStream ms = await readRawAsync();
             int id = ms.ReadS32V();
-            Packet packet = PacketRegistry.Create(true, ProtocolStage, id) ?? throw new ProtocolViolationException($"Unknown Packet 0x{id:X2}!");
+            Packet packet = PacketRegistry.Create(RemoteIsClient, ProtocolStage, id);
             packet.Deserialize(ms);
             switch (packet)
             {
