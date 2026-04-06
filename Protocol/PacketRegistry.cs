@@ -8,7 +8,6 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
     public static class PacketRegistry
     {
         private static readonly Dictionary<(bool serverbound, ProtocolStage stage, int id), Type> Types = [];
-        private static readonly Dictionary<Type, (bool serverbound, ProtocolStage stage, int id)> Signatures = [];
         static PacketRegistry()
         {
             IEnumerable<Type> types = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.IsSubclassOf(typeof(Packet)) && !type.IsAbstract);
@@ -18,7 +17,6 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                 Contract.Assert(instance is not null);
                 (bool serverbound, ProtocolStage stage, int id) signature = (instance.Serverbound, instance.ProtocolStage, instance.Id);
                 Types.Add(signature, type);
-                Signatures.Add(type, signature);
             }
         }
         public static Packet Create(bool serverbound, ProtocolStage stage, int id)
