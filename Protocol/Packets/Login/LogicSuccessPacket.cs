@@ -13,11 +13,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         public override void Serialize(Stream stream)
         {
-            stream.WriteGameProfile(Profile);
+            GameProfile.Serialize(stream, Profile);
         }
         public override void Deserialize(Stream stream)
         {
-            Profile = stream.ReadGameProfile();
+            Profile = GameProfile.Deserialize(stream);
         }
     }
 }

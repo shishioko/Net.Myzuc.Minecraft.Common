@@ -72,43 +72,6 @@ namespace Net.Myzuc.Minecraft.Common.IO
             {
                 stream.WriteMinecraftString(JsonSerializer.Serialize(data, JsonSerializerOptions));
             }
-
-            public void WriteGameProfile(GameProfile gameProfile)
-            {
-                stream.WriteGuid(gameProfile.Guid);
-                stream.WriteMinecraftString(gameProfile.Name);
-                stream.WriteS32V(gameProfile.Properties.Length);
-                foreach(GameProfile.Property property in gameProfile.Properties)
-                {
-                    stream.WriteMinecraftString(property.Name);
-                    stream.WriteMinecraftString(property.Value);
-                    stream.WriteBool(property.Signature is not null);
-                    if (property.Signature is not null)
-                    {
-                        stream.WriteMinecraftString(property.Signature);
-                    }
-                }
-            }
-
-            public GameProfile ReadGameProfile()
-            {
-                GameProfile profile = new();
-                profile.Guid = stream.ReadGuid();
-                profile.Name = stream.ReadMinecraftString();
-                profile.Properties = new GameProfile.Property[stream.ReadS32V()];
-                for (int i = 0; i < profile.Properties.Length; i++)
-                {
-                    GameProfile.Property property = new();
-                    property.Name = stream.ReadMinecraftString();
-                    property.Value = stream.ReadMinecraftString();
-                    if (stream.ReadBool())
-                    {
-                        property.Signature = stream.ReadMinecraftString();
-                    }
-                    profile.Properties[i] = property;
-                }
-                return profile;
-            }
         }
     }
 }
