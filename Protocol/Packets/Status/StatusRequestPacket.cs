@@ -1,4 +1,4 @@
-namespace Net.Myzuc.Minecraft.Common.Protocol.Packets
+namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
 {
     public sealed class StatusRequestPacket : Packet
     {

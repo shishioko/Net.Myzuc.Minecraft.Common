@@ -1,6 +1,6 @@
 using Me.Shiokawaii.IO;
 
-namespace Net.Myzuc.Minecraft.Common.Protocol.Packets
+namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
 {
     public sealed class PingRequestPacket : Packet
     {

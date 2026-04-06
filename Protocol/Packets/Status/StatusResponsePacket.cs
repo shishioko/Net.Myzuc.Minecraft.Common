@@ -1,7 +1,6 @@
 using Net.Myzuc.Minecraft.Common.IO;
-using Net.Myzuc.Minecraft.Common.Objects;
 
-namespace Net.Myzuc.Minecraft.Common.Protocol.Packets
+namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
 {
     public sealed class StatusResponsePacket : Packet
     {
@@ -9,7 +8,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets
         public override ProtocolStage ProtocolStage => ProtocolStage.Status;
         public override int Id => 0x00;
 
-        public Status Status = new();
+        public Objects.Status Status = new();
         
         public override void Serialize(Stream stream)
         {
@@ -17,7 +16,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets
         }
         public override void Deserialize(Stream stream)
         {
-            Status = stream.ReadMinecraftJson<Status>();
+            Status = stream.ReadMinecraftJson<Objects.Status>();
         }
     }
 }

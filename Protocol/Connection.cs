@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using Me.Shiokawaii.IO;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets;
+using Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol
 {
