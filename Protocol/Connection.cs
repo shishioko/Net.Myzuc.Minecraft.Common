@@ -36,12 +36,6 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
             Stream = new NetworkStream(socket, true);
             RemoteIsClient = remoteIsClient;
         }
-        public async Task<TPacket> ReadAsync<TPacket>() where TPacket : Packet
-        {
-            Packet packet = await ReadAsync();
-            if (packet is not TPacket tpacket) throw new ProtocolViolationException($"Read unexpected Packet {SignatureToString(packet)}!");
-            return tpacket;
-        }
         public async Task<Packet> ReadAsync()
         {
             using MemoryStream ms = await readRawAsync();
