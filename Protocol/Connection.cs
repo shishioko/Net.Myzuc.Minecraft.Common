@@ -1,6 +1,8 @@
+using System.Diagnostics.Contracts;
 using System.IO.Compression;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using Me.Shiokawaii.IO;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake;
@@ -9,6 +11,20 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
 {
     public class Connection : IDisposable, IAsyncDisposable
     {
+        private static readonly IReadOnlyDictionary<(bool serverbound, ProtocolStage stage, int id), Type> Packets;
+        static Connection()
+        {
+            Dictionary<(bool serverbound, ProtocolStage stage, int id), Type> packets = [];
+            IEnumerable<Type> types = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.IsSubclassOf(typeof(Packet)) && !type.IsAbstract);
+            foreach (Type type in types)
+            {
+                Packet? instance = Activator.CreateInstance(type) as Packet;
+                Contract.Assert(instance is not null);
+                (bool serverbound, ProtocolStage stage, int id) signature = (instance.Serverbound, instance.ProtocolStage, instance.Id);
+                packets.Add(signature, type);
+            }
+            Packets = packets;
+        }
         private bool Disposed { get; set; }
         private Stream Stream { get; set; }
         private bool RemoteIsClient { get; }
@@ -30,7 +46,9 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
         {
             using MemoryStream ms = await readRawAsync();
             int id = ms.ReadS32V();
-            Packet packet = PacketRegistry.Create(RemoteIsClient, ProtocolStage, id);
+            Packets.TryGetValue((RemoteIsClient, ProtocolStage, id), out Type? type);
+            Packet? packet = type is not null ? Activator.CreateInstance(type) as Packet : null;
+            if (packet is null) throw new ProtocolViolationException($"Unknown packet {(RemoteIsClient ? "Serverbound" : "Clientbound")}/{ProtocolStage}/{id:X2}!");
             packet.Deserialize(ms);
             switch (packet)
             {
