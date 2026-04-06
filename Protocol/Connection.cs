@@ -19,6 +19,10 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
         }
         public async Task<Packet> ReadAsync()
         {
+            return await ReadAsync<Packet>();
+        }
+        public async Task<TPacket> ReadAsync<TPacket>() where TPacket : Packet
+        {
             using MemoryStream ms = await readRawAsync();
             int id = ms.ReadS32V();
             Packet packet = Packet.Create(true, ProtocolStage, id) ?? throw new ProtocolViolationException($"Unknown Packet 0x{id:X2}!");
@@ -37,7 +41,8 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                     break;
                 }
             }
-            return packet;
+            if (packet is not TPacket tpacket) throw new ProtocolViolationException("Unexpected Packet!");
+            return tpacket;
 
             async Task<MemoryStream> readRawAsync()
             {
