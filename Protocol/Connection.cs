@@ -11,7 +11,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
         private bool Disposed { get; set; }
         private Stream Stream { get; set; }
         private int CompressionThreshold { get; set; } = -1;
-        public Packet.ProtocolStageEnum ProtocolStage { get; private set; } = Packet.ProtocolStageEnum.Handshake;
+        public ProtocolStage ProtocolStage { get; private set; } = ProtocolStage.Handshake;
         
         public Connection(Socket socket)
         {
