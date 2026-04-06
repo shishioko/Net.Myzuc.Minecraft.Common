@@ -19,7 +19,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                 Types.Add(signature, type);
             }
         }
-        public static Packet Create(bool serverbound, ProtocolStage stage, int id)
+        internal static Packet Create(bool serverbound, ProtocolStage stage, int id)
         {
             Types.TryGetValue((serverbound, stage, id), out Type? type);
             Packet? packet = type is not null ? Activator.CreateInstance(type) as Packet : null;
