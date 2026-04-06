@@ -8,7 +8,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         public override int Id => 0x05;
 
-        public String Identifier;
+        public string Identifier = string.Empty;
 
         public override void Serialize(Stream stream)
         {

@@ -8,7 +8,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         public override int Id => 0x03;
 
-        public int Threshold = 1000;
+        public int Threshold = 0;
 
         public override void Serialize(Stream stream)
         {

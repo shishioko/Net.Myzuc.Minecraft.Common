@@ -9,8 +9,8 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         public override int Id => 0x04;
 
-        public int MessageID;
-        public String Channel;
+        public int MessageID = 0;
+        public string Channel = string.Empty;
 
         public byte[] Data;
 

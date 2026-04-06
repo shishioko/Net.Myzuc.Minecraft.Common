@@ -9,8 +9,8 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         public override int Id => 0x04;
 
-        public String CookieID = "";
-        public byte[]? Payload;
+        public string CookieID = string.Empty;
+        public byte[]? Payload = null;
 
         public override void Serialize(Stream stream)
         {

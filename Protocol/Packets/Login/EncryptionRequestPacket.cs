@@ -10,10 +10,10 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         public override int Id => 0x01;
 
-        public String ServerID = "";
+        public string ServerID = string.Empty;
     
-        public byte[] PublicKey = new byte[] {};
-        public byte[] VerifyToken = new byte[] {};
+        public byte[] PublicKey = [];
+        public byte[] VerifyToken = [];
         public bool ShouldAuth = false;
 
         public override void Serialize(Stream stream)

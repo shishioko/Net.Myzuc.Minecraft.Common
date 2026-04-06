@@ -8,7 +8,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         public override int Id => 0x00;
 
-        public String Reason = "{}";
+        public string Reason = "{}";
 
         public override void Serialize(Stream stream)
         {
