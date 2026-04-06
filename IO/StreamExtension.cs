@@ -73,7 +73,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
                 stream.WriteMinecraftString(JsonSerializer.Serialize(data, JsonSerializerOptions));
             }
 
-            public void writeGameProfile(GameProfile gameProfile)
+            public void WriteGameProfile(GameProfile gameProfile)
             {
                 stream.WriteGuid(gameProfile.Guid);
                 stream.WriteMinecraftString(gameProfile.Name);
@@ -91,7 +91,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
                 }
             }
 
-            public GameProfile readGameProfile()
+            public GameProfile ReadGameProfile()
             {
                 GameProfile profile = new GameProfile();
 
