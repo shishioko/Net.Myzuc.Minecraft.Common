@@ -60,7 +60,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
         }
         public async Task WriteAsync(Packet packet)
         {
-            if (packet.Serverbound != RemoteIsClient || packet.ProtocolStage != ProtocolStage) throw new ProtocolViolationException($"Tried writing unexpected packet: {SignatureToString(packet)}");
+            if (packet.Serverbound == RemoteIsClient || packet.ProtocolStage != ProtocolStage) throw new ProtocolViolationException($"Tried writing unexpected packet: {SignatureToString(packet)}");
             using MemoryStream ms = new();
             ms.WriteS32V(packet.Id);
             packet.Serialize(ms);
