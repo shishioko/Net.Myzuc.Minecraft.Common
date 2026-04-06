@@ -2,10 +2,10 @@ namespace Net.Myzuc.Minecraft.Common.Objects
 {
     public class GameProfile
     {
-        public Guid uuid = Guid.Empty;
-        public string username = string.Empty; // 16 max len
+        public Guid Guid = Guid.Empty;
+        public string Name = string.Empty; // 16 max len
 
-        public GameProfileProperty[] properties = [];
+        public GameProfileProperty[] Properties = [];
 
         public GameProfile()
         {
@@ -15,9 +15,9 @@ namespace Net.Myzuc.Minecraft.Common.Objects
 
     public class GameProfileProperty
     {
-        public string name = string.Empty; // 64 max len
-        public string value = string.Empty; // 32k max len
-        public string? signature = null; // 1024 max len
+        public string Name = string.Empty; // 64 max len
+        public string Value = string.Empty; // 32k max len
+        public string? Signature = null; // 1024 max len
 
         public GameProfileProperty()
         {

@@ -75,19 +75,19 @@ namespace Net.Myzuc.Minecraft.Common.IO
 
             public void writeGameProfile(GameProfile gameProfile)
             {
-                stream.WriteGuid(gameProfile.uuid);
-                stream.WriteMinecraftString(gameProfile.username);
+                stream.WriteGuid(gameProfile.Guid);
+                stream.WriteMinecraftString(gameProfile.Name);
 
-                stream.WriteS32V(gameProfile.properties.Length);
+                stream.WriteS32V(gameProfile.Properties.Length);
                 
-                foreach(GameProfileProperty property in gameProfile.properties)
+                foreach(GameProfileProperty property in gameProfile.Properties)
                 {
-                    stream.WriteMinecraftString(property.name);
-                    stream.WriteMinecraftString(property.value);
+                    stream.WriteMinecraftString(property.Name);
+                    stream.WriteMinecraftString(property.Value);
                     
-                    stream.WriteBool(property.signature != null);
+                    stream.WriteBool(property.Signature != null);
                     
-                    if(property.signature != null) stream.WriteMinecraftString(property.signature);
+                    if(property.Signature != null) stream.WriteMinecraftString(property.Signature);
                 }
             }
 
@@ -95,27 +95,27 @@ namespace Net.Myzuc.Minecraft.Common.IO
             {
                 GameProfile profile = new GameProfile();
 
-                profile.uuid = stream.ReadGuid();
-                profile.username = stream.ReadMinecraftString();
+                profile.Guid = stream.ReadGuid();
+                profile.Name = stream.ReadMinecraftString();
 
                 int len = stream.ReadS32V();
 
-                profile.properties = new GameProfileProperty[16];
+                profile.Properties = new GameProfileProperty[16];
 
                 for (int i = 0; i < len; ++i)
                 {
                     GameProfileProperty property = new GameProfileProperty();
 
-                    property.name = stream.ReadMinecraftString();
-                    property.value = stream.ReadMinecraftString();
+                    property.Name = stream.ReadMinecraftString();
+                    property.Value = stream.ReadMinecraftString();
 
                     if (stream.ReadBool())
                     {
-                        property.signature = stream.ReadMinecraftString();
+                        property.Signature = stream.ReadMinecraftString();
                     }
-                    else property.signature = null;
+                    else property.Signature = null;
 
-                    profile.properties[i] = property;
+                    profile.Properties[i] = property;
                 }
 
                 return profile;
