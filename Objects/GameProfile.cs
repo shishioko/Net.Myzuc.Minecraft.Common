@@ -17,10 +17,14 @@ namespace Net.Myzuc.Minecraft.Common.Objects
         public Guid Guid = Guid.Empty;
         public string Name = string.Empty;
         public IEnumerable<Property> Properties = [];
-
         public GameProfile()
         {
             
+        }
+        public GameProfile(Guid id, string name)
+        {
+            Guid = id;
+            Name = name;
         }
     }
 }
