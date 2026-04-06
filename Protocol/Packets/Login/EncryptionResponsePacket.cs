@@ -4,7 +4,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login;
 
 public sealed class EncryptionResponsePacket : Packet
 {
-    public override bool Serverbound => false;
+    public override bool Serverbound => true;
     public override ProtocolStage ProtocolStage => ProtocolStage.Login;
     public override int Id => 0x01;
 
