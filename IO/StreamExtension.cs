@@ -96,7 +96,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
                 profile.Guid = stream.ReadGuid();
                 profile.Name = stream.ReadMinecraftString();
                 profile.Properties = new GameProfile.Property[stream.ReadS32V()];
-                for (int i = 0; i < profile.Properties.Length; ++i)
+                for (int i = 0; i < profile.Properties.Length; i++)
                 {
                     GameProfile.Property property = new();
                     property.Name = stream.ReadMinecraftString();
