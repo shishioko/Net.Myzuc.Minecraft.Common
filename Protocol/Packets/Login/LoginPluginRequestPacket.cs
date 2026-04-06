@@ -11,19 +11,23 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         public int MessageID;
         public String Channel;
-    
-        // Additional data, depending on the actual channel
+
+        public byte[] Data;
 
         public override void Serialize(Stream stream)
         {
             stream.WriteS32V(MessageID);
             stream.WriteMinecraftString(Channel);
+            stream.WriteU8A(Data);
         }
 
         public override void Deserialize(Stream stream)
         {
             MessageID = stream.ReadS32V();
             Channel = stream.ReadMinecraftString();
+            using MemoryStream ms = new();
+            stream.CopyTo(ms);
+            Data = ms.ToArray();
         }
     }
 }
