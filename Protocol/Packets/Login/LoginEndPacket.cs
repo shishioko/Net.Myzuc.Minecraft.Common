@@ -1,6 +1,6 @@
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 {
-    public sealed class LoginAckPacket: Packet
+    public sealed class LoginEndPacket: Packet
     {
         public override bool Serverbound => true;
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;

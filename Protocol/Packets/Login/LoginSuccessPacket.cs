@@ -1,22 +1,22 @@
-using Net.Myzuc.Minecraft.Common.IO;
+using Net.Myzuc.Minecraft.Common.Objects;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 {
-    public sealed class ClientDisconnectPacket : Packet
+    public sealed class LoginSuccessPacket: Packet
     {
         public override bool Serverbound => false;
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
-        public override int Id => 0x00;
+        public override int Id => 0x02;
 
-        public string Message = "{}";
+        public GameProfile Profile = new();
 
         public override void Serialize(Stream stream)
         {
-            stream.WriteMinecraftString(Message); // Not sure if components are strings, I forgor
+            GameProfile.Serialize(stream, Profile);
         }
         public override void Deserialize(Stream stream)
         {
-            Message = stream.ReadMinecraftString();
+            Profile = GameProfile.Deserialize(stream);
         }
     }
 }
