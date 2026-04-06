@@ -6,6 +6,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
     {
         public override bool Serverbound => false;
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
+        public override ProtocolStage NextProtocolStage => ProtocolStage.Disconnected;
         public override int Id => 0x00;
 
         public string Message = "{}";

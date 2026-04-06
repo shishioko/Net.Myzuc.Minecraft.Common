@@ -6,6 +6,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets
     {
         public abstract bool Serverbound { get; }
         public abstract ProtocolStage ProtocolStage { get; }
+        public virtual ProtocolStage NextProtocolStage => ProtocolStage;
         public abstract int Id { get; }
         
         public abstract void Deserialize(Stream stream);

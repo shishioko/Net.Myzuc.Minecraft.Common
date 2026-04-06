@@ -50,20 +50,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
             Packet? packet = type is not null ? Activator.CreateInstance(type) as Packet : null;
             if (packet is null) throw new ProtocolViolationException($"Unknown packet {(RemoteIsClient ? "Serverbound" : "Clientbound")}/{ProtocolStage}/{id:X2}!");
             packet.Deserialize(ms);
-            switch (packet)
-            {
-                case HandshakePacket handshakePacket:
-                {
-                    ProtocolStage = handshakePacket.Intent switch
-                    {
-                        HandshakePacket.IntentEnum.Status => ProtocolStage.Status,
-                        HandshakePacket.IntentEnum.Login => ProtocolStage.Login,
-                        HandshakePacket.IntentEnum.Transfer => ProtocolStage.Login,
-                        _ => throw new ProtocolViolationException("Unknown Intent!")
-                    };
-                    break;
-                }
-            }
+            ProtocolStage = packet.NextProtocolStage;
             return packet;
 
             async Task<MemoryStream> readRawAsync()
@@ -84,6 +71,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
             ms.WriteS32V(packet.Id);
             packet.Serialize(ms);
             await writeRawAsync(ms.ToArray());
+            ProtocolStage = packet.NextProtocolStage;
             return;
             
             async Task writeRawAsync(byte[] data)
