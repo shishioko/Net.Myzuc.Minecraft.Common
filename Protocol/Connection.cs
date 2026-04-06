@@ -20,7 +20,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
             {
                 Packet? instance = Activator.CreateInstance(type) as Packet;
                 Contract.Assert(instance is not null);
-                (bool serverbound, ProtocolStage stage, int id) signature = (instance.Serverbound, instance.ProtocolStage, instance.Id);
+                (bool serverbound, ProtocolStage stage, int id) signature = (instance.Serverbound, instance.ProtocolStage, instance.PacketId);
                 packets.Add(signature, type);
             }
             Packets = packets;
@@ -68,7 +68,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
         {
             if (packet.Serverbound == RemoteIsClient || packet.ProtocolStage != ProtocolStage) throw new ProtocolViolationException($"Tried writing unexpected packet: {SignatureToString(packet)}");
             using MemoryStream ms = new();
-            ms.WriteS32V(packet.Id);
+            ms.WriteS32V(packet.PacketId);
             packet.Serialize(ms);
             await writeRawAsync(ms.ToArray());
             ProtocolStage = packet.NextProtocolStage;
@@ -115,7 +115,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
         }
         private static string SignatureToString(Packet packet)
         {
-            return $"{(packet.Serverbound ? "Serverbound" : "Clientbound")}/{packet.ProtocolStage}/{packet.Id:X2}";
+            return $"{(packet.Serverbound ? "Serverbound" : "Clientbound")}/{packet.ProtocolStage}/{packet.PacketId:X2}";
         }
     }
 }

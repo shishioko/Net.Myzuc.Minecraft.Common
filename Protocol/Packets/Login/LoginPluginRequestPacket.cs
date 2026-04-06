@@ -7,21 +7,21 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
     {
         public override bool Serverbound => false;
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
-        public override int Id => 0x04;
+        protected internal override int PacketId => 0x04;
 
-        public int SequenceId = 0;
+        public int Id = 0;
         public string Channel = string.Empty;
         public byte[] Data = [];
 
         public override void Serialize(Stream stream)
         {
-            stream.WriteS32V(SequenceId);
+            stream.WriteS32V(Id);
             stream.WriteMinecraftString(Channel);
             stream.WriteU8A(Data);
         }
         public override void Deserialize(Stream stream)
         {
-            SequenceId = stream.ReadS32V();
+            Id = stream.ReadS32V();
             Channel = stream.ReadMinecraftString();
             using MemoryStream ms = new();
             stream.CopyTo(ms);

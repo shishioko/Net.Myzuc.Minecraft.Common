@@ -8,7 +8,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
     {
         public override bool Serverbound => false;
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
-        public override int Id => 0x01;
+        protected internal override int PacketId => 0x01;
 
         public string ServerId = string.Empty;
         public byte[] PublicKey = [];

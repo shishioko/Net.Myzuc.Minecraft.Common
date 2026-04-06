@@ -6,7 +6,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
     {
         public override bool Serverbound => false;
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
-        public override int Id => 0x03;
+        protected internal override int PacketId => 0x03;
 
         public int Threshold = 0;
 

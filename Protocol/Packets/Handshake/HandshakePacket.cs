@@ -27,7 +27,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake
                 };
             }
         }
-        public override int Id => 0x00;
+        protected internal override int PacketId => 0x00;
         
         public int ProtocolVersion = 0;
         public string Address = "";

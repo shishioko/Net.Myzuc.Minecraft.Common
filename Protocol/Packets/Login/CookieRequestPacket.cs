@@ -6,17 +6,17 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
     {
         public override bool Serverbound => false;
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
-        public override int Id => 0x05;
+        protected internal override int PacketId => 0x05;
 
-        public string CookieId = string.Empty;
+        public string Id = string.Empty;
 
         public override void Serialize(Stream stream)
         {
-            stream.WriteMinecraftString(CookieId);
+            stream.WriteMinecraftString(Id);
         }
         public override void Deserialize(Stream stream)
         {
-            CookieId = stream.ReadMinecraftString();
+            Id = stream.ReadMinecraftString();
         }
     }
 }

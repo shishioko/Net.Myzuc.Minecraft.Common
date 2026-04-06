@@ -6,7 +6,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
     {
         public override bool Serverbound => true;
         public override ProtocolStage ProtocolStage => ProtocolStage.Status;
-        public override int Id => 0x01;
+        protected internal override int PacketId => 0x01;
 
         public long Data = 0;
         

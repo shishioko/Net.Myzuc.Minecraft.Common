@@ -6,7 +6,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
     public sealed class LoginStartPacket : Packet
     {
         public override bool Serverbound => true;
-        public override int Id => 0x00;
+        protected internal override int PacketId => 0x00;
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
 
         public string Name = string.Empty;
