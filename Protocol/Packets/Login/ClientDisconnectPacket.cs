@@ -14,7 +14,6 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         {
             stream.WriteMinecraftString(Message); // Not sure if components are strings, I forgor
         }
-
         public override void Deserialize(Stream stream)
         {
             Message = stream.ReadMinecraftString();

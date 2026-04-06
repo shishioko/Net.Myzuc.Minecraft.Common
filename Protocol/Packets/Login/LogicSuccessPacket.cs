@@ -15,7 +15,6 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         {
             stream.writeGameProfile(Profile);
         }
-
         public override void Deserialize(Stream stream)
         {
             Profile = stream.readGameProfile();

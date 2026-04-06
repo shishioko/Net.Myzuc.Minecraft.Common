@@ -17,7 +17,6 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
             stream.WriteMinecraftString(Name);
             stream.WriteGuid(Guid);
         }
-
         public override void Deserialize(Stream stream)
         {
             Name = stream.ReadMinecraftString();

@@ -15,20 +15,16 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override void Serialize(Stream stream)
         {
             stream.WriteMinecraftString(CookieId);
-        
-            stream.WriteBool(Payload != null);
-
-            if (Payload != null)
+            stream.WriteBool(Payload is not null);
+            if (Payload is not null)
             {
                 stream.WriteS32V(Payload.Length);
                 stream.WriteU8A(Payload);
             }
         }
-
         public override void Deserialize(Stream stream)
         {
             CookieId = stream.ReadMinecraftString();
-        
             if(stream.ReadBool())
             {
                 Payload = stream.ReadU8A(stream.ReadS32V());

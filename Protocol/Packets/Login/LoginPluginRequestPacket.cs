@@ -11,7 +11,6 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         public int SequenceId = 0;
         public string Channel = string.Empty;
-
         public byte[] Data = [];
 
         public override void Serialize(Stream stream)
@@ -20,7 +19,6 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
             stream.WriteMinecraftString(Channel);
             stream.WriteU8A(Data);
         }
-
         public override void Deserialize(Stream stream)
         {
             SequenceId = stream.ReadS32V();

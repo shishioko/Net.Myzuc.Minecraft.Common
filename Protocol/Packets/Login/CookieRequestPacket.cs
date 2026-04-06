@@ -14,7 +14,6 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         {
             stream.WriteMinecraftString(CookieId);
         }
-
         public override void Deserialize(Stream stream)
         {
             CookieId = stream.ReadMinecraftString();

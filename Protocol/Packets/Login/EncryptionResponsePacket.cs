@@ -15,11 +15,9 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         {
             stream.WriteS32V(SharedSecret.Length);
             stream.WriteU8A(SharedSecret);
-        
             stream.WriteS32V(VerifyToken.Length);
             stream.WriteU8A(VerifyToken);
         }
-
         public override void Deserialize(Stream stream)
         {
             SharedSecret = stream.ReadU8A(stream.ReadS32V());
