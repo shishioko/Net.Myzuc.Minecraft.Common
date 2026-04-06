@@ -13,15 +13,16 @@ namespace Net.Myzuc.Minecraft.Common.Objects
         }
     }
 
-    public class GameProfileProperty
+    public struct GameProfileProperty
     {
-        public string Name = string.Empty;
-        public string Value = string.Empty;
-        public string? Signature = null;
-
-        public GameProfileProperty()
+        public string Name;
+        public string Value;
+        public string? Signature;
+        public GameProfileProperty(string name = "", string value = "", string? signature = null)
         {
-            
+            Name = name;
+            Value = value;
+            Signature = signature;
         }
     }
 }
