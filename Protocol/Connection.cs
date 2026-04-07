@@ -5,7 +5,6 @@ using System.Net.Sockets;
 using System.Reflection;
 using Me.Shiokawaii.IO;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets;
-using Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol
 {
@@ -93,14 +92,14 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                 Stream.WriteU8A(data);
             }
         }
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (Disposed) return;
             Disposed = true;
             Stream.Dispose();
             GC.SuppressFinalize(this);
         }
-        public async ValueTask DisposeAsync()
+        public virtual async ValueTask DisposeAsync()
         {
             if (Disposed) return;
             Disposed = true;
