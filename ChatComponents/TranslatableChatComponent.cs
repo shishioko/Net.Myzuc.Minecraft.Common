@@ -2,7 +2,7 @@ using System.Text.Json.Nodes;
 
 namespace Net.Myzuc.Minecraft.Common.ChatComponents
 {
-    public class TranslatableChatComponent : ChatComponent
+    public sealed class TranslatableChatComponent : ChatComponent
     {
         public string TranslationKey;
         public IEnumerable<ChatComponent>? Arguments = null;

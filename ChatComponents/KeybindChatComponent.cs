@@ -2,7 +2,7 @@ using System.Text.Json.Nodes;
 
 namespace Net.Myzuc.Minecraft.Common.ChatComponents
 {
-    public class KeybindChatComponent : ChatComponent
+    public sealed class KeybindChatComponent : ChatComponent
     {
         public string Keybind;
         public KeybindChatComponent(string keybind = "") : base("keybind")
