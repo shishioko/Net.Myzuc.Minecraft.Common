@@ -15,7 +15,7 @@
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
         <LangVersion>latestmajor</LangVersion>
         <Version>0.0.5.0-alpha</Version>
-        <AssemblyVersion>0.0.5.0-alpha</AssemblyVersion>
+        <AssemblyVersion>0.0.5.0</AssemblyVersion>
     </PropertyGroup>
 
     <ItemGroup>
