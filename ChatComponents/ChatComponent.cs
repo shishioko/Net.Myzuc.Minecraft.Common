@@ -12,6 +12,7 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         private readonly string Type;
         [JsonPropertyName("extra")]
         public IEnumerable<ChatComponent>? Children = null;
+        [JsonConverter(typeof(HexColorJsonSerializer))]
         [JsonPropertyName("color")]
         public Color? Color = null;
         [JsonPropertyName("font")]
@@ -26,6 +27,7 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         public bool? Strikethrough = null;
         [JsonPropertyName("obfuscated")]
         public bool? Obfuscated = null;
+        [JsonConverter(typeof(IntegerColorJsonSerializer))]
         [JsonPropertyName("shadow_color")]
         public Color? ShadowColor = null;
         protected internal ChatComponent(string type)
@@ -61,5 +63,9 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         {
             
         }*/
+        public static implicit operator ChatComponent(string data)
+        {
+            return new TextChatComponent(data);
+        }
     }
 }
