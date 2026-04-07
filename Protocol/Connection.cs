@@ -81,17 +81,15 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                     }
                     else
                     {
-                        using MemoryStream msCompressed = new();
-                        await using ZLibStream zlib = new(msCompressed, CompressionMode.Compress, true);
+                        ms2.WriteS32V(data.Length);
+                        await using ZLibStream zlib = new(ms2, CompressionMode.Compress, true);
                         zlib.WriteU8A(data);
-                        byte[] compressed = msCompressed.ToArray();
-                        ms2.WriteS32V(compressed.Length);
-                        ms2.WriteU8A(compressed);
+                        zlib.Flush();
                     }
                     data = ms2.ToArray();
                 }
-                Stream.WriteS32V(data.Length);
-                Stream.WriteU8A(data);
+                await Stream.WriteS32VAsync(data.Length);
+                await Stream.WriteU8AAsync(data);
             }
         }
         private void Run(Packet packet)
