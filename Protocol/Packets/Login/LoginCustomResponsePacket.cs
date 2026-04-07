@@ -22,9 +22,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
             Id = stream.ReadS32V();
             if (stream.ReadBool())
             {
-                using MemoryStream ms = new();
-                stream.CopyTo(ms);
-                Data = ms.ToArray();
+                Data = stream.ReadU8A();
             }
         }
     }
