@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using Me.Shiokawaii.IO;
+using Net.Myzuc.Minecraft.Common.IO;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets.Login;
@@ -36,6 +37,10 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
         {
             Stream = new NetworkStream(socket, true);
             RemoteIsClient = remoteIsClient;
+        }
+        public void Encrypt(byte[] secret)
+        {
+            Stream = new AesCfbStream(Stream, secret, secret, false);
         }
         public async Task<Packet> ReadAsync(CancellationToken cancellationToken = default)
         {
