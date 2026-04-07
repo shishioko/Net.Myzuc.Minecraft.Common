@@ -1,8 +1,5 @@
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.Data;
-using Net.Myzuc.Minecraft.Common.Objects;
 
 namespace Net.Myzuc.Minecraft.Common.ChatComponents
 {
@@ -15,12 +12,6 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         public PlayerObjectChatComponent(RenderProfile player) : base("player")
         {
             Player = player;
-        }
-        internal override void Serialize(JsonObject json)
-        {
-            json["player"] = JsonSerializer.SerializeToNode(Player, Global.JsonSerializerOptions); //todo: fix
-            json["hat"] = DisplayHat;
-            base.Serialize(json);
         }
     }
 }
