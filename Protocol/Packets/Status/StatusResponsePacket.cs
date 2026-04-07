@@ -10,12 +10,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
         protected internal override int PacketId => 0x00;
 
         public Objects.Status Status = new();
-        
-        public override void Serialize(Stream stream)
+        internal override void Serialize(Stream stream)
         {
             stream.WriteMinecraftString(JsonSerializer.Serialize(Status, Global.JsonSerializerOptions));
         }
-        public override void Deserialize(Stream stream)
+        internal override void Deserialize(Stream stream)
         {
             Status = JsonSerializer.Deserialize<Objects.Status>(stream.ReadMinecraftString(), Global.JsonSerializerOptions) ?? new();
         }

@@ -6,11 +6,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         protected internal override int PacketId => 0x03;
 
-        public override void Serialize(Stream stream)
+        internal override void Serialize(Stream stream)
         {
             
         }
-        public override void Deserialize(Stream stream)
+        internal override void Deserialize(Stream stream)
         {
             
         }

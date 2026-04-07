@@ -6,11 +6,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
         public override ProtocolStage ProtocolStage => ProtocolStage.Status;
         protected internal override int PacketId => 0x00;
         
-        public override void Serialize(Stream stream)
+        internal override void Serialize(Stream stream)
         {
             
         }
-        public override void Deserialize(Stream stream)
+        internal override void Deserialize(Stream stream)
         {
             
         }

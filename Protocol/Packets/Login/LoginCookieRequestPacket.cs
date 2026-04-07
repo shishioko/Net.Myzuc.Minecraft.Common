@@ -10,11 +10,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         public string Id = string.Empty;
 
-        public override void Serialize(Stream stream)
+        internal override void Serialize(Stream stream)
         {
             stream.WriteMinecraftString(Id);
         }
-        public override void Deserialize(Stream stream)
+        internal override void Deserialize(Stream stream)
         {
             Id = stream.ReadMinecraftString();
         }

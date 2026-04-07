@@ -22,14 +22,14 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake
         public ushort Port = 0;
         public IntentEnum Intent = IntentEnum.Status;
         
-        public override void Serialize(Stream stream)
+        internal override void Serialize(Stream stream)
         {
             stream.WriteS32V(ProtocolVersion);
             stream.WriteMinecraftString(Address);
             stream.WriteU16(Port);
             stream.WriteS32V((int)Intent);
         }
-        public override void Deserialize(Stream stream)
+        internal override void Deserialize(Stream stream)
         {
             ProtocolVersion = stream.ReadS32V();
             Address = stream.ReadMinecraftString();

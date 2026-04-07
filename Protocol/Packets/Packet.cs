@@ -8,8 +8,8 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets
         public abstract ProtocolStage ProtocolStage { get; }
         protected internal abstract int PacketId { get; }
         
-        public abstract void Deserialize(Stream stream);
-        public abstract void Serialize(Stream stream);
+        internal abstract void Deserialize(Stream stream);
+        internal abstract void Serialize(Stream stream);
 
     }
 }

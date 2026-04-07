@@ -11,14 +11,14 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public byte[] EncryptedSecret = [];
         public byte[] EncryptedSample = [];
 
-        public override void Serialize(Stream stream)
+        internal override void Serialize(Stream stream)
         {
             stream.WriteS32V(EncryptedSecret.Length);
             stream.WriteU8A(EncryptedSecret);
             stream.WriteS32V(EncryptedSample.Length);
             stream.WriteU8A(EncryptedSample);
         }
-        public override void Deserialize(Stream stream)
+        internal override void Deserialize(Stream stream)
         {
             EncryptedSecret = stream.ReadU8A(stream.ReadS32V());
             EncryptedSample = stream.ReadU8A(stream.ReadS32V());

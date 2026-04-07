@@ -10,11 +10,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         public int Threshold = 0;
 
-        public override void Serialize(Stream stream)
+        internal override void Serialize(Stream stream)
         {
             stream.WriteS32V(Threshold);
         }
-        public override void Deserialize(Stream stream)
+        internal override void Deserialize(Stream stream)
         {
             Threshold = stream.ReadS32V();
         }

@@ -13,13 +13,13 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public string Channel = string.Empty;
         public byte[] Data = [];
 
-        public override void Serialize(Stream stream)
+        internal override void Serialize(Stream stream)
         {
             stream.WriteS32V(Id);
             stream.WriteMinecraftString(Channel);
             stream.WriteU8A(Data);
         }
-        public override void Deserialize(Stream stream)
+        internal override void Deserialize(Stream stream)
         {
             Id = stream.ReadS32V();
             Channel = stream.ReadMinecraftString();

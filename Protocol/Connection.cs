@@ -11,7 +11,7 @@ using Net.Myzuc.Minecraft.Common.Protocol.Packets.Login;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol
 {
-    public class Connection : IDisposable, IAsyncDisposable
+    public sealed class Connection : IDisposable, IAsyncDisposable
     {
         private static readonly IReadOnlyDictionary<(bool serverbound, ProtocolStage stage, int id), Type> Packets;
         static Connection()
@@ -128,14 +128,14 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                 }
             }
         }
-        public virtual void Dispose()
+        public void Dispose()
         {
             if (Disposed) return;
             Disposed = true;
             Stream.Dispose();
             GC.SuppressFinalize(this);
         }
-        public virtual async ValueTask DisposeAsync()
+        public async ValueTask DisposeAsync()
         {
             if (Disposed) return;
             Disposed = true;

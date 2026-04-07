@@ -12,12 +12,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public string Name = string.Empty;
         public Guid Guid = Guid.Empty;
 
-        public override void Serialize(Stream stream)
+        internal override void Serialize(Stream stream)
         {
             stream.WriteMinecraftString(Name);
             stream.WriteGuid(Guid);
         }
-        public override void Deserialize(Stream stream)
+        internal override void Deserialize(Stream stream)
         {
             Name = stream.ReadMinecraftString();
             Guid = stream.ReadGuid();

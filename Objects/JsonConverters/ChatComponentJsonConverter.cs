@@ -5,9 +5,8 @@ using Net.Myzuc.Minecraft.Common.ChatComponents;
 
 namespace Net.Myzuc.Minecraft.Common.Objects.JsonConverters
 {
-    public class ChatComponentJsonConverter : JsonConverter<ChatComponent>
+    internal class ChatComponentJsonConverter : JsonConverter<ChatComponent>
     {
-        
         public override ChatComponent Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             throw new NotSupportedException();

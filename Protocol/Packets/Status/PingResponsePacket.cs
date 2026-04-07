@@ -10,11 +10,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
 
         public long Data = 0;
         
-        public override void Serialize(Stream stream)
+        internal override void Serialize(Stream stream)
         {
             stream.WriteS64(Data);
         }
-        public override void Deserialize(Stream stream)
+        internal override void Deserialize(Stream stream)
         {
             Data = stream.ReadS64();
         }

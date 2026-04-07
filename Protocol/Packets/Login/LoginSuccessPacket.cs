@@ -10,11 +10,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         public GameProfile Profile = new();
 
-        public override void Serialize(Stream stream)
+        internal override void Serialize(Stream stream)
         {
             GameProfile.Serialize(stream, Profile);
         }
-        public override void Deserialize(Stream stream)
+        internal override void Deserialize(Stream stream)
         {
             Profile = GameProfile.Deserialize(stream);
         }

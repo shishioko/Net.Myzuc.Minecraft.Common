@@ -13,11 +13,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public ChatComponent Message = new TextChatComponent();
 
         
-        public override void Serialize(Stream stream)
+        internal override void Serialize(Stream stream)
         {
             stream.WriteMinecraftString(JsonSerializer.Serialize(Message, Global.JsonSerializerOptions));
         }
-        public override void Deserialize(Stream stream)
+        internal override void Deserialize(Stream stream)
         {
             Message = JsonSerializer.Deserialize<ChatComponent>(stream.ReadMinecraftString(), Global.JsonSerializerOptions) ?? new TextChatComponent();
         }
