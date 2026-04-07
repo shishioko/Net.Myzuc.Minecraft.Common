@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Me.Shiokawaii.IO;
 using Net.Myzuc.Minecraft.Common.IO;
 
@@ -7,8 +8,11 @@ namespace Net.Myzuc.Minecraft.Common.Objects
     {
         public struct Property
         {
+            [JsonPropertyName("name")]
             public string Name;
+            [JsonPropertyName("value")]
             public string Value;
+            [JsonPropertyName("signature")]
             public string? Signature;
             public Property(string name = "", string value = "", string? signature = null)
             {
@@ -17,8 +21,11 @@ namespace Net.Myzuc.Minecraft.Common.Objects
                 Signature = signature;
             }
         }
+        [JsonPropertyName("id")]
         public Guid Guid = Guid.Empty;
+        [JsonPropertyName("name")]
         public string Name = string.Empty;
+        [JsonPropertyName("properties")]
         public Property[] Properties = [];
         public GameProfile()
         {
