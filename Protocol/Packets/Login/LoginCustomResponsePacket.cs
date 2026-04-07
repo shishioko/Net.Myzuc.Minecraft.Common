@@ -20,10 +20,10 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override void Deserialize(Stream stream)
         {
             Id = stream.ReadS32V();
-            using MemoryStream ms = new();
-            stream.CopyTo(ms);
             if (stream.ReadBool())
             {
+                using MemoryStream ms = new();
+                stream.CopyTo(ms);
                 Data = ms.ToArray();
             }
         }
