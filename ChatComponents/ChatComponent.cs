@@ -28,5 +28,19 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         {
             return new TextChatComponent(data);
         }
+        public static implicit operator ChatComponent(ChatComponent[] data)
+        {
+            return new TextChatComponent()
+            {
+                Children = data,
+            };
+        }
+        public static implicit operator ChatComponent(string[] data)
+        {
+            return new TextChatComponent()
+            {
+                Children = data.Select(child => new TextChatComponent(child)),
+            };
+        }
     }
 }
