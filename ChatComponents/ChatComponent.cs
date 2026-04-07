@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.Objects.JsonConverters;
 
@@ -23,6 +24,14 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         protected internal ChatComponent(string type)
         {
             Type = type;
+        }
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this, Global.JsonSerializerOptions);
+        }
+        public static ChatComponent Parse(string data)
+        {
+            return JsonSerializer.Deserialize<ChatComponent>(data, Global.JsonSerializerOptions) ?? throw new InvalidDataException();
         }
         public static implicit operator ChatComponent(string data)
         {

@@ -14,16 +14,16 @@ namespace Net.Myzuc.Minecraft.Common
             },
             PreferredObjectCreationHandling = JsonObjectCreationHandling.Replace,
 
-            NumberHandling = JsonNumberHandling.Strict,
+            NumberHandling = JsonNumberHandling.AllowReadingFromString,
 
             IncludeFields = true,
             IgnoreReadOnlyFields = false,
             IgnoreReadOnlyProperties = false,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             PropertyNameCaseInsensitive = false,
-            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
-            AllowTrailingCommas = false,
-            ReadCommentHandling = JsonCommentHandling.Disallow,
+            DictionaryKeyPolicy = JsonNamingPolicy.SnakeCaseLower,
+            AllowTrailingCommas = true,
+            ReadCommentHandling = JsonCommentHandling.Skip,
             UnknownTypeHandling = JsonUnknownTypeHandling.JsonElement,
 
             WriteIndented = false,
