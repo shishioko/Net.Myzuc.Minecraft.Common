@@ -10,9 +10,10 @@ namespace Net.Myzuc.Minecraft.Common.Objects
         public int Online = 0;
         [JsonPropertyName("sample")]
         public IList<PlayerSample>? Samples = null;
-        public PlayersInfo()
+        public PlayersInfo(int maximum = 0, int online = 0)
         {
-            
+            Maximum = maximum;
+            Online = online;
         }
     }
 }

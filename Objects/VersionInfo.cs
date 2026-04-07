@@ -5,9 +5,9 @@ namespace Net.Myzuc.Minecraft.Common.Objects
     public struct VersionInfo
     {
         [JsonPropertyName("name")]
-        public string Name = Minecraft.Version.ToString();
+        public string Name = string.Empty;
         [JsonPropertyName("protocol")]
-        public int Protocol = Minecraft.ProtocolVersion;
+        public int Protocol = -1;
         public VersionInfo(string name, int protocol)
         {
             Name = name;
