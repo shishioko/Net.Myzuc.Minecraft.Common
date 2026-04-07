@@ -1,3 +1,5 @@
+using System.Text.Json;
+using Net.Myzuc.Minecraft.Common.ChatComponents;
 using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
@@ -8,15 +10,16 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         protected internal override int PacketId => 0x00;
 
-        public string Message = string.Empty;
+        public ChatComponent Message = new TextChatComponent();
 
+        
         public override void Serialize(Stream stream)
         {
-            stream.WriteMinecraftString($"{{\"text\":\"{System.Web.HttpUtility.JavaScriptStringEncode(Message, false)}\"}}");
+            stream.WriteMinecraftString(JsonSerializer.Serialize(Message, Global.JsonSerializerOptions));
         }
         public override void Deserialize(Stream stream)
         {
-            Message = stream.ReadMinecraftString();
+            Message = JsonSerializer.Deserialize<ChatComponent>(stream.ReadMinecraftString(), Global.JsonSerializerOptions) ?? new TextChatComponent();
         }
     }
 }
