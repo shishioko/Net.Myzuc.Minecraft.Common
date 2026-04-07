@@ -6,7 +6,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using Net.Myzuc.Minecraft.Common.Data;
-using Net.Myzuc.Minecraft.Common.Objects;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets.Login;
 
 namespace Net.Myzuc.Minecraft.Common.Utilities

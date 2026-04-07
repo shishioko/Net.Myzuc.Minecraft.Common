@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets
 {
     public abstract class Packet

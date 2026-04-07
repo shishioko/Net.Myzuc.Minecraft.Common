@@ -1,4 +1,3 @@
-using System.Runtime.Serialization;
 using Me.Shiokawaii.IO;
 using Net.Myzuc.Minecraft.Common.IO;
 
