@@ -1,31 +1,31 @@
 using Me.Shiokawaii.IO;
-using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 {
-    public sealed class LoginPluginRequestPacket: Packet
+    public sealed class LoginCustomResponsePacket: Packet
     {
-        public override bool Serverbound => false;
+        public override bool Serverbound => true;
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
-        protected internal override int PacketId => 0x04;
+        protected internal override int PacketId => 0x02;
 
         public int Id = 0;
-        public string Channel = string.Empty;
-        public byte[] Data = [];
+        public byte[]? Data = [];
 
         public override void Serialize(Stream stream)
         {
             stream.WriteS32V(Id);
-            stream.WriteMinecraftString(Channel);
-            stream.WriteU8A(Data);
+            stream.WriteBool(Data is not null);
+            if (Data is not null) stream.WriteU8A(Data);
         }
         public override void Deserialize(Stream stream)
         {
             Id = stream.ReadS32V();
-            Channel = stream.ReadMinecraftString();
             using MemoryStream ms = new();
             stream.CopyTo(ms);
-            Data = ms.ToArray();
+            if (stream.ReadBool())
+            {
+                Data = ms.ToArray();
+            }
         }
     }
 }
