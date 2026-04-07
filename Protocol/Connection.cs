@@ -134,14 +134,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
             if (Disposed) return;
             Disposed = true;
             Stream.Dispose();
-            GC.SuppressFinalize(this);
         }
         public async ValueTask DisposeAsync()
         {
             if (Disposed) return;
             Disposed = true;
             await Stream.DisposeAsync();
-            GC.SuppressFinalize(this);
         }
         private static string SignatureToString(Packet packet)
         {
