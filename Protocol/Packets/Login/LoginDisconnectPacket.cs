@@ -11,7 +11,6 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         public ChatComponent Message = new TextChatComponent();
 
-        
         internal override void Serialize(Stream stream)
         {
             stream.WriteMinecraftString(Message.ToString());
