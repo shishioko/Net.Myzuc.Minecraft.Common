@@ -6,12 +6,9 @@ namespace Net.Myzuc.Minecraft.Common.Data
 {
     public class GameProfile
     {
-        [JsonPropertyName("id")]
-        public Guid Guid = Guid.Empty;
-        [JsonPropertyName("name")]
-        public string Name = string.Empty;
-        [JsonPropertyName("properties")]
-        public Property[] Properties = [];
+        [JsonPropertyName("id")] public Guid Guid { get; set; } = Guid.Empty;
+        [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
+        [JsonPropertyName("properties")] public Property[] Properties { get; set; } = [];
         public GameProfile()
         {
             

@@ -5,16 +5,11 @@ namespace Net.Myzuc.Minecraft.Common.Data
 {
     public class Status
     {
-        [JsonPropertyName("version")]
-        public VersionInfo? Version = null;
-        [JsonPropertyName("players")]
-        public PlayersInfo? Players = null;
-        [JsonPropertyName("description")]
-        public ChatComponent? Description = null;
-        [JsonPropertyName("favicon")]
-        public string? Icon = null;
-        [JsonPropertyName("enforcesSecureChat")]
-        public bool? EnforcesSecureChat = null;
+        [JsonPropertyName("version")] public VersionInfo? Version { get; set; } = null;
+        [JsonPropertyName("players")] public PlayersInfo? Players { get; set; } = null;
+        [JsonPropertyName("description")] public ChatComponent? Description { get; set; } = null;
+        [JsonPropertyName("favicon")] public string? Icon { get; set; } = null;
+        [JsonPropertyName("enforcesSecureChat")] public bool? EnforcesSecureChat { get; set; } = null;
         public Status(ChatComponent? description = null, VersionInfo? version = null)
         {
             Description = description;

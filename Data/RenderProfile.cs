@@ -6,20 +6,13 @@ namespace Net.Myzuc.Minecraft.Common.Data
     public class RenderProfile
     {
         [JsonConverter(typeof(ArrayGuidJsonConverter))]
-        [JsonPropertyName("id")]
-        public Guid? Guid = null;
-        [JsonPropertyName("name")]
-        public string? Name = null;
-        [JsonPropertyName("properties")]
-        public Property[]? Properties = null;
-        [JsonPropertyName("texture")]
-        public string? Skin = null;
-        [JsonPropertyName("cape")]
-        public string? Cape = null;
-        [JsonPropertyName("elytra")]
-        public string? Elytra = null;
-        [JsonPropertyName("model")]
-        public PlayerModelType? ModelType = null;
+        [JsonPropertyName("id")] public Guid? Guid { get; set; } = null;
+        [JsonPropertyName("name")] public string? Name { get; set; } = null;
+        [JsonPropertyName("properties")] public Property[]? Properties { get; set; } = null;
+        [JsonPropertyName("texture")] public string? Skin { get; set; } = null;
+        [JsonPropertyName("cape")] public string? Cape { get; set; } = null;
+        [JsonPropertyName("elytra")] public string? Elytra { get; set; } = null;
+        [JsonPropertyName("model")] public PlayerModelType? ModelType { get; set; } = null;
         public RenderProfile()
         {
             

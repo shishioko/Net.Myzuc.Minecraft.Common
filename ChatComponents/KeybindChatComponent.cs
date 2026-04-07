@@ -4,8 +4,7 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
 {
     public sealed class KeybindChatComponent : ChatComponent
     {
-        [JsonPropertyName("keybind")]
-        public string Keybind;
+        [JsonPropertyName("keybind")] public string Keybind { get; set; }
         public KeybindChatComponent(string keybind = "") : base("keybind")
         {
             Keybind = keybind;

@@ -4,12 +4,9 @@ namespace Net.Myzuc.Minecraft.Common.Data
 {
     public struct Property
     {
-        [JsonPropertyName("name")]
-        public string Name = "";
-        [JsonPropertyName("value")]
-        public string Value = "";
-        [JsonPropertyName("signature")]
-        public string? Signature = null;
+        [JsonPropertyName("name")] public string Name { get; set; } = "";
+        [JsonPropertyName("value")] public string Value { get; set; } = "";
+        [JsonPropertyName("signature")] public string? Signature { get; set; } = null;
         public Property()
         {
             

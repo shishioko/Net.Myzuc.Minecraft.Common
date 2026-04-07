@@ -4,10 +4,8 @@ namespace Net.Myzuc.Minecraft.Common.Data
 {
     public struct VersionInfo
     {
-        [JsonPropertyName("name")]
-        public string Name = string.Empty;
-        [JsonPropertyName("protocol")]
-        public int Protocol = -1;
+        [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
+        [JsonPropertyName("protocol")] public int Protocol { get; set; } = -1;
         public VersionInfo(string name, int protocol)
         {
             Name = name;
