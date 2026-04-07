@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Net.Myzuc.Minecraft.Common.ChatComponents;
 
 namespace Net.Myzuc.Minecraft.Common.Objects
 {
@@ -9,12 +10,12 @@ namespace Net.Myzuc.Minecraft.Common.Objects
         [JsonPropertyName("players")]
         public PlayersInfo? Players = null;
         [JsonPropertyName("description")]
-        public string? Description = null;
+        public ChatComponent? Description = null;
         [JsonPropertyName("favicon")]
         public string? Icon = null;
         [JsonPropertyName("enforcesSecureChat")]
         public bool? EnforcesSecureChat = null;
-        public Status(string? description = null, VersionInfo? version = null)
+        public Status(ChatComponent? description = null, VersionInfo? version = null)
         {
             Description = description;
             Version = version;
