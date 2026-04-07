@@ -12,7 +12,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects
         [JsonPropertyName("name")]
         public string? Name = null;
         [JsonPropertyName("properties")]
-        public GameProfile.Property[]? Properties = null;
+        public Property[]? Properties = null;
         [JsonPropertyName("texture")]
         public string? Skin = null;
         [JsonPropertyName("cape")]

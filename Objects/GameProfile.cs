@@ -6,21 +6,6 @@ namespace Net.Myzuc.Minecraft.Common.Objects
 {
     public class GameProfile
     {
-        public struct Property
-        {
-            [JsonPropertyName("name")]
-            public string Name;
-            [JsonPropertyName("value")]
-            public string Value;
-            [JsonPropertyName("signature")]
-            public string? Signature;
-            public Property(string name = "", string value = "", string? signature = null)
-            {
-                Name = name;
-                Value = value;
-                Signature = signature;
-            }
-        }
         [JsonPropertyName("id")]
         public Guid Guid = Guid.Empty;
         [JsonPropertyName("name")]
@@ -42,7 +27,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects
             stream.WriteGuid(gameProfile.Guid);
             stream.WriteMinecraftString(gameProfile.Name);
             stream.WriteS32V(gameProfile.Properties.Length);
-            foreach(GameProfile.Property property in gameProfile.Properties)
+            foreach(Property property in gameProfile.Properties)
             {
                 stream.WriteMinecraftString(property.Name);
                 stream.WriteMinecraftString(property.Value);
@@ -58,10 +43,10 @@ namespace Net.Myzuc.Minecraft.Common.Objects
             GameProfile profile = new();
             profile.Guid = stream.ReadGuid();
             profile.Name = stream.ReadMinecraftString();
-            profile.Properties = new GameProfile.Property[stream.ReadS32V()];
+            profile.Properties = new Property[stream.ReadS32V()];
             for (int i = 0; i < profile.Properties.Length; i++)
             {
-                GameProfile.Property property = new();
+                Property property = new();
                 property.Name = stream.ReadMinecraftString();
                 property.Value = stream.ReadMinecraftString();
                 if (stream.ReadBool())
