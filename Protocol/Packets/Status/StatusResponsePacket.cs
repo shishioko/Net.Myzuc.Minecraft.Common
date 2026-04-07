@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
@@ -12,11 +13,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
         
         public override void Serialize(Stream stream)
         {
-            stream.WriteMinecraftJson(Status);
+            stream.WriteMinecraftString(JsonSerializer.Serialize(Status, Global.JsonSerializerOptions));
         }
         public override void Deserialize(Stream stream)
         {
-            Status = stream.ReadMinecraftJson<Objects.Status>();
+            Status = JsonSerializer.Deserialize<Objects.Status>(stream.ReadMinecraftString(), Global.JsonSerializerOptions) ?? new();
         }
     }
 }
