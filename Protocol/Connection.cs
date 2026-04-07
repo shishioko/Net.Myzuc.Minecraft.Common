@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using Me.Shiokawaii.IO;
+using Net.Myzuc.Minecraft.Common.Data;
 using Net.Myzuc.Minecraft.Common.IO;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake;
@@ -105,8 +106,8 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                 {
                     ProtocolStage = handshakePacket.Intent switch
                     {
-                        HandshakePacket.IntentEnum.Status => ProtocolStage.Status,
-                        HandshakePacket.IntentEnum.Login or HandshakePacket.IntentEnum.Transfer => ProtocolStage.Login,
+                        HandshakeIntent.Status => ProtocolStage.Status,
+                        HandshakeIntent.Login or HandshakeIntent.Transfer => ProtocolStage.Login,
                         _ => ProtocolStage.Disconnected
                     };
                     break;
