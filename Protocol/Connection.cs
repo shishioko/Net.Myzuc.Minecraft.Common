@@ -106,7 +106,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                     };
                     break;
                 }
-                case LoginDisconnectPacket loginDisconnectPacket:
+                case LoginDisconnectPacket:
                 {
                     ProtocolStage = ProtocolStage.Disconnected;
                     break;
