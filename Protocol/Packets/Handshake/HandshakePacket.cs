@@ -15,18 +15,6 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake
 
         public override bool Serverbound => true;
         public override ProtocolStage ProtocolStage => ProtocolStage.Handshake;
-        public override ProtocolStage NextProtocolStage
-        {
-            get
-            {
-                return Intent switch
-                {
-                    IntentEnum.Status => ProtocolStage.Status,
-                    IntentEnum.Login or IntentEnum.Transfer => ProtocolStage.Login,
-                    _ => ProtocolStage.Disconnected
-                };
-            }
-        }
         protected internal override int PacketId => 0x00;
         
         public int ProtocolVersion = 0;

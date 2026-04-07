@@ -5,6 +5,8 @@ using System.Net.Sockets;
 using System.Reflection;
 using Me.Shiokawaii.IO;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets;
+using Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake;
+using Net.Myzuc.Minecraft.Common.Protocol.Packets.Login;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol
 {
@@ -43,7 +45,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
             Packet? packet = type is not null ? Activator.CreateInstance(type) as Packet : null;
             if (packet is null) throw new ProtocolViolationException($"Unknown packet {(RemoteIsClient ? "Serverbound" : "Clientbound")}/{ProtocolStage}/{id:X2}!");
             packet.Deserialize(ms);
-            ProtocolStage = packet.NextProtocolStage;
+            Run(packet);
             return packet;
 
             async Task<MemoryStream> readRawAsync()
@@ -64,7 +66,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
             ms.WriteS32V(packet.PacketId);
             packet.Serialize(ms);
             await writeRawAsync(ms.ToArray());
-            ProtocolStage = packet.NextProtocolStage;
+            Run(packet);
             return;
             
             async Task writeRawAsync(byte[] data)
@@ -90,6 +92,37 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                 }
                 Stream.WriteS32V(data.Length);
                 Stream.WriteU8A(data);
+            }
+        }
+        private void Run(Packet packet)
+        {
+            switch (packet)
+            {
+                case HandshakePacket handshakePacket:
+                {
+                    ProtocolStage = handshakePacket.Intent switch
+                    {
+                        HandshakePacket.IntentEnum.Status => ProtocolStage.Status,
+                        HandshakePacket.IntentEnum.Login or HandshakePacket.IntentEnum.Transfer => ProtocolStage.Login,
+                        _ => ProtocolStage.Disconnected
+                    };
+                    break;
+                }
+                case LoginDisconnectPacket loginDisconnectPacket:
+                {
+                    ProtocolStage = ProtocolStage.Disconnected;
+                    break;
+                }
+                case LoginCompressionPacket loginCompressionPacket:
+                {
+                    CompressionThreshold = loginCompressionPacket.Threshold;
+                    break;
+                }
+                case LoginEndPacket:
+                {
+                    ProtocolStage = ProtocolStage.Configuration;
+                    break;
+                }
             }
         }
         public virtual void Dispose()
