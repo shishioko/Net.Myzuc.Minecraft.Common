@@ -37,7 +37,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
             Stream = new NetworkStream(socket, true);
             RemoteIsClient = remoteIsClient;
         }
-        public async Task<Packet> ReadAsync()
+        public async Task<Packet> ReadAsync(CancellationToken cancellationToken = default)
         {
             using MemoryStream ms = await readRawAsync();
             int id = ms.ReadS32V();
@@ -50,7 +50,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
 
             async Task<MemoryStream> readRawAsync()
             {
-                byte[] data = await Stream.ReadU8AAsync(await Stream.ReadS32VAsync());
+                byte[] data = await Stream.ReadU8AAsync(await Stream.ReadS32VAsync(cancellationToken), cancellationToken);
                 if (CompressionThreshold < 0) return new(data);
                 MemoryStream ms2 = new(data);
                 int decompressedSize = ms2.ReadS32V();
@@ -59,7 +59,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                 return new(zlib.ReadU8A(decompressedSize));
             }
         }
-        public async Task WriteAsync(Packet packet)
+        public async Task WriteAsync(Packet packet, CancellationToken cancellationToken = default)
         {
             if (packet.Serverbound == RemoteIsClient || packet.ProtocolStage != ProtocolStage) throw new ProtocolViolationException($"Tried writing unexpected packet: {SignatureToString(packet)}");
             using MemoryStream ms = new();
@@ -88,8 +88,8 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                     }
                     data = ms2.ToArray();
                 }
-                await Stream.WriteS32VAsync(data.Length);
-                await Stream.WriteU8AAsync(data);
+                await Stream.WriteS32VAsync(data.Length, cancellationToken);
+                await Stream.WriteU8AAsync(data, cancellationToken);
             }
         }
         private void Run(Packet packet)
