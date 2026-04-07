@@ -1,8 +1,7 @@
 using System.Text.Json.Serialization;
-using Net.Myzuc.Minecraft.Common.Enums;
 using Net.Myzuc.Minecraft.Common.Objects.JsonConverters;
 
-namespace Net.Myzuc.Minecraft.Common.Objects
+namespace Net.Myzuc.Minecraft.Common.Data
 {
     public class RenderProfile
     {

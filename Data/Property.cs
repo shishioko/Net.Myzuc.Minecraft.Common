@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Net.Myzuc.Minecraft.Common.Objects
+namespace Net.Myzuc.Minecraft.Common.Data
 {
     public struct Property
     {

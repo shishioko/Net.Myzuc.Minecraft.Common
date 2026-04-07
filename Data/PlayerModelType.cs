@@ -1,4 +1,4 @@
-namespace Net.Myzuc.Minecraft.Common.Enums
+namespace Net.Myzuc.Minecraft.Common.Data
 {
     public enum PlayerModelType : int
     {

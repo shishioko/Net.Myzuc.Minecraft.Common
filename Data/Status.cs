@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.ChatComponents;
 
-namespace Net.Myzuc.Minecraft.Common.Objects
+namespace Net.Myzuc.Minecraft.Common.Data
 {
     public class Status
     {

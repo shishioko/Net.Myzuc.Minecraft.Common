@@ -9,14 +9,14 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
         public override ProtocolStage ProtocolStage => ProtocolStage.Status;
         protected internal override int PacketId => 0x00;
 
-        public Objects.Status Status = new();
+        public Data.Status Status = new();
         internal override void Serialize(Stream stream)
         {
             stream.WriteMinecraftString(JsonSerializer.Serialize(Status, Global.JsonSerializerOptions));
         }
         internal override void Deserialize(Stream stream)
         {
-            Status = JsonSerializer.Deserialize<Objects.Status>(stream.ReadMinecraftString(), Global.JsonSerializerOptions) ?? new();
+            Status = JsonSerializer.Deserialize<Data.Status>(stream.ReadMinecraftString(), Global.JsonSerializerOptions) ?? new();
         }
     }
 }

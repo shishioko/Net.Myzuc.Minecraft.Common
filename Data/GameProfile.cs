@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 using Me.Shiokawaii.IO;
 using Net.Myzuc.Minecraft.Common.IO;
 
-namespace Net.Myzuc.Minecraft.Common.Objects
+namespace Net.Myzuc.Minecraft.Common.Data
 {
     public class GameProfile
     {
