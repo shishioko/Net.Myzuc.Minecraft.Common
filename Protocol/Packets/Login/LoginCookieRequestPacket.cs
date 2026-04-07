@@ -2,7 +2,7 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 {
-    public sealed class CookieRequestPacket : Packet
+    public sealed class LoginCookieRequestPacket : Packet
     {
         public override bool Serverbound => false;
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
