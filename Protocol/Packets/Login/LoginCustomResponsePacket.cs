@@ -9,7 +9,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         protected internal override int PacketId => 0x02;
 
         public int Id = 0;
-        public byte[]? Data = [];
+        public byte[]? Data = null;
 
         public override void Serialize(Stream stream)
         {
