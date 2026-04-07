@@ -1,0 +1,26 @@
+using Me.Shiokawaii.IO;
+using Net.Myzuc.Minecraft.Common.IO;
+
+namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
+{
+    public sealed class ConfigurationCustomClientboundPacket: Packet
+    {
+        public override bool Serverbound => false;
+        public override ProtocolStage ProtocolStage => ProtocolStage.Configuration;
+        protected internal override int PacketId => 0x01;
+
+        public string Channel = string.Empty;
+        public byte[] Data = [];
+
+        internal override void Serialize(Stream stream)
+        {
+            stream.WriteMinecraftString(Channel);
+            stream.WriteU8A(Data);
+        }
+        internal override void Deserialize(Stream stream)
+        {
+            Channel = stream.ReadMinecraftString();
+            Data = stream.ReadU8A();
+        }
+    }
+}
