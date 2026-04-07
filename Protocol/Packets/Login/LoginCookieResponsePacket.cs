@@ -10,16 +10,16 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         protected internal override int PacketId => 0x04;
 
         public string Id = string.Empty;
-        public byte[]? Payload = null;
+        public byte[]? Data = null;
 
         public override void Serialize(Stream stream)
         {
             stream.WriteMinecraftString(Id);
-            stream.WriteBool(Payload is not null);
-            if (Payload is not null)
+            stream.WriteBool(Data is not null);
+            if (Data is not null)
             {
-                stream.WriteS32V(Payload.Length);
-                stream.WriteU8A(Payload);
+                stream.WriteS32V(Data.Length);
+                stream.WriteU8A(Data);
             }
         }
         public override void Deserialize(Stream stream)
@@ -27,7 +27,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
             Id = stream.ReadMinecraftString();
             if(stream.ReadBool())
             {
-                Payload = stream.ReadU8A(stream.ReadS32V());
+                Data = stream.ReadU8A(stream.ReadS32V());
             }
         }
     }
