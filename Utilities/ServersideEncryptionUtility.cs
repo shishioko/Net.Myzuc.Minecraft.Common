@@ -7,7 +7,7 @@ namespace Net.Myzuc.Minecraft.Common.Utilities
     {
         private readonly RSA Rsa;
         private readonly byte[] Sample;
-        private readonly string ServerId;
+        public string ServerId { get; private set; }
         public ServersideEncryptionUtility(string serverId = "", int sampleSize = 64)
         {
             Rsa = RSA.Create(1024);
