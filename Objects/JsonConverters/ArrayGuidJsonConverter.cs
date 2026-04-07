@@ -8,7 +8,9 @@ namespace Net.Myzuc.Minecraft.Common.Objects.JsonConverters
     {
         public override Guid Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            throw new NotImplementedException();
+            int[] data = JsonSerializer.Deserialize<int[]>(ref reader, options) ?? throw new InvalidDataException();
+            ReadOnlySpan<byte> span = MemoryMarshal.Cast<int, byte>(data);
+            return new(span);
         }
 
         public override void Write(Utf8JsonWriter writer, Guid value, JsonSerializerOptions options)

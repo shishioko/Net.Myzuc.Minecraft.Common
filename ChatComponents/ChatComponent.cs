@@ -7,6 +7,7 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
     [JsonConverter(typeof(ChatComponentJsonConverter))]
     public abstract class ChatComponent
     {
+        [JsonInclude]
         [JsonPropertyName("type")] private string Type { get; }
         [JsonPropertyName("extra")] public IEnumerable<ChatComponent>? Children { get; set; } = null;
         [JsonConverter(typeof(HexColorJsonSerializer))]
