@@ -12,7 +12,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         public string ServerId = string.Empty;
         public byte[] PublicKey = [];
-        public byte[] VerifyToken = [];
+        public byte[] EncryptedSample = [];
         public bool Authenticate = false;
 
         public override void Serialize(Stream stream)
@@ -20,15 +20,15 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
             stream.WriteMinecraftString(ServerId);
             stream.WriteS32V(PublicKey.Length);
             stream.WriteU8A(PublicKey);
-            stream.WriteS32V(VerifyToken.Length);
-            stream.WriteU8A(VerifyToken);
+            stream.WriteS32V(EncryptedSample.Length);
+            stream.WriteU8A(EncryptedSample);
             stream.WriteBool(Authenticate);
         }
         public override void Deserialize(Stream stream)
         {
             ServerId = stream.ReadMinecraftString();
             PublicKey = stream.ReadU8A(stream.ReadS32V());
-            VerifyToken = stream.ReadU8A(stream.ReadS32V());
+            EncryptedSample = stream.ReadU8A(stream.ReadS32V());
             Authenticate = stream.ReadBool();
         }
     }

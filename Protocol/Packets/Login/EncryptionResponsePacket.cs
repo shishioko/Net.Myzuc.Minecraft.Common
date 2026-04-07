@@ -8,20 +8,20 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         protected internal override int PacketId => 0x01;
 
-        public byte[] SharedSecret = [];
-        public byte[] VerifyToken = [];
+        public byte[] EncryptedSecret = [];
+        public byte[] DecryptedSample = [];
 
         public override void Serialize(Stream stream)
         {
-            stream.WriteS32V(SharedSecret.Length);
-            stream.WriteU8A(SharedSecret);
-            stream.WriteS32V(VerifyToken.Length);
-            stream.WriteU8A(VerifyToken);
+            stream.WriteS32V(EncryptedSecret.Length);
+            stream.WriteU8A(EncryptedSecret);
+            stream.WriteS32V(DecryptedSample.Length);
+            stream.WriteU8A(DecryptedSample);
         }
         public override void Deserialize(Stream stream)
         {
-            SharedSecret = stream.ReadU8A(stream.ReadS32V());
-            VerifyToken = stream.ReadU8A(stream.ReadS32V());
+            EncryptedSecret = stream.ReadU8A(stream.ReadS32V());
+            DecryptedSample = stream.ReadU8A(stream.ReadS32V());
         }
     }
 }
