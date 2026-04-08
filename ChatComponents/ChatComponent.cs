@@ -1,6 +1,7 @@
 using System.Drawing;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters;
 using Net.Myzuc.Minecraft.Common.Objects.JsonConverters;
 
 namespace Net.Myzuc.Minecraft.Common.ChatComponents
@@ -9,7 +10,7 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
     public abstract class ChatComponent
     {
         [JsonInclude]
-        [JsonPropertyName("type")] private string Type { get; }
+        [JsonPropertyName("type")] protected abstract string Type { get; }
         [JsonPropertyName("extra")] public IEnumerable<ChatComponent>? Children { get; set; } = null;
         [JsonConverter(typeof(HexColorJsonSerializer))]
         [JsonPropertyName("color")] public Color? Color { get; set; } = null;
@@ -21,17 +22,13 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         [JsonPropertyName("obfuscated")] public bool? Obfuscated { get; set; } = null;
         [JsonConverter(typeof(IntegerColorJsonSerializer))]
         [JsonPropertyName("shadow_color")] public Color? ShadowColor { get; set; } = null;
-        protected internal ChatComponent(string type)
+        protected internal ChatComponent()
         {
-            Type = type;
+            
         }
         public override string ToString()
         {
             return JsonSerializer.Serialize(this, Global.JsonSerializerOptions);
-        }
-        public static ChatComponent Parse(string data)
-        {
-            return JsonSerializer.Deserialize<ChatComponent>(data, Global.JsonSerializerOptions) ?? throw new InvalidDataException();
         }
         public static implicit operator ChatComponent(string data)
         {

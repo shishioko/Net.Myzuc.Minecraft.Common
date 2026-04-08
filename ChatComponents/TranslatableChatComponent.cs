@@ -4,10 +4,12 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
 {
     public sealed class TranslatableChatComponent : ChatComponent
     {
+        protected override string Type => "translatable";
+        [JsonRequired]
         [JsonPropertyName("translate")] public string TranslationKey { get; set; }
         [JsonPropertyName("with")] public IEnumerable<ChatComponent>? Arguments { get; set; } = null;
         [JsonPropertyName("fallback")] public string? Fallback { get; set; } = null;
-        public TranslatableChatComponent(string translationKey) : base("translatable")
+        public TranslatableChatComponent(string translationKey) : base()
         {
             TranslationKey = translationKey;
         }  
