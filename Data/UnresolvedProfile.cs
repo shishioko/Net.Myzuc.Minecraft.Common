@@ -4,7 +4,7 @@ using Net.Myzuc.Minecraft.Common.Objects.JsonConverters;
 
 namespace Net.Myzuc.Minecraft.Common.Data
 {
-    public class RenderProfile
+    public class UnresolvedProfile
     {
         [JsonConverter(typeof(GuidNbtJsonConverter))]
         [JsonPropertyName("id")] public Guid? Guid { get; set; } = null;
@@ -14,19 +14,19 @@ namespace Net.Myzuc.Minecraft.Common.Data
         [JsonPropertyName("cape")] public string? Cape { get; set; } = null;
         [JsonPropertyName("elytra")] public string? Elytra { get; set; } = null;
         [JsonPropertyName("model")] public PlayerModelType? ModelType { get; set; } = null;
-        public RenderProfile()
+        public UnresolvedProfile()
         {
             
         }
-        public RenderProfile(Guid guid)
+        public UnresolvedProfile(Guid guid)
         {
             Guid = guid;
         }
-        public RenderProfile(string name)
+        public UnresolvedProfile(string name)
         {
             Name = name;
         }
-        public RenderProfile(GameProfile profile)
+        public UnresolvedProfile(ResolvedProfile profile)
         {
             Guid = profile.Guid;
             Name = profile.Name;

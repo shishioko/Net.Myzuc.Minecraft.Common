@@ -8,15 +8,15 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         protected internal override int PacketId => 0x02;
 
-        public GameProfile Profile = new();
+        public ResolvedProfile Profile = new();
 
         internal override void Serialize(Stream stream)
         {
-            GameProfile.Serialize(stream, Profile);
+            ResolvedProfile.Serialize(stream, Profile);
         }
         internal override void Deserialize(Stream stream)
         {
-            Profile = GameProfile.Deserialize(stream);
+            Profile = ResolvedProfile.Deserialize(stream);
         }
     }
 }

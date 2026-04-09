@@ -4,28 +4,28 @@ using Net.Myzuc.Minecraft.Common.Objects.JsonConverters;
 
 namespace Net.Myzuc.Minecraft.Common.Data
 {
-    public class GameProfile
+    public class ResolvedProfile
     {
         [JsonConverter(typeof(GuidStringJsonConverter))]
         [JsonPropertyName("id")] public Guid Guid { get; set; } = Guid.Empty;
         [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
         [JsonPropertyName("properties")] public Property[] Properties { get; set; } = [];
-        public GameProfile()
+        public ResolvedProfile()
         {
             
         }
-        public GameProfile(Guid id, string name)
+        public ResolvedProfile(Guid id, string name)
         {
             Guid = id;
             Name = name;
         }
         
-        internal static void Serialize(Stream stream, GameProfile gameProfile)
+        internal static void Serialize(Stream stream, ResolvedProfile resolvedProfile)
         {
-            stream.WriteGuid(gameProfile.Guid);
-            stream.WriteT16AS32V(gameProfile.Name);
-            stream.WriteS32V(gameProfile.Properties.Length);
-            foreach(Property property in gameProfile.Properties)
+            stream.WriteGuid(resolvedProfile.Guid);
+            stream.WriteT16AS32V(resolvedProfile.Name);
+            stream.WriteS32V(resolvedProfile.Properties.Length);
+            foreach(Property property in resolvedProfile.Properties)
             {
                 stream.WriteT16AS32V(property.Name);
                 stream.WriteT16AS32V(property.Value);
@@ -36,9 +36,9 @@ namespace Net.Myzuc.Minecraft.Common.Data
                 }
             }
         }
-        internal static GameProfile Deserialize(Stream stream)
+        internal static ResolvedProfile Deserialize(Stream stream)
         {
-            GameProfile profile = new();
+            ResolvedProfile profile = new();
             profile.Guid = stream.ReadGuid();
             profile.Name = stream.ReadT16AS32V();
             profile.Properties = new Property[stream.ReadS32V()];

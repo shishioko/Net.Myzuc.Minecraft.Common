@@ -48,7 +48,7 @@ namespace Net.Myzuc.Minecraft.Common.Utilities
         {
             Rsa.Dispose();
         }
-        public async Task<GameProfile> AuthenticateAsync(IPAddress? ip = null)
+        public async Task<ResolvedProfile> AuthenticateAsync(IPAddress? ip = null)
         {
             if (!Authenticate) throw new InvalidOperationException();
             byte[] hash = SHA1.HashData(Encoding.ASCII.GetBytes(ServerId).Concat(Secret ?? []).Concat(Rsa.ExportSubjectPublicKeyInfo()).ToArray());
@@ -58,7 +58,7 @@ namespace Net.Myzuc.Minecraft.Common.Utilities
             using HttpClient http = new();
             HttpResponseMessage auth = await http.GetAsync($"https://sessionserver.mojang.com/session/minecraft/hasJoined?username={Username}&serverId={hashstring}{(ip is not null ? $"&ip={ip}" : string.Empty)}");
             if (auth.StatusCode != HttpStatusCode.OK) throw new AuthenticationException();
-            GameProfile? profile = await JsonSerializer.DeserializeAsync<GameProfile>(await auth.Content.ReadAsStreamAsync(), Global.JsonSerializerOptions);
+            ResolvedProfile? profile = await JsonSerializer.DeserializeAsync<ResolvedProfile>(await auth.Content.ReadAsStreamAsync(), Global.JsonSerializerOptions);
             if (profile is null) throw new NoNullAllowedException();
             return profile;
         }
