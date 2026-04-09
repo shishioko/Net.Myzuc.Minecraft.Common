@@ -23,6 +23,14 @@ namespace Net.Myzuc.Minecraft.Common.IO
                 return ms.ToArray();
             }
             
+            public sbyte[] ReadS8A(int size)
+            {
+                return MemoryMarshal.Cast<byte, sbyte>(stream.ReadU8A(size)).ToArray();
+            }
+            public void WriteS8A(sbyte[] data)
+            {
+                stream.Write(MemoryMarshal.AsBytes(data).ToArray());
+            }
             public byte[] ReadU8A(int size)
             {
                 byte[] data = new byte[size];
@@ -54,6 +62,34 @@ namespace Net.Myzuc.Minecraft.Common.IO
             public async ValueTask WriteU8AAsync(byte[] data, CancellationToken cancellationToken = default)
             {
                 await stream.WriteAsync(data, cancellationToken);
+            }
+            
+            public sbyte[] ReadS8AS32V(int size)
+            {
+                return stream.ReadS8A(stream.ReadS32V());
+            }
+            public void WriteS8AS32V(sbyte[] data)
+            {
+                stream.WriteS32V(data.Length);
+                stream.WriteS8A(data);
+            }
+            public byte[] ReadU8AS32V(int size)
+            {
+                return stream.ReadU8A(stream.ReadS32V());
+            }
+            public void WriteU8AS32V(byte[] data)
+            {
+                stream.WriteS32V(data.Length);
+                stream.WriteU8A(data);
+            }
+            public async Task<byte[]> ReadU8AS32VAsync(int size, CancellationToken cancellationToken = default)
+            {
+                return await stream.ReadU8AAsync(await stream.ReadS32VAsync(cancellationToken: cancellationToken), cancellationToken: cancellationToken);
+            }
+            public async ValueTask WriteU8AS32VAsync(byte[] data, CancellationToken cancellationToken = default)
+            {
+                await stream.WriteS32VAsync(data.Length, cancellationToken: cancellationToken);
+                await stream.WriteU8AAsync(data, cancellationToken: cancellationToken);
             }
             
             public int ReadS32V()
@@ -146,7 +182,6 @@ namespace Net.Myzuc.Minecraft.Common.IO
             {
                 stream.Write(MemoryMarshal.AsBytes<bool>(new bool[] { data }).ToArray());
             }
-            
             public sbyte ReadS8()
             {
                 return (sbyte)(stream.ReadU8A(1))[0];
@@ -265,18 +300,6 @@ namespace Net.Myzuc.Minecraft.Common.IO
                 stream.Write(buffer);
             }
             
-            public string ReadT16AS32V()
-            {
-                byte[] buffer = stream.ReadU8A(stream.ReadS32V());
-                return Encoding.UTF8.GetString(buffer);
-            }
-            public void WriteT16AS32V(string data)
-            {
-                byte[] buffer = Encoding.UTF8.GetBytes(data);
-                stream.WriteS32V(buffer.Length);
-                stream.WriteU8A(buffer);
-            }
-            
             public void WriteGuid(Guid data)
             {
                 byte[] buffer = MemoryMarshal.AsBytes([data]).ToArray();
@@ -292,6 +315,113 @@ namespace Net.Myzuc.Minecraft.Common.IO
                 byte[] buffer = stream.ReadU8A(16);
                 if (BitConverter.IsLittleEndian) buffer = [buffer[3], buffer[2], buffer[1], buffer[0], buffer[5], buffer[4], buffer[7], buffer[6], buffer[8], buffer[9], buffer[10], buffer[11], buffer[12], buffer[13], buffer[14], buffer[15]];
                 return MemoryMarshal.Cast<byte, Guid>(buffer)[0];
+            }
+            
+            public string ReadT16AS32V()
+            {
+                byte[] buffer = stream.ReadU8A(stream.ReadS32V());
+                return Encoding.UTF8.GetString(buffer);
+            }
+            public void WriteT16AS32V(string data)
+            {
+                byte[] buffer = Encoding.UTF8.GetBytes(data);
+                stream.WriteS32V(buffer.Length);
+                stream.WriteU8A(buffer);
+            }
+            
+            
+            public int[] ReadS32A(int size)
+            {
+                byte[] buffer = stream.ReadU8A(size * sizeof(int));
+                if (!BitConverter.IsLittleEndian) return MemoryMarshal.Cast<byte,int>(buffer).ToArray();
+                Span<byte> span = buffer;
+                int[] data = new int[size];
+                for (int i = 0; i < data.Length; i++)
+                {
+                    data[i] = BinaryPrimitives.ReadInt32BigEndian(span.Slice(i * sizeof(int), sizeof(int)));
+                }
+                return data;
+            }
+            public void WriteS32A(int[] data)
+            {
+                if (!BitConverter.IsLittleEndian)
+                {
+                    stream.Write(MemoryMarshal.AsBytes(data).ToArray());
+                    return;
+                }
+                Span<byte> span = new byte[data.Length * sizeof(int)];
+                for (int i = 0; i < data.Length; i++)
+                {
+                    BinaryPrimitives.WriteInt32BigEndian(span.Slice(i * sizeof(int), sizeof(int)), data[i]);
+                }
+            }
+            
+            public long[] ReadS64A(int size)
+            {
+                byte[] buffer = stream.ReadU8A(size * sizeof(long));
+                if (!BitConverter.IsLittleEndian) return MemoryMarshal.Cast<byte,long>(buffer).ToArray();
+                Span<byte> span = buffer;
+                long[] data = new long[size];
+                for (int i = 0; i < data.Length; i++)
+                {
+                    data[i] = BinaryPrimitives.ReadInt64BigEndian(span.Slice(i * sizeof(long), sizeof(long)));
+                }
+                return data;
+            }
+            public void WriteS64A(long[] data)
+            {
+                if (!BitConverter.IsLittleEndian)
+                {
+                    stream.Write(MemoryMarshal.AsBytes(data).ToArray());
+                    return;
+                }
+                Span<byte> span = new byte[data.Length * sizeof(long)];
+                for (int i = 0; i < data.Length; i++)
+                {
+                    BinaryPrimitives.WriteInt64BigEndian(span.Slice(i * sizeof(long), sizeof(long)), data[i]);
+                }
+            }
+            
+            public sbyte[] ReadS8AS32(int size)
+            {
+                return stream.ReadS8A(stream.ReadS32());
+            }
+            public void WriteS8AS32(sbyte[] data)
+            {
+                stream.WriteS32(data.Length);
+                stream.WriteS8A(data);
+            }
+            
+            public string ReadT16AU16()
+            {
+                byte[] buffer = stream.ReadU8A(stream.ReadU16());
+                return Encoding.UTF8.GetString(buffer);
+            }
+            public void WriteT16AU16(string data)
+            {
+                byte[] buffer = Encoding.UTF8.GetBytes(data);
+                stream.WriteU16((ushort)buffer.Length);
+                stream.WriteU8A(buffer[..ushort.MaxValue]);
+            }
+            
+            public int[] ReadS32AS32(int size)
+            {
+                return stream.ReadS32A(stream.ReadS32());
+            }
+            public void WriteS32AS32(int[] data)
+            {
+                stream.WriteS32(data.Length);
+                stream.WriteS32A(data);
+            }
+            
+            public long[] ReadS64AS32(int size)
+            {
+                return stream.ReadS64A(stream.ReadS32());
+            }
+            public void WriteS64AS32(long[] data)
+            {
+                stream.WriteS32(data.Length);
+                stream.WriteS64A(data);
             }
         }
     }
