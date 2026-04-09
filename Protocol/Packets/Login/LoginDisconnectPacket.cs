@@ -1,3 +1,5 @@
+using System.Runtime.Serialization;
+using System.Text.Json;
 using Net.Myzuc.Minecraft.Common.ChatComponents;
 using Net.Myzuc.Minecraft.Common.IO;
 
@@ -13,11 +15,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         internal override void Serialize(Stream stream)
         {
-            stream.WriteMinecraftString(Message.ToString());
+            stream.WriteMinecraftString(JsonSerializer.Serialize(Message, Global.JsonSerializerOptions));
         }
         internal override void Deserialize(Stream stream)
         {
-            Message = ChatComponent.Parse(stream.ReadMinecraftString());
+            Message = JsonSerializer.Deserialize<ChatComponent>(stream.ReadMinecraftString(), Global.JsonSerializerOptions) ?? throw new SerializationException();
         }
     }
 }

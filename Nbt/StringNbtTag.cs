@@ -1,8 +1,6 @@
-using System.Runtime.Serialization;
 using System.Text;
 using System.Web;
 using Me.Shiokawaii.IO;
-using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Nbt
 {
@@ -35,7 +33,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
                 var type when type == typeof(CompoundNbtTag) => (CompoundNbtTag)this,
                 var type when type == typeof(IntArrayNbtTag) => (IntArrayNbtTag)this,
                 var type when type == typeof(LongArrayNbtTag) => (LongArrayNbtTag)this,
-                _ => throw new SerializationException()
+                _ => throw new ArgumentException()
             };
             return (TNbtTag)nbt;
         }
