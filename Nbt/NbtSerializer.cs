@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Drawing;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 #pragma warning disable SYSLIB0050
@@ -17,6 +18,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
         {
             return Serialize(value, type, options ?? new(), 0);
         }
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public static NbtTag? Serialize(object? value, Type type, NbtSerializerOptions options, int depth)
         {
             if (depth >= options.MaxDepth) throw new SerializationException();
@@ -130,6 +132,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
         {
             return Deserialize(tag, type, options ?? new(), 0);
         }
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         private static object? Deserialize(NbtTag tag, Type type, NbtSerializerOptions options, int depth)
         {
             if (depth >= options.MaxDepth) throw new SerializationException();
