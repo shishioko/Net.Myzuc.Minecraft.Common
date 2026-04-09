@@ -94,5 +94,13 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
         {
             return new((short)value);
         }
+        public static implicit operator char(ShortNbtTag nbt)
+        {
+            return (char)nbt.Value;
+        }
+        public static implicit operator ShortNbtTag(char value)
+        {
+            return new((short)value);
+        }
     }
 }
