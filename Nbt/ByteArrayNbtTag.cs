@@ -182,5 +182,13 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
         {
             return new(MemoryMarshal.Cast<byte, sbyte>(value).ToArray());
         }
+        public static implicit operator bool[](ByteArrayNbtTag nbt)
+        {
+            return MemoryMarshal.Cast<sbyte, bool>(nbt.Value).ToArray();
+        }
+        public static implicit operator ByteArrayNbtTag(bool[] value)
+        {
+            return new(MemoryMarshal.Cast<bool, sbyte>(value).ToArray());
+        }
     }
 }
