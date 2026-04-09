@@ -13,12 +13,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
 
         internal override void Serialize(Stream stream)
         {
-            stream.WriteMinecraftString(Channel);
+            stream.WriteT16AS32V(Channel);
             stream.WriteU8A(Data);
         }
         internal override void Deserialize(Stream stream)
         {
-            Channel = stream.ReadMinecraftString();
+            Channel = stream.ReadT16AS32V();
             Data = stream.ReadU8A();
         }
     }

@@ -13,7 +13,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         internal override void Serialize(Stream stream)
         {
-            stream.WriteMinecraftString(Id);
+            stream.WriteT16AS32V(Id);
             stream.WriteBool(Data is not null);
             if (Data is not null)
             {
@@ -23,7 +23,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         }
         internal override void Deserialize(Stream stream)
         {
-            Id = stream.ReadMinecraftString();
+            Id = stream.ReadT16AS32V();
             if(stream.ReadBool())
             {
                 Data = stream.ReadU8A(stream.ReadS32V());

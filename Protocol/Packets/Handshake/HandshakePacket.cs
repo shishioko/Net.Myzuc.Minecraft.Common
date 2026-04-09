@@ -17,14 +17,14 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake
         internal override void Serialize(Stream stream)
         {
             stream.WriteS32V(ProtocolVersion);
-            stream.WriteMinecraftString(Address);
+            stream.WriteT16AS32V(Address);
             stream.WriteU16(Port);
             stream.WriteS32V((int)Intent);
         }
         internal override void Deserialize(Stream stream)
         {
             ProtocolVersion = stream.ReadS32V();
-            Address = stream.ReadMinecraftString();
+            Address = stream.ReadT16AS32V();
             Port = stream.ReadU16();
             Intent = (HandshakeIntent)stream.ReadS32V();
         }

@@ -21,7 +21,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
 
         internal override void Serialize(Stream stream)
         {
-            stream.WriteMinecraftString(Locale);
+            stream.WriteT16AS32V(Locale);
             stream.WriteU8(ViewDistance);
             stream.WriteS32V((int)ChatMode);
             stream.WriteBool(ChatColors);
@@ -33,7 +33,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
         }
         internal override void Deserialize(Stream stream)
         {
-            Locale = stream.ReadMinecraftString();
+            Locale = stream.ReadT16AS32V();
             ViewDistance = stream.ReadU8();
             ChatMode = (ChatMode)stream.ReadS32V();
             ChatColors = stream.ReadBool();

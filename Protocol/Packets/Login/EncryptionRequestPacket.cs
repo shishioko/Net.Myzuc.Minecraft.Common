@@ -15,7 +15,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         internal override void Serialize(Stream stream)
         {
-            stream.WriteMinecraftString(ServerId);
+            stream.WriteT16AS32V(ServerId);
             stream.WriteS32V(PublicKey.Length);
             stream.WriteU8A(PublicKey);
             stream.WriteS32V(DecryptedSample.Length);
@@ -24,7 +24,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         }
         internal override void Deserialize(Stream stream)
         {
-            ServerId = stream.ReadMinecraftString();
+            ServerId = stream.ReadT16AS32V();
             PublicKey = stream.ReadU8A(stream.ReadS32V());
             DecryptedSample = stream.ReadU8A(stream.ReadS32V());
             Authenticate = stream.ReadBool();

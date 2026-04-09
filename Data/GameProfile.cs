@@ -21,16 +21,16 @@ namespace Net.Myzuc.Minecraft.Common.Data
         internal static void Serialize(Stream stream, GameProfile gameProfile)
         {
             stream.WriteGuid(gameProfile.Guid);
-            stream.WriteMinecraftString(gameProfile.Name);
+            stream.WriteT16AS32V(gameProfile.Name);
             stream.WriteS32V(gameProfile.Properties.Length);
             foreach(Property property in gameProfile.Properties)
             {
-                stream.WriteMinecraftString(property.Name);
-                stream.WriteMinecraftString(property.Value);
+                stream.WriteT16AS32V(property.Name);
+                stream.WriteT16AS32V(property.Value);
                 stream.WriteBool(property.Signature is not null);
                 if (property.Signature is not null)
                 {
-                    stream.WriteMinecraftString(property.Signature);
+                    stream.WriteT16AS32V(property.Signature);
                 }
             }
         }
@@ -38,16 +38,16 @@ namespace Net.Myzuc.Minecraft.Common.Data
         {
             GameProfile profile = new();
             profile.Guid = stream.ReadGuid();
-            profile.Name = stream.ReadMinecraftString();
+            profile.Name = stream.ReadT16AS32V();
             profile.Properties = new Property[stream.ReadS32V()];
             for (int i = 0; i < profile.Properties.Length; i++)
             {
                 Property property = new();
-                property.Name = stream.ReadMinecraftString();
-                property.Value = stream.ReadMinecraftString();
+                property.Name = stream.ReadT16AS32V();
+                property.Value = stream.ReadT16AS32V();
                 if (stream.ReadBool())
                 {
-                    property.Signature = stream.ReadMinecraftString();
+                    property.Signature = stream.ReadT16AS32V();
                 }
                 profile.Properties[i] = property;
             }

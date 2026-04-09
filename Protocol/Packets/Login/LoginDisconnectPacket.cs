@@ -15,11 +15,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         internal override void Serialize(Stream stream)
         {
-            stream.WriteMinecraftString(JsonSerializer.Serialize(Message, Global.JsonSerializerOptions));
+            stream.WriteT16AS32V(JsonSerializer.Serialize(Message, Global.JsonSerializerOptions));
         }
         internal override void Deserialize(Stream stream)
         {
-            Message = JsonSerializer.Deserialize<ChatComponent>(stream.ReadMinecraftString(), Global.JsonSerializerOptions) ?? throw new SerializationException();
+            Message = JsonSerializer.Deserialize<ChatComponent>(stream.ReadT16AS32V(), Global.JsonSerializerOptions) ?? throw new SerializationException();
         }
     }
 }

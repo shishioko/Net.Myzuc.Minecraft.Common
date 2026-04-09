@@ -12,11 +12,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
         public Data.Status Status = new();
         internal override void Serialize(Stream stream)
         {
-            stream.WriteMinecraftString(Status.ToString());
+            stream.WriteT16AS32V(Status.ToString());
         }
         internal override void Deserialize(Stream stream)
         {
-            Status = Data.Status.Parse(stream.ReadMinecraftString());
+            Status = Data.Status.Parse(stream.ReadT16AS32V());
         }
     }
 }

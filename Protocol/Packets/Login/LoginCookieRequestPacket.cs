@@ -12,11 +12,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         internal override void Serialize(Stream stream)
         {
-            stream.WriteMinecraftString(Id);
+            stream.WriteT16AS32V(Id);
         }
         internal override void Deserialize(Stream stream)
         {
-            Id = stream.ReadMinecraftString();
+            Id = stream.ReadT16AS32V();
         }
     }
 }
