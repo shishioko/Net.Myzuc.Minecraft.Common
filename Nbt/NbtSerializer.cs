@@ -39,7 +39,6 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
             switch (value)
             {
                 case NbtTag nbt: return nbt;
-                case Enum: return Serialize(Convert.ChangeType(value, type.GetEnumUnderlyingType()), type.GetEnumUnderlyingType(), options, depth);
                 case nint s0 when Marshal.SizeOf(type) == sizeof(int): return new IntNbtTag((int)s0);
                 case nuint u0 when Marshal.SizeOf(type) == sizeof(int): return new IntNbtTag((int)(uint)u0);
                 case nint s0: return new LongNbtTag(s0);
@@ -66,6 +65,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
                 case long[] s64a: return (LongArrayNbtTag)s64a;
                 case ulong[] u64a: return (LongArrayNbtTag)u64a;
                 case Guid guid: return (IntArrayNbtTag)guid;
+                case Enum: return Serialize(Convert.ChangeType(value, type.GetEnumUnderlyingType()), type.GetEnumUnderlyingType(), options, depth);
                 case IList list:
                 {
                     return new ListNbtTag(list.Cast<object?>().Select(entry => entry is not null ? Serialize(entry, entry.GetType(), options, depth) : null).Where(nbt => nbt is not null)!);
@@ -102,7 +102,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
                             FieldInfo field => field.FieldType,
                             _ => throw new SerializationException(),
                         };
-                        if (!memberType.GetTypeInfo().Attributes.HasFlag(TypeAttributes.Serializable)) continue;
+                        if (!memberType.GetTypeInfo().Attributes.HasFlag(TypeAttributes.Serializable) && !memberType.IsEnum) continue; //cheap hack
                         if (Attribute.IsDefined(member, typeof(NbtIgnoreAttribute))) continue;
                         if (member is FieldInfo && !(options.IncludeFields || Attribute.IsDefined(member, typeof(NbtIncludeAttribute)))) continue;
                         string name = (Attribute.GetCustomAttribute(member, typeof(NbtPropertyAttribute)) as NbtPropertyAttribute)?.Name ?? member.Name;
@@ -148,7 +148,6 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
             if (type.IsPointer) throw new SerializationException("Attempted to serialize pointer type!");
             if (type == typeof(object)) type = typeof(NbtTag);
             if (type.IsAssignableTo(typeof(NbtTag))) return tag;
-            else if (type.IsAssignableTo(typeof(Enum))) return Convert.ChangeType(Deserialize(tag, type.GetEnumUnderlyingType(), options, depth), type);
             else if (type.IsAssignableTo(typeof(nint))) return (nint)((LongNbtTag)tag).Value;
             else if (type.IsAssignableTo(typeof(nuint))) return (nuint)((LongNbtTag)tag).Value;
             else if (type.IsAssignableTo(typeof(sbyte))) return (sbyte)(ByteNbtTag)tag;
@@ -173,6 +172,11 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
             else if (type.IsAssignableTo(typeof(long[]))) return (long[])(LongArrayNbtTag)tag;
             else if (type.IsAssignableTo(typeof(ulong[]))) return (ulong[])(LongArrayNbtTag)tag;
             else if (type.IsAssignableTo(typeof(Guid))) return (Guid)(IntArrayNbtTag)tag;
+            else if (type.IsAssignableTo(typeof(Enum)))
+            {
+                object? underlying = Deserialize(tag, type.GetEnumUnderlyingType(), options, depth);
+                return underlying is not null ? Enum.ToObject(type, underlying) : null;
+            }
             else if (type.IsAssignableTo(typeof(IList)))
             {
                 ListNbtTag nbtList = (ListNbtTag)tag;
