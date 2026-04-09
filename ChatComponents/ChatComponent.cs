@@ -28,7 +28,7 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         }
         public override string ToString()
         {
-            return JsonSerializer.Serialize(this, Global.JsonSerializerOptions);
+            return JsonSerializer.Serialize(this, JsonSerializerOptions.Default);
         }
         public static implicit operator ChatComponent(string data)
         {
