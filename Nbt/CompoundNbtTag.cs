@@ -137,8 +137,8 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
                 NbtValueKind valueKind = (NbtValueKind)stream.ReadS8();
                 if (valueKind == NbtValueKind.End) break;
                 string name = stream.ReadT16AU16();
-                NbtTag value = NbtTag.DeserializeValue(stream, valueKind);
-                data[name] = value;
+                NbtTag? value = NbtTag.DeserializeValue(stream, valueKind);
+                if (value is not null) data[name] = value;
             }
             return new(data);
         }

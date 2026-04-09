@@ -139,7 +139,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
             NbtTag[] data = new NbtTag[stream.ReadS32()];
             for (int i = 0; i < data.Length; i++)
             {
-                data[i] = NbtTag.DeserializeValue(stream, valueKind);
+                data[i] = NbtTag.DeserializeValue(stream, valueKind)!;
             }
             if (valueKind == NbtValueKind.Compound)
             {

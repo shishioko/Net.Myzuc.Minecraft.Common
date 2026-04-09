@@ -10,7 +10,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
         {
             
         }
-        public NbtTag GetValue(NbtValueKind valueKind)
+        public NbtTag? GetValue(NbtValueKind valueKind)
         {
             return valueKind switch
             {
@@ -27,7 +27,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
                 NbtValueKind.Compound => (CompoundNbtTag)this,
                 NbtValueKind.IntArray => (IntArrayNbtTag)this,
                 NbtValueKind.LongArray => (LongArrayNbtTag)this,
-                _ => throw new ArgumentException(),
+                _ => null,
             };
         }
         public abstract TNbtTag As<TNbtTag>() where TNbtTag : NbtTag;
@@ -40,7 +40,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
             stream.WriteS8((sbyte)ValueKind);
             SerializeValue(stream);
         }
-        internal static NbtTag DeserializeValue(Stream stream, NbtValueKind valueKind)
+        internal static NbtTag? DeserializeValue(Stream stream, NbtValueKind valueKind)
         {
             return valueKind switch
             {
@@ -57,10 +57,10 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
                 NbtValueKind.Compound => CompoundNbtTag.DeserializeValue(stream),
                 NbtValueKind.IntArray => IntArrayNbtTag.DeserializeValue(stream),
                 NbtValueKind.LongArray => LongArrayNbtTag.DeserializeValue(stream),
-                _ => throw new ArgumentException(),
+                _ => null,
             };
         }
-        public static NbtTag Deserialize(Stream stream)
+        public static NbtTag? Deserialize(Stream stream)
         {
             NbtValueKind valueKind = (NbtValueKind)stream.ReadS8();
             return DeserializeValue(stream, valueKind);
