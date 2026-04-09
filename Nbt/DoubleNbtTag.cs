@@ -87,5 +87,13 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
         {
             return new(value);
         }
+        public static implicit operator decimal(DoubleNbtTag nbt)
+        {
+            return (decimal)nbt.Value;
+        }
+        public static implicit operator DoubleNbtTag(decimal value)
+        {
+            return new((double)value);
+        }
     }
 }
