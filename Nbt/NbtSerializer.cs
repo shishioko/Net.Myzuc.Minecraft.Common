@@ -123,16 +123,16 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
                 }
             }
         }
-        public static T? Deserialize<T>(NbtTag tag, NbtSerializerOptions? options = null)
+        public static T? Deserialize<T>(NbtTag? tag, NbtSerializerOptions? options = null)
         {
             return (T?)Deserialize(tag, typeof(T), options ?? NbtSerializerOptions.Default, 0);
         }
-        public static object? Deserialize(NbtTag tag, Type type, NbtSerializerOptions? options = null)
+        public static object? Deserialize(NbtTag? tag, Type type, NbtSerializerOptions? options = null)
         {
             return Deserialize(tag, type, options ?? NbtSerializerOptions.Default, 0);
         }
         [MethodImpl(MethodImplOptions.AggressiveOptimization)]
-        private static object? Deserialize(NbtTag tag, Type type, NbtSerializerOptions options, int depth)
+        private static object? Deserialize(NbtTag? tag, Type type, NbtSerializerOptions options, int depth)
         {
             if (depth >= options.MaxDepth) throw new SerializationException();
             depth++;
@@ -149,6 +149,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
                 return converter.Deserialize(tag, options, depth);
             }
             if (type.IsPointer) throw new SerializationException("Attempted to serialize pointer type!");
+            if (tag is null) return null;
             if (type == typeof(object)) type = typeof(NbtTag);
             if (type.IsAssignableTo(typeof(NbtTag))) return tag;
             else if (type.IsAssignableTo(typeof(nint))) return (nint)((LongNbtTag)tag).Value;
