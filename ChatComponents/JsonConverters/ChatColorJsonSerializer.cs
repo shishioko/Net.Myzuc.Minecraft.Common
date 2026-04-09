@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Net.Myzuc.Minecraft.Common.Objects.JsonConverters
+namespace Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters
 {
     internal class ChatColorJsonSerializer : JsonConverter<Color>
     {

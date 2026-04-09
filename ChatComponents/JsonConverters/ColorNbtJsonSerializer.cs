@@ -2,7 +2,7 @@ using System.Drawing;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Net.Myzuc.Minecraft.Common.Objects.JsonConverters
+namespace Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters
 {
     internal class ColorNbtJsonSerializer : JsonConverter<Color>
     {
