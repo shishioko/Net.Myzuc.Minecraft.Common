@@ -47,10 +47,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
         }
         internal override void SerializeValue(Stream stream)
         {
-            byte[] buffer = Encoding.UTF8.GetBytes(Value);
-            if (buffer.Length > ushort.MaxValue) buffer = buffer[..ushort.MaxValue];
-            stream.WriteU16((ushort)buffer.Length);
-            stream.WriteU8A(buffer);
+            stream.WriteT16AU16(Value);
         }
         public override string ToString()
         {
@@ -58,8 +55,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
         }
         internal static StringNbtTag DeserializeValue(Stream stream)
         {
-            byte[] buffer = stream.ReadU8A(stream.ReadU16());
-            return Encoding.UTF8.GetString(buffer);
+            return stream.ReadT16AU16();
         }
         public static explicit operator ByteNbtTag(StringNbtTag nbt)
         {

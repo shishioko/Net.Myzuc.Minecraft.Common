@@ -120,7 +120,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
             foreach (KeyValuePair<string, NbtTag> kvp in Value)
             {
                 stream.WriteS8((sbyte)kvp.Value.ValueKind);
-                new StringNbtTag(kvp.Key).SerializeValue(stream);
+                stream.WriteT16AU16(kvp.Key);
                 kvp.Value.SerializeValue(stream);
             }
             stream.WriteS8((sbyte)NbtValueKind.End);
@@ -136,7 +136,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
             {
                 NbtValueKind valueKind = (NbtValueKind)stream.ReadS8();
                 if (valueKind == NbtValueKind.End) break;
-                string name = StringNbtTag.DeserializeValue(stream).Value;
+                string name = stream.ReadT16AU16();
                 NbtTag value = NbtTag.DeserializeValue(stream, valueKind);
                 data[name] = value;
             }

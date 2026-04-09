@@ -109,12 +109,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
         }
         internal override void SerializeValue(Stream stream)
         {
-            long[] data = Value;
-            stream.WriteS32(data.Length);
-            for (int i = 0; i < data.Length; i++)
-            {
-                stream.WriteS64(data[i]);
-            }
+            stream.WriteS64AS32(Value);
         }
         public override string ToString()
         {
@@ -122,9 +117,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
         }
         internal static LongArrayNbtTag DeserializeValue(Stream stream)
         {
-            long[] data = new long[stream.ReadS32()];
-            for (int i = 0; i < data.Length; i++) data[i] = stream.ReadS64();
-            return new(data);
+            return new(stream.ReadS64AS32());
         }
         public static explicit operator ByteNbtTag(LongArrayNbtTag nbt)
         {

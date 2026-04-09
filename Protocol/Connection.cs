@@ -56,7 +56,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
 
             async Task<MemoryStream> readRawAsync()
             {
-                byte[] data = await Stream.ReadU8AAsync(await Stream.ReadS32VAsync(cancellationToken), cancellationToken);
+                byte[] data = await Stream.ReadU8AS32VAsync(cancellationToken);
                 if (CompressionThreshold < 0) return new(data);
                 MemoryStream ms2 = new(data);
                 int decompressedSize = ms2.ReadS32V();
@@ -94,8 +94,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                     }
                     data = ms2.ToArray();
                 }
-                await Stream.WriteS32VAsync(data.Length, cancellationToken);
-                await Stream.WriteU8AAsync(data, cancellationToken);
+                await Stream.WriteU8AS32VAsync(data, cancellationToken);
             }
         }
         private void Run(Packet packet)

@@ -64,7 +64,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
                 await stream.WriteAsync(data, cancellationToken);
             }
             
-            public sbyte[] ReadS8AS32V(int size)
+            public sbyte[] ReadS8AS32V()
             {
                 return stream.ReadS8A(stream.ReadS32V());
             }
@@ -73,7 +73,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
                 stream.WriteS32V(data.Length);
                 stream.WriteS8A(data);
             }
-            public byte[] ReadU8AS32V(int size)
+            public byte[] ReadU8AS32V()
             {
                 return stream.ReadU8A(stream.ReadS32V());
             }
@@ -82,7 +82,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
                 stream.WriteS32V(data.Length);
                 stream.WriteU8A(data);
             }
-            public async Task<byte[]> ReadU8AS32VAsync(int size, CancellationToken cancellationToken = default)
+            public async Task<byte[]> ReadU8AS32VAsync(CancellationToken cancellationToken = default)
             {
                 return await stream.ReadU8AAsync(await stream.ReadS32VAsync(cancellationToken: cancellationToken), cancellationToken: cancellationToken);
             }
@@ -382,7 +382,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
                 }
             }
             
-            public sbyte[] ReadS8AS32(int size)
+            public sbyte[] ReadS8AS32()
             {
                 return stream.ReadS8A(stream.ReadS32());
             }
@@ -404,7 +404,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
                 stream.WriteU8A(buffer[..ushort.MaxValue]);
             }
             
-            public int[] ReadS32AS32(int size)
+            public int[] ReadS32AS32()
             {
                 return stream.ReadS32A(stream.ReadS32());
             }
@@ -414,7 +414,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
                 stream.WriteS32A(data);
             }
             
-            public long[] ReadS64AS32(int size)
+            public long[] ReadS64AS32()
             {
                 return stream.ReadS64A(stream.ReadS32());
             }
