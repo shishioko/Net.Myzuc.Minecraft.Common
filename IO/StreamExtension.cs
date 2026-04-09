@@ -458,7 +458,8 @@ namespace Net.Myzuc.Minecraft.Common.IO
             {
                 byte[] buffer = Encoding.UTF8.GetBytes(data);
                 stream.WriteU16((ushort)buffer.Length);
-                stream.WriteU8A(buffer[..ushort.MaxValue]);
+                if (buffer.Length > ushort.MaxValue) stream.WriteU8A(buffer[..ushort.MaxValue]);
+                else stream.WriteU8A(buffer);
             }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
