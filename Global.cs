@@ -8,10 +8,6 @@ namespace Net.Myzuc.Minecraft.Common
     {
         public static readonly JsonSerializerOptions JsonSerializerOptions = new()
         {
-            Converters =
-            {
-                new GuidStringJsonConverter()
-            },
             PreferredObjectCreationHandling = JsonObjectCreationHandling.Replace,
 
             NumberHandling = JsonNumberHandling.AllowReadingFromString,

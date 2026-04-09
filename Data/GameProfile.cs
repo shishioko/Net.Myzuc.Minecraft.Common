@@ -1,10 +1,12 @@
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.IO;
+using Net.Myzuc.Minecraft.Common.Objects.JsonConverters;
 
 namespace Net.Myzuc.Minecraft.Common.Data
 {
     public class GameProfile
     {
+        [JsonConverter(typeof(GuidStringJsonConverter))]
         [JsonPropertyName("id")] public Guid Guid { get; set; } = Guid.Empty;
         [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
         [JsonPropertyName("properties")] public Property[] Properties { get; set; } = [];
