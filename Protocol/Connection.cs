@@ -7,6 +7,7 @@ using Me.Shiokawaii.IO;
 using Net.Myzuc.Minecraft.Common.Data;
 using Net.Myzuc.Minecraft.Common.IO;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets;
+using Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets.Login;
 
@@ -125,6 +126,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                 case LoginEndPacket:
                 {
                     ProtocolStage = ProtocolStage.Configuration;
+                    break;
+                }
+                case ConfigurationDisconnectPacket:
+                {
+                    ProtocolStage = ProtocolStage.Disconnected;
                     break;
                 }
             }
