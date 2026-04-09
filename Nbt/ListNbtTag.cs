@@ -135,6 +135,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
         internal static ListNbtTag DeserializeValue(Stream stream)
         {
             NbtValueKind valueKind = (NbtValueKind)stream.ReadS8();
+            if (valueKind == NbtValueKind.End) return new();
             NbtTag[] data = new NbtTag[stream.ReadS32()];
             for (int i = 0; i < data.Length; i++)
             {
