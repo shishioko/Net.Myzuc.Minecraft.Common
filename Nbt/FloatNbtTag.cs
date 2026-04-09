@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Runtime.Serialization;
 using Me.Shiokawaii.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Nbt
@@ -14,6 +15,27 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
         public FloatNbtTag(float value)
         {
             Value = value;
+        }
+        public override TNbtTag As<TNbtTag>()
+        {
+            NbtTag nbt = typeof(TNbtTag) switch
+            {
+                var type when type == typeof(NbtTag) => this,
+                var type when type == typeof(ByteNbtTag) => (ByteNbtTag)this,
+                var type when type == typeof(ShortNbtTag) => (ShortNbtTag)this,
+                var type when type == typeof(IntNbtTag) => (IntNbtTag)this,
+                var type when type == typeof(LongNbtTag) => (LongNbtTag)this,
+                var type when type == typeof(FloatNbtTag) => (FloatNbtTag)this,
+                var type when type == typeof(DoubleNbtTag) => (DoubleNbtTag)this,
+                var type when type == typeof(ByteArrayContent) => (LongNbtTag)this,
+                var type when type == typeof(StringNbtTag) => (StringNbtTag)this,
+                var type when type == typeof(ListNbtTag) => (ListNbtTag)this,
+                var type when type == typeof(CompoundNbtTag) => (CompoundNbtTag)this,
+                var type when type == typeof(IntArrayNbtTag) => (IntArrayNbtTag)this,
+                var type when type == typeof(LongArrayNbtTag) => (LongArrayNbtTag)this,
+                _ => throw new SerializationException()
+            };
+            return (TNbtTag)nbt;
         }
         public override FloatNbtTag Copy()
         {
