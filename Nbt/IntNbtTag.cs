@@ -116,5 +116,21 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
         {
             return new((int)value);
         }
+        public static implicit operator nint(IntNbtTag nbt)
+        {
+            return (int)nbt.Value;
+        }
+        public static implicit operator IntNbtTag(nint value)
+        {
+            return new((int)value);
+        }
+        public static implicit operator nuint(IntNbtTag nbt)
+        {
+            return (uint)nbt.Value;
+        }
+        public static implicit operator IntNbtTag(nuint value)
+        {
+            return new((uint)value);
+        }
     }
 }
