@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Drawing;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
@@ -65,6 +66,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
                 case long[] s64a: return (LongArrayNbtTag)s64a;
                 case ulong[] u64a: return (LongArrayNbtTag)u64a;
                 case Guid guid: return (IntArrayNbtTag)guid;
+                case Color color: return (IntNbtTag)color;
                 case Enum: return Serialize(Convert.ChangeType(value, type.GetEnumUnderlyingType()), type.GetEnumUnderlyingType(), options, depth);
                 case IList list:
                 {
@@ -172,6 +174,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
             else if (type.IsAssignableTo(typeof(long[]))) return (long[])(LongArrayNbtTag)tag;
             else if (type.IsAssignableTo(typeof(ulong[]))) return (ulong[])(LongArrayNbtTag)tag;
             else if (type.IsAssignableTo(typeof(Guid))) return (Guid)(IntArrayNbtTag)tag;
+            else if (type.IsAssignableTo(typeof(Color))) return (Color)(IntNbtTag)tag;
             else if (type.IsAssignableTo(typeof(Enum)))
             {
                 object? underlying = Deserialize(tag, type.GetEnumUnderlyingType(), options, depth);

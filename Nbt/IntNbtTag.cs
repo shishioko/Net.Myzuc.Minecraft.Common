@@ -1,4 +1,5 @@
 
+using System.Drawing;
 using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Nbt
@@ -131,6 +132,14 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
         public static implicit operator IntNbtTag(nuint value)
         {
             return new((uint)value);
+        }
+        public static implicit operator Color(IntNbtTag nbt)
+        {
+            return Color.FromArgb(nbt.Value);
+        }
+        public static implicit operator IntNbtTag(Color value)
+        {
+            return new(value.ToArgb());
         }
     }
 }
