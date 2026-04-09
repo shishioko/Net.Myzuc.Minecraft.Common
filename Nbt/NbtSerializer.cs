@@ -12,18 +12,17 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
     {
         public static NbtTag Serialize<T>(T value, NbtSerializerOptions? options = null)
         {
-            return Serialize(value, typeof(T), options ?? new(), 0)!;
+            return Serialize(value, typeof(T), options ?? NbtSerializerOptions.Default, 0)!;
         }
         public static NbtTag? Serialize(object? value, Type type, NbtSerializerOptions? options = null)
         {
-            return Serialize(value, type, options ?? new(), 0);
+            return Serialize(value, type, options ?? NbtSerializerOptions.Default, 0);
         }
         [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public static NbtTag? Serialize(object? value, Type type, NbtSerializerOptions options, int depth)
         {
             if (depth >= options.MaxDepth) throw new SerializationException();
             depth++;
-            options ??= new();
             if (value is not null && !value.GetType().IsAssignableTo(type)) throw new SerializationException("Attempted to serialize data of mismatching type!");
             if (Attribute.GetCustomAttribute(type, typeof(NbtConverterAttribute)) is NbtConverterAttribute converterAttribute)
             {
@@ -126,18 +125,17 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
         }
         public static T? Deserialize<T>(NbtTag tag, NbtSerializerOptions? options = null)
         {
-            return (T?)Deserialize(tag, typeof(T), options ?? new(), 0);
+            return (T?)Deserialize(tag, typeof(T), options ?? NbtSerializerOptions.Default, 0);
         }
         public static object? Deserialize(NbtTag tag, Type type, NbtSerializerOptions? options = null)
         {
-            return Deserialize(tag, type, options ?? new(), 0);
+            return Deserialize(tag, type, options ?? NbtSerializerOptions.Default, 0);
         }
         [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         private static object? Deserialize(NbtTag tag, Type type, NbtSerializerOptions options, int depth)
         {
             if (depth >= options.MaxDepth) throw new SerializationException();
             depth++;
-            options ??= new();
             if (Attribute.GetCustomAttribute(type, typeof(NbtConverterAttribute)) is NbtConverterAttribute converterAttribute)
             {
                 Type converterType = converterAttribute.Type;
