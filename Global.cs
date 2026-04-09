@@ -10,7 +10,7 @@ namespace Net.Myzuc.Minecraft.Common
         {
             Converters =
             {
-                new GuidJsonConverter()
+                new GuidStringJsonConverter()
             },
             PreferredObjectCreationHandling = JsonObjectCreationHandling.Replace,
 

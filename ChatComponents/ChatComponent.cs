@@ -12,7 +12,7 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         [JsonInclude]
         [JsonPropertyName("type")] protected abstract string Type { get; }
         [JsonPropertyName("extra")] public IEnumerable<ChatComponent>? Children { get; set; } = null;
-        [JsonConverter(typeof(HexColorJsonSerializer))]
+        [JsonConverter(typeof(ChatColorJsonSerializer))]
         [JsonPropertyName("color")] public Color? Color { get; set; } = null;
         [JsonPropertyName("font")] public string? Font { get; set; } = null;
         [JsonPropertyName("bold")] public bool? Bold { get; set; } = null;
