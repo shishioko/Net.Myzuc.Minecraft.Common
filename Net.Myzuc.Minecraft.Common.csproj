@@ -14,8 +14,8 @@
         <PackageTags>Minecraft</PackageTags>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
         <LangVersion>latestmajor</LangVersion>
-        <Version>0.0.8.0-alpha</Version>
-        <AssemblyVersion>0.0.8.0</AssemblyVersion>
+        <Version>0.0.8.1-alpha</Version>
+        <AssemblyVersion>0.0.8.1</AssemblyVersion>
     </PropertyGroup>
     
     <PropertyGroup>
