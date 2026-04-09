@@ -12,7 +12,7 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         [JsonInclude]
         [JsonPropertyName("type")] protected abstract string Type { get; }
         [JsonPropertyName("extra")] public IEnumerable<ChatComponent>? Children { get; set; } = null;
-        [JsonConverter(typeof(ChatColorJsonSerializer))]
+        [JsonConverter(typeof(ChatColorJsonConverter))]
         [JsonPropertyName("color")] public Color? Color { get; set; } = null;
         [JsonPropertyName("font")] public string? Font { get; set; } = null;
         [JsonPropertyName("bold")] public bool? Bold { get; set; } = null;
@@ -20,7 +20,7 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         [JsonPropertyName("underlined")] public bool? Underlined { get; set; } = null;
         [JsonPropertyName("strikethrough")] public bool? Strikethrough { get; set; } = null;
         [JsonPropertyName("obfuscated")] public bool? Obfuscated { get; set; } = null;
-        [JsonConverter(typeof(ColorNbtJsonSerializer))]
+        [JsonConverter(typeof(ColorNbtJsonConverter))]
         [JsonPropertyName("shadow_color")] public Color? ShadowColor { get; set; } = null;
         protected internal ChatComponent()
         {

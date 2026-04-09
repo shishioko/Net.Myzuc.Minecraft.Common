@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters
 {
-    internal class ChatColorJsonSerializer : JsonConverter<Color>
+    internal class ChatColorJsonConverter : JsonConverter<Color>
     {
         public override Color Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
