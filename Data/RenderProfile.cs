@@ -5,7 +5,7 @@ namespace Net.Myzuc.Minecraft.Common.Data
 {
     public class RenderProfile
     {
-        [JsonConverter(typeof(ArrayGuidJsonConverter))]
+        [JsonConverter(typeof(GuidNbtJsonConverter))]
         [JsonPropertyName("id")] public Guid? Guid { get; set; } = null;
         [JsonPropertyName("name")] public string? Name { get; set; } = null;
         [JsonPropertyName("properties")] public Property[]? Properties { get; set; } = null;

@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Net.Myzuc.Minecraft.Common.Objects.JsonConverters
 {
-    internal class IntegerColorJsonSerializer : JsonConverter<Color>
+    internal class ColorNbtJsonSerializer : JsonConverter<Color>
     {
         public override Color Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {

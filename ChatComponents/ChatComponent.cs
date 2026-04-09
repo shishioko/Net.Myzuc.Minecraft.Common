@@ -20,7 +20,7 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         [JsonPropertyName("underlined")] public bool? Underlined { get; set; } = null;
         [JsonPropertyName("strikethrough")] public bool? Strikethrough { get; set; } = null;
         [JsonPropertyName("obfuscated")] public bool? Obfuscated { get; set; } = null;
-        [JsonConverter(typeof(IntegerColorJsonSerializer))]
+        [JsonConverter(typeof(ColorNbtJsonSerializer))]
         [JsonPropertyName("shadow_color")] public Color? ShadowColor { get; set; } = null;
         protected internal ChatComponent()
         {

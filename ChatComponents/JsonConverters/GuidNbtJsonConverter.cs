@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Net.Myzuc.Minecraft.Common.Objects.JsonConverters
 {
-    internal class ArrayGuidJsonConverter : JsonConverter<Guid>
+    internal class GuidNbtJsonConverter : JsonConverter<Guid>
     {
         public override Guid Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
