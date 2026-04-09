@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿// i forgot where i even got ts from
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 
 namespace Net.Myzuc.Minecraft.Common.IO
 {
@@ -31,6 +33,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
             Aes.Padding = PaddingMode.None;
             KeepOpen = keepOpen;
         }
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public override int Read(byte[] buffer, int offset, int count)
         {
             int read = Stream.Read(buffer, offset, count);
@@ -44,6 +47,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
             }
             return read;
         }
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public override int Read(Span<byte> buffer)
         {
             int read = Stream.Read(buffer);
@@ -57,6 +61,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
             }
             return read;
         }
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public override void Write(byte[] buffer, int offset, int count)
         {
             if (count <= 0) return;
@@ -72,6 +77,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
                 Stream.Write(WriteBuffer, 0, size);
             }
         }
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public override void Write(ReadOnlySpan<byte> buffer)
         {
             if (buffer.Length <= 0) return;
@@ -87,6 +93,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
                 Stream.Write(WriteBuffer, 0, size);
             }
         }
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken = default)
         {
             int read = await Stream.ReadAsync(buffer.AsMemory(offset, count), cancellationToken);
@@ -100,6 +107,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
             }
             return read;
         }
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
         {
             int read = await Stream.ReadAsync(buffer, cancellationToken);
@@ -113,6 +121,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
             }
             return read;
         }
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public override async Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken = default)
         {
             if (count <= 0) return;
@@ -128,6 +137,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
                 await Stream.WriteAsync(WriteBuffer.AsMemory(0, size), cancellationToken);
             }
         }
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public override async ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
         {
             if (buffer.Length <= 0) return;
