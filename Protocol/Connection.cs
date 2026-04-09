@@ -3,7 +3,6 @@ using System.IO.Compression;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
-using Me.Shiokawaii.IO;
 using Net.Myzuc.Minecraft.Common.Data;
 using Net.Myzuc.Minecraft.Common.IO;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets;

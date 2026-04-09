@@ -1,6 +1,6 @@
 using System.Text;
 using System.Web;
-using Me.Shiokawaii.IO;
+using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Nbt
 {

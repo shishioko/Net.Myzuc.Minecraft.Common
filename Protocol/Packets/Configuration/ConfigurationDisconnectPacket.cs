@@ -1,25 +1,24 @@
+using Net.Myzuc.Minecraft.Common.ChatComponents;
 using Net.Myzuc.Minecraft.Common.IO;
+using Net.Myzuc.Minecraft.Common.Nbt;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
 {
-    public sealed class ConfigurationCustomClientboundPacket: Packet
+    public sealed class ConfigurationDisconnectPacket : Packet
     {
         public override bool Serverbound => false;
         public override ProtocolStage ProtocolStage => ProtocolStage.Configuration;
-        protected internal override int PacketId => 0x01;
+        protected internal override int PacketId => 0x02;
 
-        public string Channel = string.Empty;
-        public byte[] Data = [];
+        public NbtTag Message = new CompoundNbtTag();
 
         internal override void Serialize(Stream stream)
         {
-            stream.WriteMinecraftString(Channel);
-            stream.WriteU8A(Data);
+            Message.Serialize(stream);
         }
         internal override void Deserialize(Stream stream)
         {
-            Channel = stream.ReadMinecraftString();
-            Data = stream.ReadU8A();
+            Message = NbtTag.Deserialize(stream);
         }
     }
 }

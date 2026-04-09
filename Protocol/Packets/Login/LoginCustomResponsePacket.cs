@@ -1,4 +1,5 @@
-using Me.Shiokawaii.IO;
+
+using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 {
