@@ -1,10 +1,9 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Net.Myzuc.Minecraft.Common.Data;
 
-namespace Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters
+namespace Net.Myzuc.Minecraft.Common.Data.JsonConverters
 {
-    internal class ColorNbtJsonConverter : JsonConverter<Color>
+    internal sealed class ColorJsonConverter : JsonConverter<Color>
     {
         public override Color Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {

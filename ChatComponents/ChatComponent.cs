@@ -14,7 +14,7 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         [JsonPropertyName("extra")]
         public IList<ChatComponent>? Children { get; set; } = null;
         [JsonPropertyName("color")]
-        public Color? Color { get; set; } = null;
+        public ChatColor? Color { get; set; } = null;
         [JsonPropertyName("font")]
         public string? Font { get; set; } = null;
         [JsonPropertyName("bold")]
@@ -27,7 +27,6 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         public bool? Strikethrough { get; set; } = null;
         [JsonPropertyName("obfuscated")]
         public bool? Obfuscated { get; set; } = null;
-        [JsonConverter(typeof(ColorNbtJsonConverter))]
         [JsonPropertyName("shadow_color")]
         public Color? ShadowColor { get; set; } = null;
         protected internal ChatComponent()
@@ -36,7 +35,7 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         }
         public override string ToString()
         {
-            return JsonSerializer.Serialize(this, JsonSerializerOptions.Default);
+            return JsonSerializer.Serialize(this, Global.JsonSerializerOptions);
         }
         public static implicit operator ChatComponent(string data)
         {
