@@ -10,26 +10,6 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
         {
             
         }
-        public NbtTag? GetValue(NbtValueKind valueKind)
-        {
-            return valueKind switch
-            {
-                NbtValueKind.End => throw new InvalidOperationException(),
-                NbtValueKind.Byte => (ByteNbtTag)this,
-                NbtValueKind.Short => (ShortNbtTag)this,
-                NbtValueKind.Int => (IntNbtTag)this,
-                NbtValueKind.Long => (LongNbtTag)this,
-                NbtValueKind.Float => (FloatNbtTag)this,
-                NbtValueKind.Double => (DoubleNbtTag)this,
-                NbtValueKind.ByteArray => (ByteArrayNbtTag)this,
-                NbtValueKind.String => (StringNbtTag)this,
-                NbtValueKind.List => (ListNbtTag)this,
-                NbtValueKind.Compound => (CompoundNbtTag)this,
-                NbtValueKind.IntArray => (IntArrayNbtTag)this,
-                NbtValueKind.LongArray => (LongArrayNbtTag)this,
-                _ => null,
-            };
-        }
         public abstract TNbtTag As<TNbtTag>() where TNbtTag : NbtTag;
         public abstract NbtTag Copy();
         public abstract NbtTag Merge(NbtTag nbt);
