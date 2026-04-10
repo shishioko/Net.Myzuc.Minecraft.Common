@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Net.Myzuc.Minecraft.Common.Objects.JsonConverters
 {
-    internal class GuidStringJsonConverter : JsonConverter<Guid>
+    internal sealed class GuidStringJsonConverter : JsonConverter<Guid>
     {
         public override Guid Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
