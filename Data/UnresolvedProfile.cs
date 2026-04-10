@@ -3,16 +3,23 @@ using Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters;
 
 namespace Net.Myzuc.Minecraft.Common.Data
 {
-    public class UnresolvedProfile
+    public readonly record struct UnresolvedProfile
     {
         [JsonConverter(typeof(GuidNbtJsonConverter))]
-        [JsonPropertyName("id")] public Guid? Guid { get; set; } = null;
-        [JsonPropertyName("name")] public string? Name { get; set; } = null;
-        [JsonPropertyName("properties")] public Property[]? Properties { get; set; } = null;
-        [JsonPropertyName("texture")] public string? Skin { get; set; } = null;
-        [JsonPropertyName("cape")] public string? Cape { get; set; } = null;
-        [JsonPropertyName("elytra")] public string? Elytra { get; set; } = null;
-        [JsonPropertyName("model")] public PlayerModelType? ModelType { get; set; } = null;
+        [JsonPropertyName("id")]
+        public Guid? Guid { get; init; } = null;
+        [JsonPropertyName("name")]
+        public string? Name { get; init; } = null;
+        [JsonPropertyName("properties")]
+        public IReadOnlyList<Property>? Properties { get; init; } = null;
+        [JsonPropertyName("texture")]
+        public string? Skin { get; init; } = null;
+        [JsonPropertyName("cape")]
+        public string? Cape { get; init; } = null;
+        [JsonPropertyName("elytra")]
+        public string? Elytra { get; init; } = null;
+        [JsonPropertyName("model")]
+        public PlayerModelType? ModelType { get; init; } = null;
         public UnresolvedProfile()
         {
             

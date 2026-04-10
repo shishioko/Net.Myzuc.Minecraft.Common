@@ -4,12 +4,15 @@ using Net.Myzuc.Minecraft.Common.Objects.JsonConverters;
 
 namespace Net.Myzuc.Minecraft.Common.Data
 {
-    public class ResolvedProfile
+    public readonly record struct ResolvedProfile
     {
         [JsonConverter(typeof(GuidStringJsonConverter))]
-        [JsonPropertyName("id")] public Guid Guid { get; set; } = Guid.Empty;
-        [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
-        [JsonPropertyName("properties")] public Property[] Properties { get; set; } = [];
+        [JsonPropertyName("id")]
+        public Guid Guid { get; init; } = Guid.Empty;
+        [JsonPropertyName("name")]
+        public string Name { get; init; } = string.Empty;
+        [JsonPropertyName("properties")]
+        public IReadOnlyList<Property> Properties { get; init; } = [];
         public ResolvedProfile()
         {
             
@@ -19,12 +22,18 @@ namespace Net.Myzuc.Minecraft.Common.Data
             Guid = id;
             Name = name;
         }
+        public ResolvedProfile(Guid id, string name, IReadOnlyList<Property> properties)
+        {
+            Guid = id;
+            Name = name;
+            Properties = properties;
+        }
         
         internal static void Serialize(Stream stream, ResolvedProfile resolvedProfile)
         {
             stream.WriteGuid(resolvedProfile.Guid);
             stream.WriteT16AS32V(resolvedProfile.Name);
-            stream.WriteS32V(resolvedProfile.Properties.Length);
+            stream.WriteS32V(resolvedProfile.Properties.Count);
             foreach(Property property in resolvedProfile.Properties)
             {
                 stream.WriteT16AS32V(property.Name);
@@ -42,7 +51,7 @@ namespace Net.Myzuc.Minecraft.Common.Data
             profile.Guid = stream.ReadGuid();
             profile.Name = stream.ReadT16AS32V();
             profile.Properties = new Property[stream.ReadS32V()];
-            for (int i = 0; i < profile.Properties.Length; i++)
+            for (int i = 0; i < profile.Properties.Count; i++)
             {
                 Property property = new();
                 property.Name = stream.ReadT16AS32V();

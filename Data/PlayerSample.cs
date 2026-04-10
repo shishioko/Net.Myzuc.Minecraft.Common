@@ -3,11 +3,18 @@ using Net.Myzuc.Minecraft.Common.Objects.JsonConverters;
 
 namespace Net.Myzuc.Minecraft.Common.Data
 {
-    public struct PlayerSample
+    public readonly record struct PlayerSample
     {
-        [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
+        [JsonPropertyName("name")] 
+        public string Name { get; init; } = string.Empty;
         [JsonConverter(typeof(GuidStringJsonConverter))]
-        [JsonPropertyName("id")] public Guid Guid { get; set; } = Guid.Empty;
+        [JsonPropertyName("id")] 
+        public Guid Guid { get; init; } = Guid.Empty;
+        [JsonConstructor]
+        public PlayerSample()
+        {
+            
+        }
         public PlayerSample(string name, Guid guid)
         {
             Name = name;
