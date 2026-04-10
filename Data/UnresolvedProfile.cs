@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters;
+using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 
 namespace Net.Myzuc.Minecraft.Common.Data
 {
@@ -37,6 +38,34 @@ namespace Net.Myzuc.Minecraft.Common.Data
             Guid = profile.Guid;
             Name = profile.Name;
             Properties = profile.Properties;
+        }
+        
+        internal UnresolvedProfile(CompoundNbtTag nbt)
+        {
+            if (nbt.ContainsKey("id")) Guid = nbt["id"].Get<IntArrayNbtTag>();
+            if (nbt.ContainsKey("name")) Name = nbt["name"].Get<StringNbtTag>();
+            if (nbt.ContainsKey("properties"))
+            {
+                Properties = nbt["properties"].Get<ListNbtTag>().Select(property => new Property(property.Get<CompoundNbtTag>())).ToList();
+            }
+            if (nbt.ContainsKey("texture")) Skin = nbt["texture"].Get<StringNbtTag>();
+            if (nbt.ContainsKey("cape")) Cape = nbt["cape"].Get<StringNbtTag>();
+            if (nbt.ContainsKey("elytra")) Elytra = nbt["elytra"].Get<StringNbtTag>();
+        }
+
+        internal CompoundNbtTag Serialize()
+        {
+            CompoundNbtTag nbt = new();
+            if (Guid is not null) nbt["id"] = (IntArrayNbtTag)Guid;
+            if (Name is not null) nbt["name"] = (StringNbtTag)Name;
+            if (Properties is not null)
+            {
+                nbt["properties"] = new ListNbtTag(Properties.Select(entry => entry.Serialize()).ToList());
+            }
+            if (Skin is not null) nbt["skin"] = (StringNbtTag)Skin;
+            if (Cape is not null) nbt["cape"] = (StringNbtTag)Cape;
+            if (Elytra is not null) nbt["elytra"] = (StringNbtTag)Elytra;
+            return nbt;
         }
     }
 }

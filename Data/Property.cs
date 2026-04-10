@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.IO;
+using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 
 namespace Net.Myzuc.Minecraft.Common.Data
 {
@@ -36,6 +37,13 @@ namespace Net.Myzuc.Minecraft.Common.Data
                 Signature = stream.ReadT16AS32V();
             }
         }
+
+        internal Property(CompoundNbtTag nbt)
+        {
+            Name = nbt["name"].Get<StringNbtTag>();
+            Value = nbt["value"].Get<StringNbtTag>();
+            if (nbt.ContainsKey("signature")) Signature = nbt["value"].Get<StringNbtTag>();
+        }
         
         internal void Serialize(Stream stream)
         {
@@ -46,6 +54,15 @@ namespace Net.Myzuc.Minecraft.Common.Data
             {
                 stream.WriteT16AS32V(Signature);
             }
+        }
+        
+        internal CompoundNbtTag Serialize()
+        {
+            CompoundNbtTag nbt = new();
+            nbt["name"] = (StringNbtTag)Name;
+            nbt["value"] = (StringNbtTag)Value;
+            if (Signature is not null) nbt["signature"] = (StringNbtTag)Signature;
+            return nbt;
         }
     }
 }

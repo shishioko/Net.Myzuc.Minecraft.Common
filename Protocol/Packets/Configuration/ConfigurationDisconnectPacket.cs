@@ -1,6 +1,7 @@
 using Net.Myzuc.Minecraft.Common.ChatComponents;
 using Net.Myzuc.Minecraft.Common.IO;
 using Net.Myzuc.Minecraft.Common.Nbt;
+using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
 {
@@ -19,12 +20,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
 
         internal ConfigurationDisconnectPacket(Stream stream) : base(stream)
         {
-            //Message = stream.ReadNbt<ChatComponent>();
+            Message = ChatComponent.Deserialize(stream.ReadNbt());
         }
         
         internal override void Serialize(Stream stream)
         {
-            //stream.WriteNbt(Message);
+            stream.WriteNbt(Message.Serialize());
         }
     }
 }

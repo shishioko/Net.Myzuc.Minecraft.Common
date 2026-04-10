@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.Nbt;
+using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 
 namespace Net.Myzuc.Minecraft.Common.ChatComponents
 {
@@ -16,6 +17,20 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         {
             Atlas = atlas;
             Sprite = sprite;
+        }
+        
+        internal AtlasObjectChatComponent(CompoundNbtTag nbt) : base(nbt)
+        {
+            Atlas = nbt["atlas"].Get<StringNbtTag>();
+            Sprite = nbt["sprite"].Get<StringNbtTag>();
+        }
+
+        internal override CompoundNbtTag Serialize()
+        {
+            CompoundNbtTag nbt = base.Serialize();
+            nbt["atlas"] = (StringNbtTag)Atlas;
+            nbt["sprite"] = (StringNbtTag)Sprite;
+            return nbt;
         }
     }
 }
