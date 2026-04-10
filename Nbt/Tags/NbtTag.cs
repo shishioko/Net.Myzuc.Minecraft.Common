@@ -60,11 +60,6 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
                 _ => null,
             };
         }
-        public static NbtTag? Deserialize(Stream stream)
-        {
-            NbtValueKind valueKind = (NbtValueKind)stream.ReadS8();
-            return DeserializeValue(stream, valueKind);
-        }
         public static NbtTag Parse(StringReader reader)
         {
             throw new NotImplementedException();
