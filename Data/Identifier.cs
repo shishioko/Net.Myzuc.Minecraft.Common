@@ -1,3 +1,5 @@
+using System.Runtime.Serialization;
+
 namespace Net.Myzuc.Minecraft.Common.Data
 {
     public readonly struct Identifier
@@ -5,12 +7,21 @@ namespace Net.Myzuc.Minecraft.Common.Data
         private const string ValidNamespaceCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYZ0123456789.-_";
         private const string ValidValueCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYZ0123456789.-_/";
         
-        public string Namespace { get; }
-        public string Value { get; }
-        public Identifier(string identifier)
+        public string FullIdentifier
         {
-            string[] parts = identifier.Split(':');
-            if (parts.Length > 2) throw new ArgumentException($"Invalid identifier '{identifier}'!");
+            get
+            {
+                return $"{Namespace}:{Value}";
+            }
+        }
+        [IgnoreDataMember]
+        public string Namespace { get; }
+        [IgnoreDataMember]
+        public string Value { get; }
+        public Identifier(string fullIdentifier)
+        {
+            string[] parts = fullIdentifier.Split(':');
+            if (parts.Length > 2) throw new ArgumentException($"Invalid identifier '{fullIdentifier}'!");
             Namespace = parts.Length > 1 ? parts[1] : "minecraft";
             Value = parts[^1];
             if (Namespace.Any(c => !ValidNamespaceCharacters.Contains(c))) throw new ArgumentException($"Invalid identifier namespace '{Namespace}'!");
@@ -18,7 +29,7 @@ namespace Net.Myzuc.Minecraft.Common.Data
         }
         public override string ToString()
         {
-            return $"{Namespace}:{Value}";
+            return FullIdentifier;
         }
     }
 }

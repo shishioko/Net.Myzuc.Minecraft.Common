@@ -14,11 +14,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
 
         internal override void Serialize(Stream stream)
         {
-            stream.WriteNbt(Message);
+            //stream.WriteNbt(Message);
         }
         internal override void Deserialize(Stream stream)
         {
-            Message = stream.ReadNbt<ChatComponent>();
+            //Message = stream.ReadNbt<ChatComponent>();
         }
     }
 }

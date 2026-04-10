@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Net.Myzuc.Minecraft.Common.Data
 {
@@ -159,15 +160,16 @@ namespace Net.Myzuc.Minecraft.Common.Data
                 _ => throw new ArgumentException($"Unrecognized color '{color}'!", nameof(color))
             };
         }
-        public Color(string value)
+        [JsonConstructor]
+        public Color(string @string)
         {
-            if (value.StartsWith('#'))
+            if (@string.StartsWith('#'))
             {
-                Argb = int.Parse(value[1..], NumberStyles.HexNumber);
+                Argb = int.Parse(@string[1..], NumberStyles.HexNumber);
             }
             else
             {
-                Argb = value switch
+                Argb = @string switch
                 {
                     "black" => -16777216,
                     "dark_blue" => -16777046,
@@ -185,7 +187,7 @@ namespace Net.Myzuc.Minecraft.Common.Data
                     "light_purple" => -43521,
                     "yellow" => -171,
                     "white" => -1,
-                    _ => throw new ArgumentException($"Unrecognized legacy color '{value}'!", nameof(value))
+                    _ => throw new ArgumentException($"Unrecognized legacy color '{@string}'!", nameof(@string))
                 };
             }
         }
