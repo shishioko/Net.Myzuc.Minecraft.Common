@@ -10,7 +10,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         public ResolvedProfile Profile { get; init; } = new();
 
-        public LoginSuccessPacket(Stream stream) : base(stream)
+        public LoginSuccessPacket()
+        {
+            
+        }
+
+        internal LoginSuccessPacket(Stream stream) : base(stream)
         {
             Profile = new(stream);
         }

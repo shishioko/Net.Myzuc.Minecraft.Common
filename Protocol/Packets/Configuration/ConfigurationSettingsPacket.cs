@@ -19,7 +19,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
         public bool AllowListing { get; init; } = false;
         public ParticleSetting ParticleSettings { get; init; } = ParticleSetting.All;
 
-        public ConfigurationSettingsPacket(Stream stream) : base(stream)
+        public ConfigurationSettingsPacket()
+        {
+            
+        }
+
+        internal ConfigurationSettingsPacket(Stream stream) : base(stream)
         {
             Locale = stream.ReadT16AS32V();
             ViewDistance = stream.ReadU8();

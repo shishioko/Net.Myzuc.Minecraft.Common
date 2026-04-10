@@ -12,7 +12,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
 
         public ChatComponent Message { get; init; } = new TextChatComponent();
 
-        public ConfigurationDisconnectPacket(Stream stream) : base(stream)
+        public ConfigurationDisconnectPacket()
+        {
+            
+        }
+
+        internal ConfigurationDisconnectPacket(Stream stream) : base(stream)
         {
             //Message = stream.ReadNbt<ChatComponent>();
         }

@@ -13,7 +13,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         public ChatComponent Message { get; init; } = new TextChatComponent();
 
-        public LoginDisconnectPacket(Stream stream) : base(stream)
+        public LoginDisconnectPacket()
+        {
+            
+        }
+
+        internal LoginDisconnectPacket(Stream stream) : base(stream)
         {
             Message = JsonSerializer.Deserialize<ChatComponent>(stream.ReadT16AS32V(), Global.JsonSerializerOptions) ?? throw new SerializationException();
         }

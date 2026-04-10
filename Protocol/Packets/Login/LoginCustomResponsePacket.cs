@@ -12,7 +12,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public int Id { get; init; } = 0;
         public byte[]? Data { get; init; } = null;
 
-        public LoginCustomResponsePacket(Stream stream) : base(stream)
+        public LoginCustomResponsePacket()
+        {
+            
+        }
+
+        internal LoginCustomResponsePacket(Stream stream) : base(stream)
         {
             Id = stream.ReadS32V();
             if (stream.ReadBool())

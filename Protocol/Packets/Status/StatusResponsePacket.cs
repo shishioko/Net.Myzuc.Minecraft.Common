@@ -10,7 +10,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
 
         public Data.Status Status { get; init; } = new();
         
-        public StatusResponsePacket(Stream stream) : base(stream)
+        public StatusResponsePacket()
+        {
+            
+        }
+
+        internal StatusResponsePacket(Stream stream) : base(stream)
         {
             Status = Data.Status.Parse(stream.ReadT16AS32V());
         }

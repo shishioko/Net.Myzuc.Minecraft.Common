@@ -6,6 +6,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets
         public abstract ProtocolStage ProtocolStage { get; }
         protected internal abstract int PacketId { get; }
 
+        internal Packet()
+        {
+            
+        }
+        
         internal Packet(Stream stream)
         {
             

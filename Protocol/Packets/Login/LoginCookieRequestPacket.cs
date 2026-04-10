@@ -10,7 +10,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         public string Id { get; init; } = string.Empty;
 
-        public LoginCookieRequestPacket(Stream stream) : base(stream)
+        public LoginCookieRequestPacket()
+        {
+            
+        }
+
+        internal LoginCookieRequestPacket(Stream stream) : base(stream)
         {
             Id = stream.ReadT16AS32V();
         }

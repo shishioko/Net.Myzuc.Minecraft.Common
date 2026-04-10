@@ -12,7 +12,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public byte[] EncryptedSecret { get; init; } = [];
         public byte[] EncryptedSample { get; init; } = [];
 
-        public EncryptionResponsePacket(Stream stream) : base(stream)
+        public EncryptionResponsePacket()
+        {
+            
+        }
+
+        internal EncryptionResponsePacket(Stream stream) : base(stream)
         {
             EncryptedSecret = stream.ReadU8AS32V();
             EncryptedSample = stream.ReadU8AS32V();

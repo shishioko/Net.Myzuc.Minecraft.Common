@@ -11,7 +11,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public string Name { get; init; } = string.Empty;
         public Guid Guid { get; init; } = Guid.Empty; //todo: replace with game profile
 
-        public LoginStartPacket(Stream stream) : base(stream)
+        public LoginStartPacket()
+        {
+            
+        }
+
+        internal LoginStartPacket(Stream stream) : base(stream)
         {
             Name = stream.ReadT16AS32V();
             Guid = stream.ReadGuid();

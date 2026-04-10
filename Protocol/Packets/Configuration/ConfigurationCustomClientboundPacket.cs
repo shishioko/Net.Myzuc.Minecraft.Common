@@ -11,7 +11,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
         public string Channel { get; init; } = string.Empty;
         public byte[] Data { get; init; } = [];
 
-        public ConfigurationCustomClientboundPacket(Stream stream) : base(stream)
+        public ConfigurationCustomClientboundPacket()
+        {
+            
+        }
+
+        internal ConfigurationCustomClientboundPacket(Stream stream) : base(stream)
         {
             Channel = stream.ReadT16AS32V();
             Data = stream.ReadU8A();

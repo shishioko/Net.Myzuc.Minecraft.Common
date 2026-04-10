@@ -11,7 +11,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         public int Threshold { get; init; } = 0;
 
-        public LoginCompressionPacket(Stream stream) : base(stream)
+        public LoginCompressionPacket()
+        {
+            
+        }
+
+        internal LoginCompressionPacket(Stream stream) : base(stream)
         {
             Threshold = stream.ReadS32V();
         }

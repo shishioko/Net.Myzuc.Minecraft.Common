@@ -11,7 +11,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
 
         public long Data { get; init; } = 0;
         
-        public PingRequestPacket(Stream stream) : base(stream)
+        public PingRequestPacket()
+        {
+            
+        }
+
+        internal PingRequestPacket(Stream stream) : base(stream)
         {
             Data = stream.ReadS64();
         }

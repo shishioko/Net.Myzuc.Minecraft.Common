@@ -13,7 +13,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public byte[] DecryptedSample { get; init; } = [];
         public bool Authenticate { get; init; } = false;
 
-        public EncryptionRequestPacket(Stream stream) : base(stream)
+        public EncryptionRequestPacket()
+        {
+            
+        }
+
+        internal EncryptionRequestPacket(Stream stream) : base(stream)
         {
             ServerId = stream.ReadT16AS32V();
             PublicKey = stream.ReadU8AS32V();

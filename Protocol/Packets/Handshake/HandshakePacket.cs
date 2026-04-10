@@ -13,8 +13,13 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake
         public string Address { get; init; } = "";
         public ushort Port { get; init; } = 0;
         public HandshakeIntent Intent { get; init; } = HandshakeIntent.Status;
+
+        public HandshakePacket()
+        {
+            
+        }
         
-        public HandshakePacket(Stream stream) : base(stream)
+        internal HandshakePacket(Stream stream) : base(stream)
         {
             ProtocolVersion = stream.ReadS32V();
             Address = stream.ReadT16AS32V();
