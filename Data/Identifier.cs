@@ -1,12 +1,16 @@
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
+using Net.Myzuc.Minecraft.Common.Data.JsonConverters;
 
 namespace Net.Myzuc.Minecraft.Common.Data
 {
+    [JsonConverter(typeof(IdentifierJsonConverter))]
     public readonly struct Identifier
     {
         private const string ValidNamespaceCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYZ0123456789.-_";
         private const string ValidValueCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYZ0123456789.-_/";
         
+        [IgnoreDataMember]
         public string FullIdentifier
         {
             get
@@ -14,9 +18,7 @@ namespace Net.Myzuc.Minecraft.Common.Data
                 return $"{Namespace}:{Value}";
             }
         }
-        [IgnoreDataMember]
         public string Namespace { get; }
-        [IgnoreDataMember]
         public string Value { get; }
         public Identifier(string fullIdentifier)
         {
