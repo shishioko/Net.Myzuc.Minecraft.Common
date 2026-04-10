@@ -14,99 +14,87 @@ namespace Net.Myzuc.Minecraft.Common.IO
         extension(Stream stream)
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public byte[] ReadU8A()
+            public Span<byte> ReadU8A()
             {
                 using MemoryStream ms = new();
                 stream.CopyTo(ms);
-                return ms.ToArray();
+                return ms.ToArray().AsSpan();
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public async Task<byte[]> ReadU8AAsync(CancellationToken cancellationToken = default)
+            public async Task<Memory<byte>> ReadU8AAsync(CancellationToken cancellationToken = default)
             {
                 using MemoryStream ms = new();
                 await stream.CopyToAsync(ms, cancellationToken);
-                return ms.ToArray();
+                return ms.ToArray().AsMemory();
             }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public sbyte[] ReadS8A(int size)
+            public Span<sbyte> ReadS8A(int size)
             {
-                return MemoryMarshal.Cast<byte, sbyte>(stream.ReadU8A(size)).ToArray();
+                return MemoryMarshal.Cast<byte, sbyte>(stream.ReadU8A(size));
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void WriteS8A(sbyte[] data)
+            public void WriteS8A(ReadOnlySpan<sbyte> data)
             {
-                stream.Write(MemoryMarshal.AsBytes(data).ToArray());
+                stream.Write(MemoryMarshal.AsBytes(data));
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public byte[] ReadU8A(int size)
+            public Span<byte> ReadU8A(int size)
             {
-                byte[] data = new byte[size];
-                int position = 0;
-                while (position < size)
-                {
-                    int read = stream.Read(data, position, size - position);
-                    position += read;
-                    if (read == 0) throw new EndOfStreamException();
-                }
+                Span<byte> data = new(new byte[size]);
+                stream.ReadExactly(data);
                 return data;
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void WriteU8A(byte[] data)
+            public void WriteU8A(ReadOnlySpan<byte> data)
             {
                 stream.Write(data);
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public async Task<byte[]> ReadU8AAsync(int size, CancellationToken cancellationToken = default)
+            public async Task<Memory<byte>> ReadU8AAsync(int size, CancellationToken cancellationToken = default)
             {
-                byte[] data = new byte[size];
-                int position = 0;
-                while (position < size)
-                {
-                    int read = await stream.ReadAsync(data.AsMemory(position, size - position), cancellationToken);
-                    position += read;
-                    if (read == 0) throw new EndOfStreamException();
-                }
+                Memory<byte> data = new(new byte[size]);
+                await stream.ReadExactlyAsync(data, cancellationToken);
                 return data;
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public async ValueTask WriteU8AAsync(byte[] data, CancellationToken cancellationToken = default)
+            public async ValueTask WriteU8AAsync(ReadOnlyMemory<byte> data, CancellationToken cancellationToken = default)
             {
                 await stream.WriteAsync(data, cancellationToken);
             }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public sbyte[] ReadS8AS32V()
+            public Span<sbyte> ReadS8AS32V()
             {
                 return stream.ReadS8A(stream.ReadS32V());
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void WriteS8AS32V(sbyte[] data)
+            public void WriteS8AS32V(ReadOnlySpan<sbyte> data)
             {
                 stream.WriteS32V(data.Length);
                 stream.WriteS8A(data);
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public byte[] ReadU8AS32V()
+            public Span<byte> ReadU8AS32V()
             {
                 return stream.ReadU8A(stream.ReadS32V());
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void WriteU8AS32V(byte[] data)
+            public void WriteU8AS32V(ReadOnlySpan<byte> data)
             {
                 stream.WriteS32V(data.Length);
                 stream.WriteU8A(data);
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public async Task<byte[]> ReadU8AS32VAsync(CancellationToken cancellationToken = default)
+            public async Task<Memory<byte>> ReadU8AS32VAsync(CancellationToken cancellationToken = default)
             {
-                return await stream.ReadU8AAsync(await stream.ReadS32VAsync(cancellationToken: cancellationToken), cancellationToken: cancellationToken);
+                return await stream.ReadU8AAsync(await stream.ReadS32VAsync(cancellationToken), cancellationToken);
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public async ValueTask WriteU8AS32VAsync(byte[] data, CancellationToken cancellationToken = default)
+            public async ValueTask WriteU8AS32VAsync(ReadOnlyMemory<byte> data, CancellationToken cancellationToken = default)
             {
-                await stream.WriteS32VAsync(data.Length, cancellationToken: cancellationToken);
-                await stream.WriteU8AAsync(data, cancellationToken: cancellationToken);
+                await stream.WriteS32VAsync(data.Length, cancellationToken);
+                await stream.WriteU8AAsync(data, cancellationToken);
             }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -200,22 +188,22 @@ namespace Net.Myzuc.Minecraft.Common.IO
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool ReadBool()
             {
-                return (stream.ReadU8()) != 0;
+                return stream.ReadU8() != 0;
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void WriteBool(bool data)
             {
-                stream.Write(MemoryMarshal.AsBytes<bool>(new bool[] { data }).ToArray());
+                stream.WriteU8((byte)(data ? 1 : 0));
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public sbyte ReadS8()
             {
-                return (sbyte)(stream.ReadU8A(1))[0];
+                return stream.ReadS8A(1)[0];
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void WriteS8(sbyte data)
             {
-                stream.Write(MemoryMarshal.AsBytes<sbyte>(new sbyte[] { data }).ToArray());
+                stream.WriteS8A(stackalloc sbyte[1] { data });
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public byte ReadU8()
@@ -225,42 +213,42 @@ namespace Net.Myzuc.Minecraft.Common.IO
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void WriteU8(byte data)
             {
-                stream.Write([data]);
+                stream.WriteU8A(stackalloc byte[1] { data });
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public async Task<byte> ReadU8Async(CancellationToken cancellationToken = default)
             {
-                return (await stream.ReadU8AAsync(1, cancellationToken))[0];
+                return (await stream.ReadU8AAsync(1, cancellationToken)).Span[0];
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public async ValueTask WriteU8Async(byte data, CancellationToken cancellationToken = default)
             {
-                await stream.WriteAsync(new byte[] { data }, cancellationToken);
+                await stream.WriteAsync(new byte[1] { data }, cancellationToken);
             }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public short ReadS16()
             {
-                byte[] buffer = stream.ReadU8A(sizeof(short));
+                ReadOnlySpan<byte> buffer = stream.ReadU8A(sizeof(short));
                 return BinaryPrimitives.ReadInt16BigEndian(buffer);
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void WriteS16(short data)
             {
-                byte[] buffer = new byte[sizeof(short)];
+                Span<byte> buffer = stackalloc byte[sizeof(short)];
                 BinaryPrimitives.WriteInt16BigEndian(buffer, data);
                 stream.Write(buffer);
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ushort ReadU16()
             {
-                byte[] buffer = stream.ReadU8A(sizeof(ushort));
+                ReadOnlySpan<byte> buffer = stream.ReadU8A(sizeof(ushort));
                 return BinaryPrimitives.ReadUInt16BigEndian(buffer);
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void WriteU16(ushort data)
             {
-                byte[] buffer = new byte[sizeof(ushort)];
+                Span<byte> buffer = stackalloc byte[sizeof(ushort)];
                 BinaryPrimitives.WriteUInt16BigEndian(buffer, data);
                 stream.Write(buffer);
             }
@@ -268,26 +256,26 @@ namespace Net.Myzuc.Minecraft.Common.IO
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int ReadS32()
             {
-                byte[] buffer = stream.ReadU8A(sizeof(int));
+                ReadOnlySpan<byte> buffer = stream.ReadU8A(sizeof(int));
                 return BinaryPrimitives.ReadInt32BigEndian(buffer);
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void WriteS32(int data)
             {
-                byte[] buffer = new byte[sizeof(int)];
+                Span<byte> buffer = stackalloc byte[sizeof(int)];
                 BinaryPrimitives.WriteInt32BigEndian(buffer, data);
                 stream.Write(buffer);
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public uint ReadU32()
             {
-                byte[] buffer = stream.ReadU8A(sizeof(uint));
+                ReadOnlySpan<byte> buffer = stream.ReadU8A(sizeof(uint));
                 return BinaryPrimitives.ReadUInt32BigEndian(buffer);
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void WriteU32(uint data)
             {
-                byte[] buffer = new byte[sizeof(uint)];
+                Span<byte> buffer = stackalloc byte[sizeof(uint)];
                 BinaryPrimitives.WriteUInt32BigEndian(buffer, data);
                 stream.Write(buffer);
             }
@@ -295,26 +283,26 @@ namespace Net.Myzuc.Minecraft.Common.IO
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public long ReadS64()
             {
-                byte[] buffer = stream.ReadU8A(sizeof(long));
+                ReadOnlySpan<byte> buffer = stream.ReadU8A(sizeof(long));
                 return BinaryPrimitives.ReadInt64BigEndian(buffer);
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void WriteS64(long data)
             {
-                byte[] buffer = new byte[sizeof(long)];
+                Span<byte> buffer = stackalloc byte[sizeof(long)];
                 BinaryPrimitives.WriteInt64BigEndian(buffer, data);
                 stream.Write(buffer);
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ulong ReadU64()
             {
-                byte[] buffer = stream.ReadU8A(sizeof(ulong));
+                ReadOnlySpan<byte> buffer = stream.ReadU8A(sizeof(ulong));
                 return BinaryPrimitives.ReadUInt64BigEndian(buffer);
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void WriteU64(ulong data)
             {
-                byte[] buffer = new byte[sizeof(ulong)];
+                Span<byte> buffer = stackalloc byte[sizeof(ulong)];
                 BinaryPrimitives.WriteUInt64BigEndian(buffer, data);
                 stream.Write(buffer);
             }
@@ -322,13 +310,13 @@ namespace Net.Myzuc.Minecraft.Common.IO
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public float ReadF32()
             {
-                byte[] buffer = stream.ReadU8A(sizeof(float));
+                ReadOnlySpan<byte> buffer = stream.ReadU8A(sizeof(float));
                 return BinaryPrimitives.ReadSingleBigEndian(buffer);
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void WriteF32(float data)
             {
-                byte[] buffer = new byte[sizeof(float)];
+                Span<byte> buffer = stackalloc byte[sizeof(float)];
                 BinaryPrimitives.WriteSingleBigEndian(buffer, data);
                 stream.Write(buffer);
             }
@@ -336,48 +324,41 @@ namespace Net.Myzuc.Minecraft.Common.IO
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public double ReadF64()
             {
-                byte[] buffer = stream.ReadU8A(sizeof(double));
+                ReadOnlySpan<byte> buffer = stream.ReadU8A(sizeof(double));
                 return BinaryPrimitives.ReadDoubleBigEndian(buffer);
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void WriteF64(double data)
             {
-                byte[] buffer = new byte[sizeof(double)];
+                Span<byte> buffer = stackalloc byte[sizeof(double)];
                 BinaryPrimitives.WriteDoubleBigEndian(buffer, data);
                 stream.Write(buffer);
             }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void WriteGuid(Guid data)
-            {
-                byte[] buffer = MemoryMarshal.AsBytes([data]).ToArray();
-                if (!BitConverter.IsLittleEndian)
-                {
-                    stream.Write(buffer);
-                    return;
-                }
-                stream.Write([buffer[3], buffer[2], buffer[1], buffer[0], buffer[5], buffer[4], buffer[7], buffer[6], buffer[8], buffer[9], buffer[10], buffer[11], buffer[12], buffer[13], buffer[14], buffer[15]]);
-            }
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Guid ReadGuid()
             {
-                byte[] buffer = stream.ReadU8A(16);
-                if (BitConverter.IsLittleEndian) buffer = [buffer[3], buffer[2], buffer[1], buffer[0], buffer[5], buffer[4], buffer[7], buffer[6], buffer[8], buffer[9], buffer[10], buffer[11], buffer[12], buffer[13], buffer[14], buffer[15]];
-                return MemoryMarshal.Cast<byte, Guid>(buffer)[0];
+                ReadOnlySpan<byte> buffer = stream.ReadU8A(16);
+                if (!BitConverter.IsLittleEndian) return MemoryMarshal.Cast<byte, Guid>(buffer)[0];
+                return MemoryMarshal.Cast<byte, Guid>(stackalloc byte[16] { buffer[3], buffer[2], buffer[1], buffer[0], buffer[5], buffer[4], buffer[7], buffer[6], buffer[8], buffer[9], buffer[10], buffer[11], buffer[12], buffer[13], buffer[14], buffer[15] })[0];
+            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void WriteGuid(Guid data)
+            {
+                ReadOnlySpan<byte> buffer = MemoryMarshal.AsBytes(stackalloc Guid[1] { data });
+                if (!BitConverter.IsLittleEndian) stream.Write(buffer);
+                else stream.Write(stackalloc byte[16] { buffer[3], buffer[2], buffer[1], buffer[0], buffer[5], buffer[4], buffer[7], buffer[6], buffer[8], buffer[9], buffer[10], buffer[11], buffer[12], buffer[13], buffer[14], buffer[15] });
             }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public string ReadT16AS32V()
             {
-                byte[] buffer = stream.ReadU8A(stream.ReadS32V());
-                return Encoding.UTF8.GetString(buffer);
+                return Encoding.UTF8.GetString(stream.ReadU8AS32V());
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void WriteT16AS32V(string data)
             {
-                byte[] buffer = Encoding.UTF8.GetBytes(data);
-                stream.WriteS32V(buffer.Length);
-                stream.WriteU8A(buffer);
+                stream.WriteU8AS32V(Encoding.UTF8.GetBytes(data));
             }
             
             
@@ -394,68 +375,54 @@ namespace Net.Myzuc.Minecraft.Common.IO
             
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public int[] ReadS32A(int size)
+            public Span<int> ReadS32A(int size)
             {
-                byte[] buffer = stream.ReadU8A(size * sizeof(int));
-                if (!BitConverter.IsLittleEndian) return MemoryMarshal.Cast<byte,int>(buffer).ToArray();
-                Span<byte> span = buffer;
-                int[] data = new int[size];
-                for (int i = 0; i < data.Length; i++)
-                {
-                    data[i] = BinaryPrimitives.ReadInt32BigEndian(span.Slice(i * sizeof(int), sizeof(int)));
-                }
+                Span<byte> buffer = stream.ReadU8A(size * sizeof(int));
+                Span<int> data = MemoryMarshal.Cast<byte, int>(buffer);
+                if (BitConverter.IsLittleEndian) BinaryPrimitives.ReverseEndianness(data, data);
                 return data;
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void WriteS32A(int[] data)
+            public void WriteS32A(ReadOnlySpan<int> data)
             {
-                if (!BitConverter.IsLittleEndian)
+                if(!BitConverter.IsLittleEndian)
                 {
-                    stream.Write(MemoryMarshal.AsBytes(data).ToArray());
+                    stream.WriteU8A(MemoryMarshal.AsBytes(data));
                     return;
                 }
-                Span<byte> span = new byte[data.Length * sizeof(int)];
-                for (int i = 0; i < data.Length; i++)
-                {
-                    BinaryPrimitives.WriteInt32BigEndian(span.Slice(i * sizeof(int), sizeof(int)), data[i]);
-                }
+                Span<int> reversed = new(new int[data.Length]);
+                BinaryPrimitives.ReverseEndianness(data, reversed);
+                stream.WriteU8A(MemoryMarshal.AsBytes(reversed));
             }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public long[] ReadS64A(int size)
+            public Span<long> ReadS64A(int size)
             {
-                byte[] buffer = stream.ReadU8A(size * sizeof(long));
-                if (!BitConverter.IsLittleEndian) return MemoryMarshal.Cast<byte,long>(buffer).ToArray();
-                Span<byte> span = buffer;
-                long[] data = new long[size];
-                for (int i = 0; i < data.Length; i++)
-                {
-                    data[i] = BinaryPrimitives.ReadInt64BigEndian(span.Slice(i * sizeof(long), sizeof(long)));
-                }
+                Span<byte> buffer = stream.ReadU8A(size * sizeof(long));
+                Span<long> data = MemoryMarshal.Cast<byte, long>(buffer);
+                if (BitConverter.IsLittleEndian) BinaryPrimitives.ReverseEndianness(data, data);
                 return data;
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void WriteS64A(long[] data)
+            public void WriteS64A(ReadOnlySpan<long> data)
             {
-                if (!BitConverter.IsLittleEndian)
+                if(!BitConverter.IsLittleEndian)
                 {
-                    stream.Write(MemoryMarshal.AsBytes(data).ToArray());
+                    stream.WriteU8A(MemoryMarshal.AsBytes(data));
                     return;
                 }
-                Span<byte> span = new byte[data.Length * sizeof(long)];
-                for (int i = 0; i < data.Length; i++)
-                {
-                    BinaryPrimitives.WriteInt64BigEndian(span.Slice(i * sizeof(long), sizeof(long)), data[i]);
-                }
+                Span<long> reversed = new(new long[data.Length]);
+                BinaryPrimitives.ReverseEndianness(data, reversed);
+                stream.WriteU8A(MemoryMarshal.AsBytes(reversed));
             }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public sbyte[] ReadS8AS32()
+            public Span<sbyte> ReadS8AS32()
             {
                 return stream.ReadS8A(stream.ReadS32());
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void WriteS8AS32(sbyte[] data)
+            public void WriteS8AS32(ReadOnlySpan<sbyte> data)
             {
                 stream.WriteS32(data.Length);
                 stream.WriteS8A(data);
@@ -464,37 +431,37 @@ namespace Net.Myzuc.Minecraft.Common.IO
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public string ReadT16AU16()
             {
-                byte[] buffer = stream.ReadU8A(stream.ReadU16());
+                Span<byte> buffer = stream.ReadU8A(stream.ReadU16());
                 return Encoding.UTF8.GetString(buffer);
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void WriteT16AU16(string data)
             {
-                byte[] buffer = Encoding.UTF8.GetBytes(data);
+                Span<byte> buffer = Encoding.UTF8.GetBytes(data);
                 stream.WriteU16((ushort)buffer.Length);
                 if (buffer.Length > ushort.MaxValue) stream.WriteU8A(buffer[..ushort.MaxValue]);
                 else stream.WriteU8A(buffer);
             }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public int[] ReadS32AS32()
+            public Span<int> ReadS32AS32()
             {
                 return stream.ReadS32A(stream.ReadS32());
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void WriteS32AS32(int[] data)
+            public void WriteS32AS32(ReadOnlySpan<int> data)
             {
                 stream.WriteS32(data.Length);
                 stream.WriteS32A(data);
             }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public long[] ReadS64AS32()
+            public Span<long> ReadS64AS32()
             {
                 return stream.ReadS64A(stream.ReadS32());
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void WriteS64AS32(long[] data)
+            public void WriteS64AS32(ReadOnlySpan<long> data)
             {
                 stream.WriteS32(data.Length);
                 stream.WriteS64A(data);
