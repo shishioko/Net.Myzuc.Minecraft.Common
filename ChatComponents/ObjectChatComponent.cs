@@ -4,7 +4,7 @@ using Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters;
 namespace Net.Myzuc.Minecraft.Common.ChatComponents
 {
     [JsonConverter(typeof(ObjectChatComponentJsonConverter))]
-    public abstract class ObjectChatComponent : ChatComponent
+    public abstract record ObjectChatComponent : ChatComponent
     {
         protected override string Type => "object";
         [JsonInclude]

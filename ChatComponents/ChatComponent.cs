@@ -1,35 +1,34 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters;
-using Net.Myzuc.Minecraft.Common.Data;
 using Net.Myzuc.Minecraft.Common.Data.Primitives;
 
 namespace Net.Myzuc.Minecraft.Common.ChatComponents
 {
     [JsonConverter(typeof(ChatComponentJsonConverter))]
-    public abstract class ChatComponent
+    public abstract record ChatComponent
     {
         [JsonInclude]
         [JsonPropertyName("type")]
         protected abstract string Type { get; }
         [JsonPropertyName("extra")]
-        public IList<ChatComponent>? Children { get; set; } = null;
+        public IReadOnlyList<ChatComponent>? Children { get; set; } = null;
         [JsonPropertyName("color")]
-        public ChatColor? Color { get; set; } = null;
+        public ChatColor? Color { get; init; } = null;
         [JsonPropertyName("font")]
-        public string? Font { get; set; } = null;
+        public string? Font { get; init; } = null;
         [JsonPropertyName("bold")]
-        public bool? Bold { get; set; } = null;
+        public bool? Bold { get; init; } = null;
         [JsonPropertyName("italic")]
-        public bool? Italic { get; set; } = null;
+        public bool? Italic { get; init; } = null;
         [JsonPropertyName("underlined")]
-        public bool? Underlined { get; set; } = null;
+        public bool? Underlined { get; init; } = null;
         [JsonPropertyName("strikethrough")]
-        public bool? Strikethrough { get; set; } = null;
+        public bool? Strikethrough { get; init; } = null;
         [JsonPropertyName("obfuscated")]
-        public bool? Obfuscated { get; set; } = null;
+        public bool? Obfuscated { get; init; } = null;
         [JsonPropertyName("shadow_color")]
-        public Color? ShadowColor { get; set; } = null;
+        public Color? ShadowColor { get; init; } = null;
         protected internal ChatComponent()
         {
             

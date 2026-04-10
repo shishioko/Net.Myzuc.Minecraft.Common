@@ -1,15 +1,14 @@
 using System.Text.Json.Serialization;
-using Net.Myzuc.Minecraft.Common.Nbt;
 
 namespace Net.Myzuc.Minecraft.Common.ChatComponents
 {
    
-    public sealed class TextChatComponent : ChatComponent
+    public sealed record TextChatComponent : ChatComponent
     {
         protected override string Type => "text";
         [JsonRequired]
         [JsonPropertyName("text")]
-        public string Text { get; set; }
+        public string Text { get; init; }
         public TextChatComponent(string text = "")
         {
             Text = text;
