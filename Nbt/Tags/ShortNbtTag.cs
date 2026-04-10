@@ -1,17 +1,17 @@
-using System.Globalization;
+
 using Net.Myzuc.Minecraft.Common.IO;
 
-namespace Net.Myzuc.Minecraft.Common.Nbt
+namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
 {
-    public sealed record DoubleNbtTag : NbtTag
+    public sealed record ShortNbtTag : NbtTag
     {
-        public double Value { get; set; }
-        protected internal override NbtValueKind ValueKind => NbtValueKind.Double;
-        public DoubleNbtTag()
+        public short Value { get; set; }
+        protected internal override NbtValueKind ValueKind => NbtValueKind.Short;
+        public ShortNbtTag()
         {
             Value = 0;
         }
-        public DoubleNbtTag(double value)
+        public ShortNbtTag(short value)
         {
             Value = value;
         }
@@ -36,7 +36,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
             };
             return (TNbtTag)nbt;
         }
-        public override DoubleNbtTag Copy()
+        public override ShortNbtTag Copy()
         {
             return new(Value);
         }
@@ -46,75 +46,83 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
         }
         internal override void SerializeValue(Stream stream)
         {
-            stream.WriteF64(Value);
+            stream.WriteS16(Value);
         }
         public override string ToString()
         {
-            return $"{Value}D";
+            return $"{Value}S";
         }
-        internal static DoubleNbtTag DeserializeValue(Stream stream)
+        internal static ShortNbtTag DeserializeValue(Stream stream)
         {
-            return new(stream.ReadF64());
+            return new(stream.ReadS16());
         }
-        public static explicit operator ByteNbtTag(DoubleNbtTag nbt)
+        public static explicit operator ByteNbtTag(ShortNbtTag nbt)
         {
             return new((sbyte)nbt.Value);
         }
-        public static explicit operator ShortNbtTag(DoubleNbtTag nbt)
+        public static explicit operator IntNbtTag(ShortNbtTag nbt)
         {
-            return new((short)nbt.Value);
+            return new(nbt.Value);
         }
-        public static explicit operator IntNbtTag(DoubleNbtTag nbt)
+        public static explicit operator LongNbtTag(ShortNbtTag nbt)
         {
-            return new((int)nbt.Value);
+            return new(nbt.Value);
         }
-        public static explicit operator LongNbtTag(DoubleNbtTag nbt)
+        public static explicit operator FloatNbtTag(ShortNbtTag nbt)
         {
-            return new((long)nbt.Value);
+            return new(nbt.Value);
         }
-        public static explicit operator FloatNbtTag(DoubleNbtTag nbt)
+        public static explicit operator DoubleNbtTag(ShortNbtTag nbt)
         {
-            return new((float)nbt.Value);
+            return new(nbt.Value);
         }
-        public static explicit operator ByteArrayNbtTag(DoubleNbtTag nbt)
-        {
-            return new();
-        }
-        public static explicit operator StringNbtTag(DoubleNbtTag nbt)
-        {
-            return new(nbt.Value.ToString(CultureInfo.InvariantCulture));
-        }
-        public static explicit operator ListNbtTag(DoubleNbtTag nbt)
+        public static explicit operator ByteArrayNbtTag(ShortNbtTag nbt)
         {
             return new();
         }
-        public static explicit operator CompoundNbtTag(DoubleNbtTag nbt)
+        public static explicit operator StringNbtTag(ShortNbtTag nbt)
+        {
+            return new(nbt.Value.ToString());
+        }
+        public static explicit operator ListNbtTag(ShortNbtTag nbt)
         {
             return new();
         }
-        public static explicit operator IntArrayNbtTag(DoubleNbtTag nbt)
+        public static explicit operator CompoundNbtTag(ShortNbtTag nbt)
         {
             return new();
         }
-        public static explicit operator LongArrayNbtTag(DoubleNbtTag nbt)
+        public static explicit operator IntArrayNbtTag(ShortNbtTag nbt)
         {
             return new();
         }
-        public static implicit operator double(DoubleNbtTag nbt)
+        public static explicit operator LongArrayNbtTag(ShortNbtTag nbt)
+        {
+            return new();
+        }
+        public static implicit operator short(ShortNbtTag nbt)
         {
             return nbt.Value;
         }
-        public static implicit operator DoubleNbtTag(double value)
+        public static implicit operator ShortNbtTag(short value)
         {
             return new(value);
         }
-        public static implicit operator decimal(DoubleNbtTag nbt)
+        public static implicit operator ushort(ShortNbtTag nbt)
         {
-            return (decimal)nbt.Value;
+            return (ushort)nbt.Value;
         }
-        public static implicit operator DoubleNbtTag(decimal value)
+        public static implicit operator ShortNbtTag(ushort value)
         {
-            return new((double)value);
+            return new((short)value);
+        }
+        public static implicit operator char(ShortNbtTag nbt)
+        {
+            return (char)nbt.Value;
+        }
+        public static implicit operator ShortNbtTag(char value)
+        {
+            return new((short)value);
         }
     }
 }

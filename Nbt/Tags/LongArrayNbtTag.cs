@@ -2,7 +2,7 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using Net.Myzuc.Minecraft.Common.IO;
 
-namespace Net.Myzuc.Minecraft.Common.Nbt
+namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
 {
     public sealed record LongArrayNbtTag : NbtTag, IList<long>
     {

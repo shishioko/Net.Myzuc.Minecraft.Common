@@ -1,7 +1,7 @@
 using System.Collections;
 using Net.Myzuc.Minecraft.Common.IO;
 
-namespace Net.Myzuc.Minecraft.Common.Nbt
+namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
 {
     public sealed record ListNbtTag : NbtTag, IList<NbtTag>
     {
