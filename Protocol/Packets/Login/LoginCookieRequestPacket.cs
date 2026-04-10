@@ -1,3 +1,4 @@
+using Net.Myzuc.Minecraft.Common.Data.Primitives;
 using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
@@ -8,7 +9,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         protected internal override int PacketId => 0x05;
 
-        public string Id { get; init; } = string.Empty;
+        public Identifier Id { get; init; } = new();
 
         public LoginCookieRequestPacket()
         {
@@ -17,12 +18,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         internal LoginCookieRequestPacket(Stream stream) : base(stream)
         {
-            Id = stream.ReadT16AS32V();
+            Id = new(stream);
         }
         
         internal override void Serialize(Stream stream)
         {
-            stream.WriteT16AS32V(Id);
+            Id.Serialize(stream);
         }
     }
 }

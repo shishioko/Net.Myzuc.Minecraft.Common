@@ -1,3 +1,4 @@
+using Net.Myzuc.Minecraft.Common.Data.Primitives;
 using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
@@ -9,7 +10,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         protected internal override int PacketId => 0x04;
 
         public int Id { get; init; } = 0;
-        public string Channel { get; init; } = string.Empty;
+        public Identifier Channel { get; init; } = new();
         public byte[] Data { get; init; } = [];
 
         public LoginCustomRequestPacket()
@@ -20,14 +21,14 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         internal LoginCustomRequestPacket(Stream stream) : base(stream)
         {
             Id = stream.ReadS32V();
-            Channel = stream.ReadT16AS32V();
+            Channel = new(stream);
             Data = stream.ReadU8A();
         }
         
         internal override void Serialize(Stream stream)
         {
             stream.WriteS32V(Id);
-            stream.WriteT16AS32V(Channel);
+            Channel.Serialize(stream);
             stream.WriteU8A(Data);
         }
     }
