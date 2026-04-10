@@ -382,31 +382,6 @@ namespace Net.Myzuc.Minecraft.Common.IO
             
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public NbtTag? ReadNbt()
-            {
-                return NbtTag.Deserialize(stream);
-            }
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void WriteNbt(NbtTag data)
-            {
-                data.Serialize(stream);
-            }
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public T ReadNbt<T>()
-            {
-                T? value = NbtSerializer.Deserialize<T>(NbtTag.Deserialize(stream), NbtSerializerOptions.Strict);
-                if (value is not null) return value;
-                if (Nullable.GetUnderlyingType(typeof(T)) is null) throw new SerializationException();
-                return value!;
-            }
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void WriteNbt<T>(T? data)
-            {
-                NbtSerializer.Serialize(data, NbtSerializerOptions.Strict).Serialize(stream);
-            }
-            
-            
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int[] ReadS32A(int size)
             {
                 byte[] buffer = stream.ReadU8A(size * sizeof(int));

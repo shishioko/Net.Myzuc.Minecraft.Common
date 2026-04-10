@@ -2,37 +2,34 @@ using System.Drawing;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters;
-using Net.Myzuc.Minecraft.Common.ChatComponents.NbtConverters;
-using Net.Myzuc.Minecraft.Common.Nbt;
 
 namespace Net.Myzuc.Minecraft.Common.ChatComponents
 {
-    [NbtConverter(typeof(ChatComponentNbtConverter))]
     [JsonConverter(typeof(ChatComponentJsonConverter))]
     public abstract class ChatComponent
     {
-        [JsonInclude] [NbtInclude]
-        [JsonPropertyName("type")] [NbtProperty("type")]
+        [JsonInclude]
+        [JsonPropertyName("type")]
         protected abstract string Type { get; }
-        [JsonPropertyName("extra")] [NbtProperty("extra")]
+        [JsonPropertyName("extra")]
         public IEnumerable<ChatComponent>? Children { get; set; } = null;
-        [JsonConverter(typeof(ChatColorJsonConverter))] [NbtConverter(typeof(ChatColorNbtConverter))]
-        [JsonPropertyName("color")] [NbtProperty("color")]
+        [JsonConverter(typeof(ChatColorJsonConverter))]
+        [JsonPropertyName("color")]
         public Color? Color { get; set; } = null;
-        [JsonPropertyName("font")] [NbtProperty("font")]
+        [JsonPropertyName("font")]
         public string? Font { get; set; } = null;
-        [JsonPropertyName("bold")] [NbtProperty("bold")]
+        [JsonPropertyName("bold")]
         public bool? Bold { get; set; } = null;
-        [JsonPropertyName("italic")] [NbtProperty("italic")]
+        [JsonPropertyName("italic")]
         public bool? Italic { get; set; } = null;
-        [JsonPropertyName("underlined")] [NbtProperty("underlined")]
+        [JsonPropertyName("underlined")]
         public bool? Underlined { get; set; } = null;
-        [JsonPropertyName("strikethrough")] [NbtProperty("strikethrough")]
+        [JsonPropertyName("strikethrough")]
         public bool? Strikethrough { get; set; } = null;
-        [JsonPropertyName("obfuscated")] [NbtProperty("obfuscated")]
+        [JsonPropertyName("obfuscated")]
         public bool? Obfuscated { get; set; } = null;
         [JsonConverter(typeof(ColorNbtJsonConverter))]
-        [JsonPropertyName("shadow_color")] [NbtProperty("shadow_color")]
+        [JsonPropertyName("shadow_color")]
         public Color? ShadowColor { get; set; } = null;
         protected internal ChatComponent()
         {

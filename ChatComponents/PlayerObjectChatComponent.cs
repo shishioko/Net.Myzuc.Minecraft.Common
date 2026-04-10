@@ -7,10 +7,10 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
     public sealed class PlayerObjectChatComponent : ObjectChatComponent
     {
         protected override string Object => "player";
-        [JsonRequired] [NbtRequired]
-        [JsonPropertyName("player")] [NbtProperty("player")]
+        [JsonRequired]
+        [JsonPropertyName("player")]
         public UnresolvedProfile Player { get; set; }
-        [JsonPropertyName("hat")] [NbtProperty("hat")]
+        [JsonPropertyName("hat")]
         public bool DisplayHat { get; set; } = true;
         public PlayerObjectChatComponent(UnresolvedProfile player)
         {
