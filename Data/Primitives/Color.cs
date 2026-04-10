@@ -6,7 +6,7 @@ using Net.Myzuc.Minecraft.Common.Data.Primitives.JsonConverters;
 namespace Net.Myzuc.Minecraft.Common.Data.Primitives
 {
     [JsonConverter(typeof(ColorJsonConverter))]
-    public readonly struct Color
+    public readonly record struct Color
     {
         [IgnoreDataMember]
         public Color Opaque
@@ -96,14 +96,6 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
         public override string ToString()
         {
             return $"#{Argb:X8}";
-        }
-        public static bool operator ==(Color a, Color b)
-        {
-            return a.A == b.A && a.R == b.R && a.G == b.G && a.B == b.B;
-        }
-        public static bool operator !=(Color a, Color b)
-        {
-            return a.A != b.A || a.R != b.R || a.G != b.G || a.B != b.B;
         }
         public static Color operator +(Color a)
         {
