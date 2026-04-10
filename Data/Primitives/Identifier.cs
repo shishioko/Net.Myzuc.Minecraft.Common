@@ -70,5 +70,13 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
         {
             return FullIdentifier;
         }
+        public static implicit operator Identifier(string value)
+        {
+            return new(value);
+        }
+        public static implicit operator string(Identifier value)
+        {
+            return value.FullIdentifier;
+        }
     }
 }
