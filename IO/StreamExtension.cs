@@ -4,6 +4,8 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
+using Net.Myzuc.Minecraft.Common.Nbt;
+using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 
 namespace Net.Myzuc.Minecraft.Common.IO
 {
@@ -376,6 +378,31 @@ namespace Net.Myzuc.Minecraft.Common.IO
                 byte[] buffer = Encoding.UTF8.GetBytes(data);
                 stream.WriteS32V(buffer.Length);
                 stream.WriteU8A(buffer);
+            }
+            
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public NbtTag? ReadNbt()
+            {
+                return NbtTag.Deserialize(stream);
+            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void WriteNbt(NbtTag data)
+            {
+                data.Serialize(stream);
+            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public T ReadNbt<T>()
+            {
+                T? value = NbtSerializer.Deserialize<T>(NbtTag.Deserialize(stream), NbtSerializerOptions.Strict);
+                if (value is not null) return value;
+                if (Nullable.GetUnderlyingType(typeof(T)) is null) throw new SerializationException();
+                return value!;
+            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void WriteNbt<T>(T? data)
+            {
+                NbtSerializer.Serialize(data, NbtSerializerOptions.Strict).Serialize(stream);
             }
             
             

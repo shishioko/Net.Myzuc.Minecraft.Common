@@ -1,8 +1,7 @@
-using System.Text;
 using System.Web;
 using Net.Myzuc.Minecraft.Common.IO;
 
-namespace Net.Myzuc.Minecraft.Common.Nbt
+namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
 {
     public sealed record StringNbtTag : NbtTag
     {

@@ -28,7 +28,7 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters
                     var root when root.TryGetProperty("type", out JsonElement type) => type.GetString() switch
                     {
                         "text" => json.Deserialize<TextChatComponent>(options),
-                        "translate" => json.Deserialize<TranslatableChatComponent>(options),
+                        "translatable" => json.Deserialize<TranslatableChatComponent>(options),
                         "keybind" => json.Deserialize<KeybindChatComponent>(options),
                         "object" => json.Deserialize<ObjectChatComponent>(options),
                         _ => throw new SerializationException()

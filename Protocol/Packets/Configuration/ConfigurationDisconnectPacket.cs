@@ -10,15 +10,15 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
         public override ProtocolStage ProtocolStage => ProtocolStage.Configuration;
         protected internal override int PacketId => 0x02;
 
-        public NbtTag Message = new CompoundNbtTag();
+        public ChatComponent Message = new TextChatComponent();
 
         internal override void Serialize(Stream stream)
         {
-            Message.Serialize(stream);
+            stream.WriteNbt(Message);
         }
         internal override void Deserialize(Stream stream)
         {
-            Message = NbtTag.Deserialize(stream);
+            Message = stream.ReadNbt<ChatComponent>();
         }
     }
 }

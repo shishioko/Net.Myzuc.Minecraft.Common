@@ -4,40 +4,56 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using Net.Myzuc.Minecraft.Common.Nbt.Tags;
+
 #pragma warning disable SYSLIB0050
 
 namespace Net.Myzuc.Minecraft.Common.Nbt
 {
     public static class NbtSerializer
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static NbtTag Serialize<T>(T value, NbtSerializerOptions? options = null)
         {
-            return Serialize(value, typeof(T), options ?? NbtSerializerOptions.Default, 0)!;
+            return Serialize(value, typeof(T), new NbtSerializerContext(options))!;
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static NbtTag? Serialize(object? value, Type type, NbtSerializerOptions? options = null)
         {
-            return Serialize(value, type, options ?? NbtSerializerOptions.Default, 0);
+            return Serialize(value, type, new NbtSerializerContext(options));
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static NbtTag Serialize<T>(T value, NbtSerializerContext context)
+        {
+            return Serialize(value, typeof(T), context)!;
         }
         [MethodImpl(MethodImplOptions.AggressiveOptimization)]
-        public static NbtTag? Serialize(object? value, Type type, NbtSerializerOptions options, int depth)
+        public static NbtTag? Serialize(object? value, Type type, NbtSerializerContext context)
         {
-            if (depth >= options.MaxDepth) throw new SerializationException();
-            depth++;
+            if (context.Depth >= context.Options.MaxDepth) throw new SerializationException();
             if (value is not null && !value.GetType().IsAssignableTo(type)) throw new SerializationException("Attempted to serialize data of mismatching type!");
-            if (Attribute.GetCustomAttribute(type, typeof(NbtConverterAttribute)) is NbtConverterAttribute converterAttribute)
+            if (context.Options.PolymorphicSerialization && value is not null) type = value.GetType();
+            if (!context.IgnoreConverter)
             {
-                Type converterType = converterAttribute.Type;
-                NbtConverter? converter = Activator.CreateInstance(converterType) as NbtConverter;
-                if (converter is null || converter.CanConvert(type)) throw new SerializationException();
-                return converter.Serialize(value, options, depth);
+                foreach (NbtConverter converter in context.Options.Converters)
+                {
+                    if (!converter.CanConvert(type)) continue;
+                    return converter.Serialize(value, context.Derive(true));
+                }
+                if (Attribute.GetCustomAttribute(type, typeof(NbtConverterAttribute)) is NbtConverterAttribute converterAttribute)
+                {
+                    Type converterType = converterAttribute.Type;
+                    NbtConverter? converter = Activator.CreateInstance(converterType) as NbtConverter;
+                    if (converter is null || !converter.CanConvert(type)) throw new SerializationException();
+                    return converter.Serialize(value, context.Derive(true));
+                }
             }
-            foreach (NbtConverter converter in options.Converters)
-            {
-                if (!converter.CanConvert(type)) continue;
-                return converter.Serialize(value, options, depth);
-            }
-            if (value is null) return null;
             if (type.IsPointer) throw new SerializationException("Attempted to serialize pointer type!");
+            if (value is null) return null;
+            if (Nullable.GetUnderlyingType(type) is Type nullableType)
+            {
+                return Serialize(value, nullableType, context.Derive(false));
+            }
             switch (value)
             {
                 case NbtTag nbt: return nbt;
@@ -68,10 +84,10 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
                 case ulong[] u64a: return (LongArrayNbtTag)u64a;
                 case Guid guid: return (IntArrayNbtTag)guid;
                 case Color color: return (IntNbtTag)color;
-                case Enum: return Serialize(Convert.ChangeType(value, type.GetEnumUnderlyingType()), type.GetEnumUnderlyingType(), options, depth);
+                case Enum: return Serialize(Convert.ChangeType(value, type.GetEnumUnderlyingType()), type.GetEnumUnderlyingType(), context.Derive(false));
                 case IList list:
                 {
-                    return new ListNbtTag(list.Cast<object?>().Select(entry => entry is not null ? Serialize(entry, entry.GetType(), options, depth) : null).Where(nbt => nbt is not null)!);
+                    return new ListNbtTag(list.Cast<object?>().Select(entry => entry is not null ? Serialize(entry, entry.GetType(), context.Derive(false)) : null).Where(nbt => nbt is not null)!);
                 }
                 case IDictionary dictionary when dictionary.Keys is IEnumerable<string> keys:
                 {
@@ -80,13 +96,13 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
                     {
                         object? entry = dictionary[key];
                         if (entry is null) continue;
-                        compound[key] = Serialize(entry, entry.GetType(), options, depth)!;
+                        compound[key] = Serialize(entry, entry.GetType(),  context.Derive(false))!;
                     }
                     return compound;
                 }
                 case IEnumerable enumerable:
                 {
-                    return new ListNbtTag(enumerable.Cast<object?>().Select(entry => entry is not null ? Serialize(entry, entry.GetType(), options, depth) : null).Where(nbt => nbt is not null)!);
+                    return new ListNbtTag(enumerable.Cast<object?>().Select(entry => entry is not null ? Serialize(entry, entry.GetType(), context.Derive(false)) : null).Where(nbt => nbt is not null)!);
                 }
                 default:
                 {
@@ -96,8 +112,8 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
                     {
                         if (member is not PropertyInfo and not FieldInfo) continue;
                         {
-                            if (member is PropertyInfo property && ((!property.CanRead && options.IgnoreReadOnlyProperties && !Attribute.IsDefined(property, typeof(NbtIncludeAttribute))) || property.GetIndexParameters().Length > 0)) continue;
-                            if (member is FieldInfo field && (!field.IsInitOnly && options.IgnoreReadOnlyFields && !Attribute.IsDefined(field, typeof(NbtIncludeAttribute)))) continue;
+                            if (member is PropertyInfo property && ((!property.CanRead && context.Options.IgnoreReadOnlyProperties && !Attribute.IsDefined(property, typeof(NbtIncludeAttribute))) || property.GetIndexParameters().Length > 0)) continue;
+                            if (member is FieldInfo field && (!field.IsInitOnly && context.Options.IgnoreReadOnlyFields && !Attribute.IsDefined(field, typeof(NbtIncludeAttribute)))) continue;
                         }
                         Type memberType = member switch
                         {
@@ -107,7 +123,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
                         };
                         if (!memberType.GetTypeInfo().Attributes.HasFlag(TypeAttributes.Serializable) && !memberType.IsEnum) continue; //cheap hack
                         if (Attribute.IsDefined(member, typeof(NbtIgnoreAttribute))) continue;
-                        if (member is FieldInfo && !(options.IncludeFields || Attribute.IsDefined(member, typeof(NbtIncludeAttribute)))) continue;
+                        if (member is FieldInfo && !(context.Options.IncludeFields || Attribute.IsDefined(member, typeof(NbtIncludeAttribute)))) continue;
                         string name = (Attribute.GetCustomAttribute(member, typeof(NbtPropertyAttribute)) as NbtPropertyAttribute)?.Name ?? member.Name;
                         object? instance = member switch
                         {
@@ -115,41 +131,68 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
                             FieldInfo field => field.GetValue(value),
                             _ => null
                         };
-                        if (instance is null) continue;
-                        NbtTag? nbt = Serialize(instance, instance.GetType(), options, depth);
+                        NbtTag? nbt = null;
+                        if (Nullable.GetUnderlyingType(memberType) is Type nullableType)
+                        {
+                            return Serialize(value, nullableType, context.Derive(false));
+                        }
+                        if (Attribute.GetCustomAttribute(member, typeof(NbtConverterAttribute)) is NbtConverterAttribute converterAttribute)
+                        {
+                            Type converterType = converterAttribute.Type;
+                            NbtConverter? converter = Activator.CreateInstance(converterType) as NbtConverter;
+                            if (converter is null || !converter.CanConvert(memberType)) throw new SerializationException();
+                            nbt = converter.Serialize(instance, context.Derive(true));
+                        }
+                        else
+                        {
+                             if (instance is not null) nbt = Serialize(instance, instance.GetType(), context.Derive(false));
+                        }
                         if (nbt is not null) compound[name] = nbt;
                     }
                     return compound;
                 }
             }
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T? Deserialize<T>(NbtTag? tag, NbtSerializerOptions? options = null)
         {
-            return (T?)Deserialize(tag, typeof(T), options ?? NbtSerializerOptions.Default, 0);
+            return (T?)Deserialize(tag, typeof(T), new NbtSerializerContext(options));
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static object? Deserialize(NbtTag? tag, Type type, NbtSerializerOptions? options = null)
         {
-            return Deserialize(tag, type, options ?? NbtSerializerOptions.Default, 0);
+            return Deserialize(tag, type, new NbtSerializerContext(options));
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T? Deserialize<T>(NbtTag? tag, NbtSerializerContext context)
+        {
+            return (T?)Deserialize(tag, typeof(T), context);
         }
         [MethodImpl(MethodImplOptions.AggressiveOptimization)]
-        private static object? Deserialize(NbtTag? tag, Type type, NbtSerializerOptions options, int depth)
+        public static object? Deserialize(NbtTag? tag, Type type, NbtSerializerContext context)
         {
-            if (depth >= options.MaxDepth) throw new SerializationException();
-            depth++;
-            if (Attribute.GetCustomAttribute(type, typeof(NbtConverterAttribute)) is NbtConverterAttribute converterAttribute)
+            if (context.Depth >= context.Options.MaxDepth) throw new SerializationException();
+            if (!context.IgnoreConverter)
             {
-                Type converterType = converterAttribute.Type;
-                NbtConverter? converter = Activator.CreateInstance(converterType) as NbtConverter;
-                if (converter is null || converter.CanConvert(type)) throw new SerializationException();
-                return converter.Deserialize(tag, options, depth);
-            }
-            foreach (NbtConverter converter in options.Converters)
-            {
-                if (!converter.CanConvert(type)) continue;
-                return converter.Deserialize(tag, options, depth);
+                foreach (NbtConverter converter in context.Options.Converters)
+                {
+                    if (!converter.CanConvert(type)) continue;
+                    return converter.Deserialize(tag, context.Derive(true));
+                }
+                if (Attribute.GetCustomAttribute(type, typeof(NbtConverterAttribute)) is NbtConverterAttribute converterAttribute)
+                {
+                    Type converterType = converterAttribute.Type;
+                    NbtConverter? converter = Activator.CreateInstance(converterType) as NbtConverter;
+                    if (converter is null || !converter.CanConvert(type)) throw new SerializationException();
+                    return converter.Deserialize(tag, context.Derive(true));
+                }
             }
             if (type.IsPointer) throw new SerializationException("Attempted to serialize pointer type!");
             if (tag is null) return null;
+            if (Nullable.GetUnderlyingType(type) is Type nullabletype)
+            {
+                return Deserialize(tag, nullabletype, context);
+            }
             if (type == typeof(object)) type = typeof(NbtTag);
             if (type.IsAssignableTo(typeof(NbtTag))) return tag;
             else if (type.IsAssignableTo(typeof(nint))) return (nint)((LongNbtTag)tag).Value;
@@ -179,7 +222,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
             else if (type.IsAssignableTo(typeof(Color))) return (Color)(IntNbtTag)tag;
             else if (type.IsAssignableTo(typeof(Enum)))
             {
-                object? underlying = Deserialize(tag, type.GetEnumUnderlyingType(), options, depth);
+                object? underlying = Deserialize(tag, type.GetEnumUnderlyingType(), context.Derive(false));
                 return underlying is not null ? Enum.ToObject(type, underlying) : null;
             }
             else if (type.IsAssignableTo(typeof(IList)))
@@ -189,7 +232,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
                 Type listType = type.GenericTypeArguments.ElementAtOrDefault(0) ?? typeof(object);
                 foreach (NbtTag data in list)
                 {
-                    list.Add(Deserialize(data, listType, options, depth));
+                    list.Add(Deserialize(data, listType, context.Derive(false)));
                 }
                 return list;
             } 
@@ -200,7 +243,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
                 Type listType = type.GenericTypeArguments.ElementAtOrDefault(1) ?? typeof(object);
                 foreach (KeyValuePair<string, NbtTag> kvp in compound)
                 {
-                    dictionary[kvp.Key] = Deserialize(kvp.Value, listType, options, depth);
+                    dictionary[kvp.Key] = Deserialize(kvp.Value, listType, context.Derive(false));
                 }
                 return dictionary;
             }
@@ -215,26 +258,38 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
                     {
                         if (member is PropertyInfo property && (!property.CanWrite || property.GetIndexParameters().Length > 0)) continue;
                     }
+                    Type memberType = member switch
+                    {
+                        PropertyInfo property => property.PropertyType,
+                        FieldInfo field => field.FieldType,
+                        _ => throw new SerializationException()
+                    };
                     if (Attribute.IsDefined(member, typeof(NonSerializedAttribute))) continue;
                     if (Attribute.IsDefined(member, typeof(NbtIgnoreAttribute))) continue;
-                    if (member is FieldInfo && !(options.IncludeFields || Attribute.IsDefined(member, typeof(NbtIncludeAttribute)))) continue;
+                    if (member is FieldInfo && !(context.Options.IncludeFields || Attribute.IsDefined(member, typeof(NbtIncludeAttribute)))) continue;
                     string name = (Attribute.GetCustomAttribute(member, typeof(NbtPropertyAttribute)) as NbtPropertyAttribute)?.Name ?? member.Name;
                     if (!compound.TryGetValue(name, out NbtTag? memberTag))
                     {
                         if (Attribute.IsDefined(member, typeof(NbtRequiredAttribute))) throw new SerializationException();
-                        switch (options.UnmappedMemberHandling)
+                        switch (context.Options.UnmappedMemberHandling)
                         {
                             case NbtUnmappedMemberHandling.Disallow: throw new SerializationException();
                             case NbtUnmappedMemberHandling.Skip: continue;
                             default: continue;
                         }
                     }
-                    object? memberInstance = member switch
+                    object? memberInstance = null;
+                    if (Attribute.GetCustomAttribute(member, typeof(NbtConverterAttribute)) is NbtConverterAttribute converterAttribute)
                     {
-                        PropertyInfo property => Deserialize(memberTag, property.PropertyType, options, depth),
-                        FieldInfo field => Deserialize(memberTag, field.FieldType, options, depth),
-                        _ => null
-                    };
+                        Type converterType = converterAttribute.Type;
+                        NbtConverter? converter = Activator.CreateInstance(converterType) as NbtConverter;
+                        if (converter is null || !converter.CanConvert(memberType)) throw new SerializationException();
+                        memberInstance = converter.Deserialize(memberTag, context.Derive(true));
+                    }
+                    else
+                    {
+                        memberInstance = Deserialize(memberTag, memberType, context.Derive(false));
+                    }
                     if (memberInstance is null) continue;
                     {
                         if (member is PropertyInfo property) property.SetValue(instance, memberInstance);
