@@ -1,3 +1,4 @@
+using Net.Myzuc.Minecraft.Common.Data;
 using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
@@ -8,8 +9,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         protected internal override int PacketId => 0x00;
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
 
-        public string Name { get; init; } = string.Empty;
-        public Guid Guid { get; init; } = Guid.Empty; //todo: replace with game profile
+        public ResolvedProfile Profile { get; init; } = new();
 
         public LoginStartPacket()
         {
@@ -18,14 +18,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         internal LoginStartPacket(Stream stream) : base(stream)
         {
-            Name = stream.ReadT16AS32V();
-            Guid = stream.ReadGuid();
+            Profile = new(stream);
         }
         
         internal override void Serialize(Stream stream)
         {
-            stream.WriteT16AS32V(Name);
-            stream.WriteGuid(Guid);
+            Profile.Serialize(stream);
         }
     }
 }
