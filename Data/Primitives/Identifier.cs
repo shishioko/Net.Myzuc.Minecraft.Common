@@ -1,6 +1,7 @@
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.Data.Primitives.JsonConverters;
+using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 
 namespace Net.Myzuc.Minecraft.Common.Data.Primitives
 {
@@ -20,6 +21,13 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
         }
         public string Namespace { get; }
         public string Value { get; }
+        public Identifier(string @namespace, string value)
+        {
+            Namespace = @namespace;
+            Value = value;
+            if (Namespace.Any(c => !ValidNamespaceCharacters.Contains(c))) throw new ArgumentException($"Invalid identifier namespace '{Namespace}'!");
+            if (Value.Any(c => !ValidValueCharacters.Contains(c))) throw new ArgumentException($"Invalid identifier value '{Value}'!");
+        }
         public Identifier(string fullIdentifier)
         {
             string[] parts = fullIdentifier.Split(':');
@@ -29,6 +37,17 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
             if (Namespace.Any(c => !ValidNamespaceCharacters.Contains(c))) throw new ArgumentException($"Invalid identifier namespace '{Namespace}'!");
             if (Value.Any(c => !ValidValueCharacters.Contains(c))) throw new ArgumentException($"Invalid identifier value '{Value}'!");
         }
+        
+        internal Identifier(StringNbtTag nbt)
+        {
+            Identifier id = new(nbt.Value);
+        }
+        
+        internal StringNbtTag Serialize()
+        {
+            return FullIdentifier;
+        }
+        
         public override string ToString()
         {
             return FullIdentifier;
