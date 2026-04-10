@@ -21,6 +21,11 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
         }
         public string Namespace { get; }
         public string Value { get; }
+        public Identifier()
+        {
+            Namespace = "minecraft";
+            Value = "unknown";
+        }
         public Identifier(string @namespace, string value)
         {
             Namespace = @namespace;
