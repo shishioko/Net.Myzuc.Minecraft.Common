@@ -9,7 +9,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
         public override ProtocolStage ProtocolStage => ProtocolStage.Status;
         protected internal override int PacketId => 0x01;
 
-        public long Data { get; init; } = 0;
+        public long Data { get; set; } = 0;
         
         public PingResponsePacket()
         {

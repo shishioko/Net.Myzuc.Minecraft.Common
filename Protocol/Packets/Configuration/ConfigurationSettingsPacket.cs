@@ -10,15 +10,15 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
         public override ProtocolStage ProtocolStage => ProtocolStage.Configuration;
         protected internal override int PacketId => 0x00;
 
-        public string Locale { get; init; } = string.Empty;
-        public byte ViewDistance { get; init; } = 0;
-        public ChatMode ChatMode { get; init; } = ChatMode.Enabled;
-        public bool ChatColors { get; init; } = false;
-        public SkinPartFlags SkinParts { get; init; } = SkinPartFlags.None;
-        public MainHand MainHand { get; init; } = MainHand.Left;
-        public bool EnableCensorship { get; init; } = false;
-        public bool AllowListing { get; init; } = false;
-        public ParticleSetting ParticleSettings { get; init; } = ParticleSetting.All;
+        public string Locale { get; set; } = string.Empty;
+        public byte ViewDistance { get; set; } = 0;
+        public ChatMode ChatMode { get; set; } = ChatMode.Enabled;
+        public bool ChatColors { get; set; } = false;
+        public SkinPartFlags SkinParts { get; set; } = SkinPartFlags.None;
+        public MainHand MainHand { get; set; } = MainHand.Left;
+        public bool EnableCensorship { get; set; } = false;
+        public bool AllowListing { get; set; } = false;
+        public ParticleSetting ParticleSettings { get; set; } = ParticleSetting.All;
 
         public ConfigurationSettingsPacket()
         {

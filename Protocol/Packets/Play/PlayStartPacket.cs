@@ -11,17 +11,17 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Play
         public override ProtocolStage ProtocolStage => ProtocolStage.Play;
         protected internal override int PacketId => 0x30;
 
-        public int EntityId { get; init; } = 0;
-        public bool Hardcore { get; init; } = false;
-        public IReadOnlyList<Identifier> DimensionNames = [];
-        public int TablistSize { get; init; } = 0;
-        public int ViewDistance { get; init; } = 0;
-        public int SimulationDistance { get; init; } = 0;
-        public bool ReduceDebugInfo { get; init; } = false;
-        public bool ShowRespawnScreen { get; init; } = false;
-        public bool LimitedCrafting { get; init; } = false;
-        public RespawnMetadata RespawnMetadata { get; init; } = new();
-        public bool EnableCensorship { get; init; } = false;
+        public int EntityId { get; set; } = 0;
+        public bool Hardcore { get; set; } = false;
+        public IList<Identifier> DimensionNames = [];
+        public int TablistSize { get; set; } = 0;
+        public int ViewDistance { get; set; } = 0;
+        public int SimulationDistance { get; set; } = 0;
+        public bool ReduceDebugInfo { get; set; } = false;
+        public bool ShowRespawnScreen { get; set; } = false;
+        public bool LimitedCrafting { get; set; } = false;
+        public RespawnMetadata RespawnMetadata { get; set; } = new();
+        public bool EnableCensorship { get; set; } = false;
         
         public PlayStartPacket()
         {

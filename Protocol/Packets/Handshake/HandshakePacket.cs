@@ -10,10 +10,10 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake
         public override ProtocolStage ProtocolStage => ProtocolStage.Handshake;
         protected internal override int PacketId => 0x00;
         
-        public int ProtocolVersion { get; init; } = 0;
-        public string Address { get; init; } = "";
-        public ushort Port { get; init; } = 0;
-        public HandshakeIntent Intent { get; init; } = HandshakeIntent.Status;
+        public int ProtocolVersion { get; set; } = 0;
+        public string Address { get; set; } = "";
+        public ushort Port { get; set; } = 0;
+        public HandshakeIntent Intent { get; set; } = HandshakeIntent.Status;
 
         public HandshakePacket()
         {

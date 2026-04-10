@@ -9,7 +9,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
         public override ProtocolStage ProtocolStage => ProtocolStage.Status;
         protected internal override int PacketId => 0x00;
 
-        public Data.Structs.Status Status { get; init; } = new();
+        public Data.Structs.Status Status { get; set; } = new();
         
         public StatusResponsePacket()
         {

@@ -9,8 +9,8 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
         public override ProtocolStage ProtocolStage => ProtocolStage.Configuration;
         protected internal override int PacketId => 0x01;
 
-        public Identifier Id { get; init; } = new();
-        public ReadOnlyMemory<byte>? Data { get; init; } = null;
+        public Identifier Id { get; set; } = new();
+        public Memory<byte>? Data { get; set; } = null;
 
         public ConfigurationCookieResponsePacket()
         {

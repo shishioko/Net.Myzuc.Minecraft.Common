@@ -9,7 +9,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         protected internal override int PacketId => 0x02;
 
-        public ResolvedProfile Profile { get; init; } = new();
+        public ResolvedProfile Profile { get; set; } = new();
 
         public LoginSuccessPacket()
         {

@@ -8,8 +8,8 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         protected internal override int PacketId => 0x00;
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
 
-        public string Name { get; init; } = string.Empty;
-        public Guid Guid { get; init; } = Guid.Empty;
+        public string Name { get; set; } = string.Empty;
+        public Guid Guid { get; set; } = Guid.Empty;
 
         public LoginStartPacket()
         {

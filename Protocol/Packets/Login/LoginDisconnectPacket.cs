@@ -11,7 +11,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         protected internal override int PacketId => 0x00;
 
-        public ChatComponent Message { get; init; } = new TextChatComponent();
+        public ChatComponent Message { get; set; } = new TextChatComponent();
 
         public LoginDisconnectPacket()
         {

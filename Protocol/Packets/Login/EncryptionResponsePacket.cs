@@ -9,8 +9,8 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         protected internal override int PacketId => 0x01;
 
-        public ReadOnlyMemory<byte> EncryptedSecret { get; init; } = new();
-        public ReadOnlyMemory<byte> EncryptedSample { get; init; } = new();
+        public Memory<byte> EncryptedSecret { get; set; } = new();
+        public Memory<byte> EncryptedSample { get; set; } = new();
 
         public EncryptionResponsePacket()
         {

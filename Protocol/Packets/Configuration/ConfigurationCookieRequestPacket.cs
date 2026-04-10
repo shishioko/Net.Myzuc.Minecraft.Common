@@ -8,7 +8,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
         public override ProtocolStage ProtocolStage => ProtocolStage.Configuration;
         protected internal override int PacketId => 0x00;
 
-        public Identifier Id { get; init; } = new();
+        public Identifier Id { get; set; } = new();
 
         public ConfigurationCookieRequestPacket()
         {

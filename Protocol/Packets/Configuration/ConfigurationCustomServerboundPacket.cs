@@ -9,8 +9,8 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
         public override ProtocolStage ProtocolStage => ProtocolStage.Configuration;
         protected internal override int PacketId => 0x02;
 
-        public Identifier Channel { get; init; } = new();
-        public ReadOnlyMemory<byte> Data { get; init; } = new();
+        public Identifier Channel { get; set; } = new();
+        public Memory<byte> Data { get; set; } = new();
 
         public ConfigurationCustomServerboundPacket()
         {
