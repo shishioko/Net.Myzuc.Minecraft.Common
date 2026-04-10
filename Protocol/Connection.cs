@@ -131,6 +131,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                     ProtocolStage = ProtocolStage.Disconnected;
                     break;
                 }
+                case ConfigurationEndPacket:
+                {
+                    ProtocolStage = ProtocolStage.Play;
+                    break;
+                }
             }
         }
         public void Dispose()
