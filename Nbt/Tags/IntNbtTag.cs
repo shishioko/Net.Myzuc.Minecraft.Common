@@ -20,18 +20,18 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
             NbtTag nbt = typeof(TNbtTag) switch
             {
                 var type when type == typeof(NbtTag) => this,
-                var type when type == typeof(ByteNbtTag) => (ByteNbtTag)this,
-                var type when type == typeof(ShortNbtTag) => (ShortNbtTag)this,
-                var type when type == typeof(IntNbtTag) => (IntNbtTag)this,
-                var type when type == typeof(LongNbtTag) => (LongNbtTag)this,
-                var type when type == typeof(FloatNbtTag) => (FloatNbtTag)this,
-                var type when type == typeof(DoubleNbtTag) => (DoubleNbtTag)this,
-                var type when type == typeof(ByteArrayContent) => (LongNbtTag)this,
-                var type when type == typeof(StringNbtTag) => (StringNbtTag)this,
-                var type when type == typeof(ListNbtTag) => (ListNbtTag)this,
-                var type when type == typeof(CompoundNbtTag) => (CompoundNbtTag)this,
-                var type when type == typeof(IntArrayNbtTag) => (IntArrayNbtTag)this,
-                var type when type == typeof(LongArrayNbtTag) => (LongArrayNbtTag)this,
+                var type when type == typeof(ByteNbtTag) => new ByteNbtTag((sbyte)Value),
+                var type when type == typeof(ShortNbtTag) => new ShortNbtTag((short)Value),
+                var type when type == typeof(IntNbtTag) => this,
+                var type when type == typeof(LongNbtTag) => new LongNbtTag(Value),
+                var type when type == typeof(FloatNbtTag) => new FloatNbtTag(Value),
+                var type when type == typeof(DoubleNbtTag) => new DoubleNbtTag(Value),
+                var type when type == typeof(ByteArrayNbtTag) => new ByteArrayNbtTag(),
+                var type when type == typeof(StringNbtTag) => new StringNbtTag(Value.ToString()),
+                var type when type == typeof(ListNbtTag) => new ListNbtTag(),
+                var type when type == typeof(CompoundNbtTag) => new CompoundNbtTag(),
+                var type when type == typeof(IntArrayNbtTag) => new IntArrayNbtTag(),
+                var type when type == typeof(LongArrayNbtTag) => new LongArrayNbtTag(),
                 _ => throw new ArgumentException()
             };
             return (TNbtTag)nbt;
@@ -55,50 +55,6 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
         internal static IntNbtTag DeserializeValue(Stream stream)
         {
             return new(stream.ReadS32());
-        }
-        public static explicit operator ByteNbtTag(IntNbtTag nbt)
-        {
-            return new((sbyte)nbt.Value);
-        }
-        public static explicit operator ShortNbtTag(IntNbtTag nbt)
-        {
-            return new((short)nbt.Value);
-        }
-        public static explicit operator LongNbtTag(IntNbtTag nbt)
-        {
-            return new(nbt.Value);
-        }
-        public static explicit operator FloatNbtTag(IntNbtTag nbt)
-        {
-            return new(nbt.Value);
-        }
-        public static explicit operator DoubleNbtTag(IntNbtTag nbt)
-        {
-            return new(nbt.Value);
-        }
-        public static explicit operator ByteArrayNbtTag(IntNbtTag nbt)
-        {
-            return new();
-        }
-        public static explicit operator StringNbtTag(IntNbtTag nbt)
-        {
-            return new(nbt.Value.ToString());
-        }
-        public static explicit operator ListNbtTag(IntNbtTag nbt)
-        {
-            return new();
-        }
-        public static explicit operator CompoundNbtTag(IntNbtTag nbt)
-        {
-            return new();
-        }
-        public static explicit operator IntArrayNbtTag(IntNbtTag nbt)
-        {
-            return new();
-        }
-        public static explicit operator LongArrayNbtTag(IntNbtTag nbt)
-        {
-            return new();
         }
         public static implicit operator int(IntNbtTag nbt)
         {

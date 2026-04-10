@@ -10,5 +10,13 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
             NbtValueKind valueKind = (NbtValueKind)stream.ReadS8();
             return NbtTag.DeserializeValue(stream, valueKind);
         }
+        public static NbtTag FromSNbt(string data)
+        {
+            throw new NotImplementedException();
+        }
+        public static string ToSNbt(NbtTag data)
+        {
+            return data.ToString();
+        }
     }
 }

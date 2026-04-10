@@ -77,18 +77,18 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
             NbtTag nbt = typeof(TNbtTag) switch
             {
                 var type when type == typeof(NbtTag) => this,
-                var type when type == typeof(ByteNbtTag) => (ByteNbtTag)this,
-                var type when type == typeof(ShortNbtTag) => (ShortNbtTag)this,
-                var type when type == typeof(IntNbtTag) => (IntNbtTag)this,
-                var type when type == typeof(LongNbtTag) => (LongNbtTag)this,
-                var type when type == typeof(FloatNbtTag) => (FloatNbtTag)this,
-                var type when type == typeof(DoubleNbtTag) => (DoubleNbtTag)this,
-                var type when type == typeof(ByteArrayContent) => (LongNbtTag)this,
-                var type when type == typeof(StringNbtTag) => (StringNbtTag)this,
-                var type when type == typeof(ListNbtTag) => (ListNbtTag)this,
-                var type when type == typeof(CompoundNbtTag) => (CompoundNbtTag)this,
-                var type when type == typeof(IntArrayNbtTag) => (IntArrayNbtTag)this,
-                var type when type == typeof(LongArrayNbtTag) => (LongArrayNbtTag)this,
+                var type when type == typeof(ByteNbtTag) => new ByteNbtTag((sbyte)Value.Count),
+                var type when type == typeof(ShortNbtTag) => new ShortNbtTag((short)Value.Count),
+                var type when type == typeof(IntNbtTag) => new IntNbtTag(Value.Count),
+                var type when type == typeof(LongNbtTag) => new LongNbtTag(Value.Count),
+                var type when type == typeof(FloatNbtTag) => new FloatNbtTag(Value.Count),
+                var type when type == typeof(DoubleNbtTag) => new DoubleNbtTag(Value.Count),
+                var type when type == typeof(ByteArrayNbtTag) => new ByteArrayNbtTag(),
+                var type when type == typeof(StringNbtTag) => new StringNbtTag(Value.Count.ToString()),
+                var type when type == typeof(ListNbtTag) => this,
+                var type when type == typeof(CompoundNbtTag) => new CompoundNbtTag(),
+                var type when type == typeof(IntArrayNbtTag) => new IntArrayNbtTag(),
+                var type when type == typeof(LongArrayNbtTag) => new LongArrayNbtTag(),
                 _ => throw new ArgumentException()
             };
             return (TNbtTag)nbt;
@@ -153,50 +153,6 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
                 ).ToArray();
             }
             return new(data);
-        }
-        public static explicit operator ByteNbtTag(ListNbtTag nbt)
-        {
-            return new((sbyte)nbt.Value.Count);
-        }
-        public static explicit operator ShortNbtTag(ListNbtTag nbt)
-        {
-            return new((short)nbt.Value.Count);
-        }
-        public static explicit operator IntNbtTag(ListNbtTag nbt)
-        {
-            return new(nbt.Value.Count);
-        }
-        public static explicit operator LongNbtTag(ListNbtTag nbt)
-        {
-            return new(nbt.Value.Count);
-        }
-        public static explicit operator FloatNbtTag(ListNbtTag nbt)
-        {
-            return new(nbt.Value.Count);
-        }
-        public static explicit operator DoubleNbtTag(ListNbtTag nbt)
-        {
-            return new(nbt.Value.Count);
-        }
-        public static explicit operator ByteArrayNbtTag(ListNbtTag nbt)
-        {
-            return new();
-        }
-        public static explicit operator StringNbtTag(ListNbtTag nbt)
-        {
-            return new(nbt.Value.Count.ToString());
-        }
-        public static explicit operator CompoundNbtTag(ListNbtTag nbt)
-        {
-            return new();
-        }
-        public static explicit operator IntArrayNbtTag(ListNbtTag nbt)
-        {
-            return new();
-        }
-        public static explicit operator LongArrayNbtTag(ListNbtTag nbt)
-        {
-            return new();
         }
     }
 }

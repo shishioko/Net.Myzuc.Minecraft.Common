@@ -80,18 +80,18 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
             NbtTag nbt = typeof(TNbtTag) switch
             {
                 var type when type == typeof(NbtTag) => this,
-                var type when type == typeof(ByteNbtTag) => (ByteNbtTag)this,
-                var type when type == typeof(ShortNbtTag) => (ShortNbtTag)this,
-                var type when type == typeof(IntNbtTag) => (IntNbtTag)this,
-                var type when type == typeof(LongNbtTag) => (LongNbtTag)this,
-                var type when type == typeof(FloatNbtTag) => (FloatNbtTag)this,
-                var type when type == typeof(DoubleNbtTag) => (DoubleNbtTag)this,
-                var type when type == typeof(ByteArrayContent) => (LongNbtTag)this,
-                var type when type == typeof(StringNbtTag) => (StringNbtTag)this,
-                var type when type == typeof(ListNbtTag) => (ListNbtTag)this,
-                var type when type == typeof(CompoundNbtTag) => (CompoundNbtTag)this,
-                var type when type == typeof(IntArrayNbtTag) => (IntArrayNbtTag)this,
-                var type when type == typeof(LongArrayNbtTag) => (LongArrayNbtTag)this,
+                var type when type == typeof(ByteNbtTag) => new ByteNbtTag((sbyte)Value.Length),
+                var type when type == typeof(ShortNbtTag) => new ShortNbtTag((short)Value.Length),
+                var type when type == typeof(IntNbtTag) => new IntNbtTag(Value.Length),
+                var type when type == typeof(LongNbtTag) => new LongNbtTag(Value.Length),
+                var type when type == typeof(FloatNbtTag) => new FloatNbtTag(Value.Length),
+                var type when type == typeof(DoubleNbtTag) => new DoubleNbtTag(Value.Length),
+                var type when type == typeof(ByteArrayNbtTag) => new ByteArrayNbtTag(),
+                var type when type == typeof(StringNbtTag) => new StringNbtTag(Value.Length.ToString()),
+                var type when type == typeof(ListNbtTag) => new ListNbtTag(),
+                var type when type == typeof(CompoundNbtTag) => new CompoundNbtTag(),
+                var type when type == typeof(IntArrayNbtTag) => new IntArrayNbtTag(),
+                var type when type == typeof(LongArrayNbtTag) => this,
                 _ => throw new ArgumentException()
             };
             return (TNbtTag)nbt;
@@ -118,50 +118,6 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
         internal static LongArrayNbtTag DeserializeValue(Stream stream)
         {
             return new(stream.ReadS64AS32());
-        }
-        public static explicit operator ByteNbtTag(LongArrayNbtTag nbt)
-        {
-            return new((sbyte)nbt.Value.Length);
-        }
-        public static explicit operator ShortNbtTag(LongArrayNbtTag nbt)
-        {
-            return new((short)nbt.Value.Length);
-        }
-        public static explicit operator IntNbtTag(LongArrayNbtTag nbt)
-        {
-            return new(nbt.Value.Length);
-        }
-        public static explicit operator LongNbtTag(LongArrayNbtTag nbt)
-        {
-            return new(nbt.Value.Length);
-        }
-        public static explicit operator FloatNbtTag(LongArrayNbtTag nbt)
-        {
-            return new(nbt.Value.Length);
-        }
-        public static explicit operator DoubleNbtTag(LongArrayNbtTag nbt)
-        {
-            return new(nbt.Value.Length);
-        }
-        public static explicit operator ByteArrayNbtTag(LongArrayNbtTag nbt)
-        {
-            return new(nbt.Value.Select(value => (sbyte)value).ToArray());
-        }
-        public static explicit operator StringNbtTag(LongArrayNbtTag nbt)
-        {
-            return new(nbt.Value.Length.ToString());
-        }
-        public static explicit operator ListNbtTag(LongArrayNbtTag nbt)
-        {
-            return new();
-        }
-        public static explicit operator CompoundNbtTag(LongArrayNbtTag nbt)
-        {
-            return new();
-        }
-        public static explicit operator IntArrayNbtTag(LongArrayNbtTag nbt)
-        {
-            return new(nbt.Value.Select(value => (int)value).ToArray());
         }
         public static implicit operator long[](LongArrayNbtTag nbt)
         {
