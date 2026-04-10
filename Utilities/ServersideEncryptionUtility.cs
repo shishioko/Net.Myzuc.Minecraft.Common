@@ -12,7 +12,7 @@ using Net.Myzuc.Minecraft.Common.Protocol.Packets.Login;
 namespace Net.Myzuc.Minecraft.Common.Utilities
 {
     [SecurityCritical]
-    public class ServersideEncryptionUtility : IDisposable
+    public sealed class ServersideEncryptionUtility : IDisposable
     {
         private readonly RSA Rsa;
         private readonly byte[] Sample;
