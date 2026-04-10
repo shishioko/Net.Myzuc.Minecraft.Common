@@ -7,7 +7,7 @@ using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 namespace Net.Myzuc.Minecraft.Common.Data.Primitives
 {
     [JsonConverter(typeof(IdentifierJsonConverter))]
-    public readonly struct Identifier
+    public readonly record struct Identifier
     {
         private const string ValidNamespaceCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYZ0123456789.-_";
         private const string ValidValueCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYZ0123456789.-_/";
