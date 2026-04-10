@@ -48,7 +48,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
             using MemoryStream ms = await readRawAsync();
             int id = ms.ReadS32V();
             Packets.TryGetValue((RemoteIsClient, ProtocolStage, id), out Type? type);
-            Packet? packet = type is not null ? Activator.CreateInstance(type, ms) as Packet : null;
+            Packet? packet = type is not null ? Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.NonPublic, null, [ms], null) as Packet : null;
             if (packet is null) throw new ProtocolViolationException($"Unknown packet {(RemoteIsClient ? "Serverbound" : "Clientbound")}/{ProtocolStage}/{id:X2}!");
             Run(packet);
             return packet;
