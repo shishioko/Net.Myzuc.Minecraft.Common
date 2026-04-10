@@ -11,7 +11,6 @@ using Net.Myzuc.Minecraft.Common.Protocol.Packets.Login;
 
 namespace Net.Myzuc.Minecraft.Common.Utilities
 {
-    [SecurityCritical]
     public sealed class ServersideEncryptionUtility : IDisposable
     {
         private readonly RSA Rsa;
