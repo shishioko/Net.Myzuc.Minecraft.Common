@@ -14,13 +14,13 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters
                 JsonValueKind.Array => new TextChatComponent()
                 {
                     Children = json.RootElement.EnumerateArray()
-                                   .Select(
-                                       entry =>
-                                       {
-                                           JsonDocument entryJson = JsonDocument.Parse(entry.GetRawText());
-                                           return entryJson.Deserialize<ChatComponent>(options) ?? throw new SerializationException();
-                                       }
-                                   )
+                    .Select(
+                        entry =>
+                        {
+                            JsonDocument entryJson = JsonDocument.Parse(entry.GetRawText());
+                            return entryJson.Deserialize<ChatComponent>(options) ?? throw new SerializationException();
+                        }
+                    ).ToList()
                 },
                 JsonValueKind.String => new TextChatComponent(json.RootElement.GetString()!),
                 _ => json.RootElement switch

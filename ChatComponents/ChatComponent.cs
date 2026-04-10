@@ -12,7 +12,7 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         [JsonPropertyName("type")]
         protected abstract string Type { get; }
         [JsonPropertyName("extra")]
-        public IEnumerable<ChatComponent>? Children { get; set; } = null;
+        public IList<ChatComponent>? Children { get; set; } = null;
         [JsonConverter(typeof(ChatColorJsonConverter))]
         [JsonPropertyName("color")]
         public Color? Color { get; set; } = null;
@@ -54,7 +54,7 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         {
             return new TextChatComponent()
             {
-                Children = data.Select(child => new TextChatComponent(child)),
+                Children = data.Select<string, ChatComponent>(child => new TextChatComponent(child)).ToList(),
             };
         }
     }
