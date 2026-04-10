@@ -41,8 +41,8 @@ namespace Net.Myzuc.Minecraft.Common.Utilities
         public byte[] HandleResponse(EncryptionResponsePacket encryptionResponsePacket)
         {
             if (Secret is not null) throw new InvalidOperationException();
-            bool success = Enumerable.SequenceEqual(Sample, Rsa.Decrypt(encryptionResponsePacket.EncryptedSample, RSAEncryptionPadding.Pkcs1));
-            Secret = Rsa.Decrypt(encryptionResponsePacket.EncryptedSecret, RSAEncryptionPadding.Pkcs1);
+            bool success = Enumerable.SequenceEqual(Sample, Rsa.Decrypt(encryptionResponsePacket.EncryptedSample.Span, RSAEncryptionPadding.Pkcs1));
+            Secret = Rsa.Decrypt(encryptionResponsePacket.EncryptedSecret.Span, RSAEncryptionPadding.Pkcs1);
             if (!success) throw new CryptographicException();
             return Secret;
         }

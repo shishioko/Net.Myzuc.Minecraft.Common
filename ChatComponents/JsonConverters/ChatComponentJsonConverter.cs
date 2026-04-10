@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -20,7 +21,7 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters
                             JsonDocument entryJson = JsonDocument.Parse(entry.GetRawText());
                             return entryJson.Deserialize<ChatComponent>(options) ?? throw new SerializationException();
                         }
-                    ).ToList()
+                    ).ToImmutableArray()
                 },
                 JsonValueKind.String => new TextChatComponent(json.RootElement.GetString()!),
                 _ => json.RootElement switch

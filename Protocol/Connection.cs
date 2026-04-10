@@ -3,6 +3,7 @@ using System.IO.Compression;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
+using CommunityToolkit.HighPerformance;
 using Net.Myzuc.Minecraft.Common.Data;
 using Net.Myzuc.Minecraft.Common.Data.Enums;
 using Net.Myzuc.Minecraft.Common.IO;
@@ -46,23 +47,23 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
         }
         public async Task<Packet> ReadAsync(CancellationToken cancellationToken = default)
         {
-            using MemoryStream ms = await readRawAsync();
-            int id = ms.ReadS32V();
+            using Stream stream1 = await readRawAsync();
+            int id = stream1.ReadS32V();
             Packets.TryGetValue((RemoteIsClient, ProtocolStage, id), out Type? type);
-            Packet? packet = type is not null ? Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.NonPublic, null, [ms], null) as Packet : null;
+            Packet? packet = type is not null ? Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.NonPublic, null, [stream1], null) as Packet : null;
             if (packet is null) throw new ProtocolViolationException($"Unknown packet {(RemoteIsClient ? "Serverbound" : "Clientbound")}/{ProtocolStage}/{id:X2}!");
             Run(packet);
             return packet;
 
-            async Task<MemoryStream> readRawAsync()
+            async Task<Stream> readRawAsync()
             {
-                byte[] data = await Stream.ReadU8AS32VAsync(cancellationToken);
-                if (CompressionThreshold < 0) return new(data);
-                MemoryStream ms2 = new(data);
-                int decompressedSize = ms2.ReadS32V();
-                if (decompressedSize <= 0) return ms2;
-                await using ZLibStream zlib = new(ms2, CompressionMode.Decompress, false);
-                return new(zlib.ReadU8A(decompressedSize));
+                Memory<byte> data = await Stream.ReadU8AS32VAsync(cancellationToken);
+                if (CompressionThreshold < 0) return data.AsStream();
+                Stream stream2 = data.AsStream();
+                int decompressedSize = stream2.ReadS32V();
+                if (decompressedSize <= 0) return stream2;
+                await using ZLibStream zlib = new(stream2, CompressionMode.Decompress, false);
+                return zlib.ReadU8A(decompressedSize).ToArray().AsMemory().AsStream();
             }
         }
         public async Task WriteAsync(Packet packet, CancellationToken cancellationToken = default)
@@ -94,7 +95,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                     }
                     data = ms2.ToArray();
                 }
-                await Stream.WriteU8AS32VAsync(data, cancellationToken);
+                await Stream.WriteU8AS32VAsync(data.AsMemory(), cancellationToken);
             }
         }
         private void Run(Packet packet)

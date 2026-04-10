@@ -10,7 +10,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
         protected internal override int PacketId => 0x01;
 
         public Identifier Id { get; init; } = new();
-        public byte[]? Data { get; init; } = null;
+        public ReadOnlyMemory<byte>? Data { get; init; } = null;
 
         public ConfigurationCookieResponsePacket()
         {
@@ -22,17 +22,17 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
             Id = new(stream);
             if(stream.ReadBool())
             {
-                Data = stream.ReadU8AS32V();
+                Data = stream.ReadU8AS32V().ToArray().AsMemory();
             }
         }
         
         internal override void Serialize(Stream stream)
         {
             Id.Serialize(stream);
-            stream.WriteBool(Data is not null);
-            if (Data is not null)
+            stream.WriteBool(Data.HasValue);
+            if (Data.HasValue)
             {
-                stream.WriteU8AS32V(Data);
+                stream.WriteU8AS32V(Data.Value.Span);
             }
         }
     }

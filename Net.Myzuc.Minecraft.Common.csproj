@@ -21,5 +21,9 @@
     <PropertyGroup>
         <NoWarn>$(NoWarn);NU5125</NoWarn>
     </PropertyGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.4.2" />
+    </ItemGroup>
 
 </Project>

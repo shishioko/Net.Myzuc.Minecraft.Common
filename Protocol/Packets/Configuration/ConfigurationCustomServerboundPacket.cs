@@ -10,7 +10,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
         protected internal override int PacketId => 0x02;
 
         public Identifier Channel { get; init; } = new();
-        public byte[] Data { get; init; } = [];
+        public ReadOnlyMemory<byte> Data { get; init; } = new();
 
         public ConfigurationCustomServerboundPacket()
         {
@@ -20,13 +20,13 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
         internal ConfigurationCustomServerboundPacket(Stream stream) : base(stream)
         {
             Channel = new(stream);
-            Data = stream.ReadU8A();
+            Data = stream.ReadU8A().ToArray().AsMemory();
         }
         
         internal override void Serialize(Stream stream)
         {
             Channel.Serialize(stream);
-            stream.WriteU8A(Data);
+            stream.WriteU8A(Data.Span);
         }
     }
 }

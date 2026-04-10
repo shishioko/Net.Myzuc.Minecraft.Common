@@ -10,7 +10,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         protected internal override int PacketId => 0x02;
 
         public int Id { get; init; } = 0;
-        public byte[]? Data { get; init; } = null;
+        public ReadOnlyMemory<byte>? Data { get; init; } = null;
 
         public LoginCustomResponsePacket()
         {
@@ -22,15 +22,15 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
             Id = stream.ReadS32V();
             if (stream.ReadBool())
             {
-                Data = stream.ReadU8A();
+                Data = stream.ReadU8A().ToArray().AsMemory();
             }
         }
         
         internal override void Serialize(Stream stream)
         {
             stream.WriteS32V(Id);
-            stream.WriteBool(Data is not null);
-            if (Data is not null) stream.WriteU8A(Data);
+            stream.WriteBool(Data.HasValue);
+            if (Data.HasValue) stream.WriteU8A(Data.Value.Span);
         }
     }
 }

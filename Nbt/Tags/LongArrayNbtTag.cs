@@ -123,7 +123,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
         }
         internal static LongArrayNbtTag DeserializeValue(Stream stream)
         {
-            return new(stream.ReadS64AS32());
+            return new(stream.ReadS64AS32().ToArray());
         }
         public static implicit operator long[](LongArrayNbtTag nbt)
         {

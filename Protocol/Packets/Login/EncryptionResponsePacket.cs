@@ -9,8 +9,8 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         public override ProtocolStage ProtocolStage => ProtocolStage.Login;
         protected internal override int PacketId => 0x01;
 
-        public byte[] EncryptedSecret { get; init; } = [];
-        public byte[] EncryptedSample { get; init; } = [];
+        public ReadOnlyMemory<byte> EncryptedSecret { get; init; } = new();
+        public ReadOnlyMemory<byte> EncryptedSample { get; init; } = new();
 
         public EncryptionResponsePacket()
         {
@@ -19,14 +19,14 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         internal EncryptionResponsePacket(Stream stream) : base(stream)
         {
-            EncryptedSecret = stream.ReadU8AS32V();
-            EncryptedSample = stream.ReadU8AS32V();
+            EncryptedSecret = stream.ReadU8AS32V().ToArray().AsMemory();
+            EncryptedSample = stream.ReadU8AS32V().ToArray().AsMemory();
         }
         
         internal override void Serialize(Stream stream)
         {
-            stream.WriteU8AS32V(EncryptedSecret);
-            stream.WriteU8AS32V(EncryptedSample);
+            stream.WriteU8AS32V(EncryptedSecret.Span);
+            stream.WriteU8AS32V(EncryptedSample.Span);
         }
     }
 }

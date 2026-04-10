@@ -9,8 +9,8 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         protected internal override int PacketId => 0x01;
 
         public string ServerId { get; init; } = string.Empty;
-        public byte[] PublicKey { get; init; } = [];
-        public byte[] DecryptedSample { get; init; } = [];
+        public ReadOnlyMemory<byte> PublicKey { get; init; } = new();
+        public ReadOnlyMemory<byte> DecryptedSample { get; init; } = new();
         public bool Authenticate { get; init; } = false;
 
         public EncryptionRequestPacket()
@@ -21,16 +21,16 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         internal EncryptionRequestPacket(Stream stream) : base(stream)
         {
             ServerId = stream.ReadT16AS32V();
-            PublicKey = stream.ReadU8AS32V();
-            DecryptedSample = stream.ReadU8AS32V();
+            PublicKey = stream.ReadU8AS32V().ToArray().AsMemory();
+            DecryptedSample = stream.ReadU8AS32V().ToArray().AsMemory();
             Authenticate = stream.ReadBool();
         }
         
         internal override void Serialize(Stream stream)
         {
             stream.WriteT16AS32V(ServerId);
-            stream.WriteU8AS32V(PublicKey);
-            stream.WriteU8AS32V(DecryptedSample);
+            stream.WriteU8AS32V(PublicKey.Span);
+            stream.WriteU8AS32V(DecryptedSample.Span);
             stream.WriteBool(Authenticate);
         }
     }

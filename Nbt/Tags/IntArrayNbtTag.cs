@@ -122,7 +122,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
         }
         internal static IntArrayNbtTag DeserializeValue(Stream stream)
         {
-            return new(stream.ReadS32AS32());
+            return new(stream.ReadS32AS32().ToArray());
         }
         public static implicit operator int[](IntArrayNbtTag nbt)
         {

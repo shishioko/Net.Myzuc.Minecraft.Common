@@ -11,7 +11,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         public int Id { get; init; } = 0;
         public Identifier Channel { get; init; } = new();
-        public byte[] Data { get; init; } = [];
+        public ReadOnlyMemory<byte> Data { get; init; } = new();
 
         public LoginCustomRequestPacket()
         {
@@ -22,14 +22,14 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         {
             Id = stream.ReadS32V();
             Channel = new(stream);
-            Data = stream.ReadU8A();
+            Data = stream.ReadU8A().ToArray().AsMemory();
         }
         
         internal override void Serialize(Stream stream)
         {
             stream.WriteS32V(Id);
             Channel.Serialize(stream);
-            stream.WriteU8A(Data);
+            stream.WriteU8A(Data.Span);
         }
     }
 }
