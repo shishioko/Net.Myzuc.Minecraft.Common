@@ -3,22 +3,35 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
 {
-    public class ConfigurationSettingsPacket : Packet
+    public sealed record ConfigurationSettingsPacket : Packet
     {
         public override bool Serverbound => true;
         public override ProtocolStage ProtocolStage => ProtocolStage.Configuration;
         protected internal override int PacketId => 0x00;
 
-        public string Locale = string.Empty;
-        public byte ViewDistance = 0;
-        public ChatMode ChatMode = ChatMode.Enabled;
-        public bool ChatColors = false;
-        public SkinPartFlags SkinParts = SkinPartFlags.None;
-        public MainHand MainHand = MainHand.Left;
-        public bool EnableCensorship = false;
-        public bool AllowListing = false;
-        public ParticleSetting ParticleSettings = ParticleSetting.All;
+        public string Locale { get; init; } = string.Empty;
+        public byte ViewDistance { get; init; } = 0;
+        public ChatMode ChatMode { get; init; } = ChatMode.Enabled;
+        public bool ChatColors { get; init; } = false;
+        public SkinPartFlags SkinParts { get; init; } = SkinPartFlags.None;
+        public MainHand MainHand { get; init; } = MainHand.Left;
+        public bool EnableCensorship { get; init; } = false;
+        public bool AllowListing { get; init; } = false;
+        public ParticleSetting ParticleSettings { get; init; } = ParticleSetting.All;
 
+        public ConfigurationSettingsPacket(Stream stream) : base(stream)
+        {
+            Locale = stream.ReadT16AS32V();
+            ViewDistance = stream.ReadU8();
+            ChatMode = (ChatMode)stream.ReadS32V();
+            ChatColors = stream.ReadBool();
+            SkinParts = (SkinPartFlags)stream.ReadU8();
+            MainHand = (MainHand)stream.ReadS32V();
+            EnableCensorship = stream.ReadBool();
+            AllowListing = stream.ReadBool();
+            ParticleSettings = (ParticleSetting)stream.ReadS32V();
+        }
+        
         internal override void Serialize(Stream stream)
         {
             stream.WriteT16AS32V(Locale);
@@ -30,18 +43,6 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
             stream.WriteBool(EnableCensorship);
             stream.WriteBool(AllowListing);
             stream.WriteS32V((int)ParticleSettings);
-        }
-        internal override void Deserialize(Stream stream)
-        {
-            Locale = stream.ReadT16AS32V();
-            ViewDistance = stream.ReadU8();
-            ChatMode = (ChatMode)stream.ReadS32V();
-            ChatColors = stream.ReadBool();
-            SkinParts = (SkinPartFlags)stream.ReadU8();
-            MainHand = (MainHand)stream.ReadS32V();
-            EnableCensorship = stream.ReadBool();
-            AllowListing = stream.ReadBool();
-            ParticleSettings = (ParticleSetting)stream.ReadS32V();
         }
     }
 }
