@@ -18,11 +18,11 @@ namespace Net.Myzuc.Minecraft.Common.Data
         }
         public override string ToString()
         {
-            return JsonSerializer.Serialize(this, JsonSerializerOptions.Default);
+            return JsonSerializer.Serialize(this, Global.JsonSerializerOptions);
         }
         public static Status Parse(string data)
         {
-            return JsonSerializer.Deserialize<Status>(data, JsonSerializerOptions.Default) ?? throw new InvalidDataException();
+            return JsonSerializer.Deserialize<Status>(data, Global.JsonSerializerOptions) ?? throw new InvalidDataException();
         }
     }
 }
