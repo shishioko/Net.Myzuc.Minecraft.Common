@@ -11,7 +11,7 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         [JsonPropertyName("translate")]
         public Identifier TranslationKey { get; init; }
         [JsonPropertyName("with")]
-        public IReadOnlyList<ChatComponent>? Arguments { get; init; } = null;
+        public IList<ChatComponent>? Arguments { get; init; } = null;
         [JsonPropertyName("fallback")]
         public string? Fallback { get; init; } = null;
         public TranslatableChatComponent(Identifier translationKey) : base()

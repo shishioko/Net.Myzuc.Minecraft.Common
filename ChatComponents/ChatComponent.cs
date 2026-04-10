@@ -14,7 +14,7 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         [JsonPropertyName("type")]
         protected abstract string Type { get; }
         [JsonPropertyName("extra")]
-        public IReadOnlyList<ChatComponent>? Children { get; set; } = null;
+        public IList<ChatComponent>? Children { get; set; } = null;
         [JsonPropertyName("color")]
         public ChatColor? Color { get; init; } = null;
         [JsonPropertyName("font")]
