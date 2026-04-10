@@ -12,12 +12,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 
         public LoginSuccessPacket(Stream stream) : base(stream)
         {
-            Profile = ResolvedProfile.Deserialize(stream);
+            Profile = new(stream);
         }
         
         internal override void Serialize(Stream stream)
         {
-            ResolvedProfile.Serialize(stream, Profile);
+            Profile.Serialize(stream);
         }
     }
 }

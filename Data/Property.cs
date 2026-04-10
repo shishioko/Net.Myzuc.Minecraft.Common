@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Data
 {
@@ -24,6 +25,27 @@ namespace Net.Myzuc.Minecraft.Common.Data
             Name = name;
             Value = value;
             Signature = signature;
+        }
+        
+        internal Property(Stream stream)
+        {
+            Name = stream.ReadT16AS32V();
+            Value = stream.ReadT16AS32V();
+            if (stream.ReadBool())
+            {
+                Signature = stream.ReadT16AS32V();
+            }
+        }
+        
+        internal void Serialize(Stream stream)
+        {
+            stream.WriteT16AS32V(Name);
+            stream.WriteT16AS32V(Value);
+            stream.WriteBool(Signature is not null);
+            if (Signature is not null)
+            {
+                stream.WriteT16AS32V(Signature);
+            }
         }
     }
 }

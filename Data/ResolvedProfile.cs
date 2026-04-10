@@ -29,40 +29,27 @@ namespace Net.Myzuc.Minecraft.Common.Data
             Properties = properties;
         }
         
-        internal static void Serialize(Stream stream, ResolvedProfile resolvedProfile)
+        internal ResolvedProfile(Stream stream)
         {
-            stream.WriteGuid(resolvedProfile.Guid);
-            stream.WriteT16AS32V(resolvedProfile.Name);
-            stream.WriteS32V(resolvedProfile.Properties.Count);
-            foreach(Property property in resolvedProfile.Properties)
+            Guid = stream.ReadGuid();
+            Name = stream.ReadT16AS32V();
+            Property[] properties = new Property[stream.ReadS32V()];
+            for (int i = 0; i < properties.Length; i++)
             {
-                stream.WriteT16AS32V(property.Name);
-                stream.WriteT16AS32V(property.Value);
-                stream.WriteBool(property.Signature is not null);
-                if (property.Signature is not null)
-                {
-                    stream.WriteT16AS32V(property.Signature);
-                }
+                properties[i] = new(stream);
             }
+            Properties = properties;
         }
-        internal static ResolvedProfile Deserialize(Stream stream)
+        
+        internal void Serialize(Stream stream)
         {
-            ResolvedProfile profile = new();
-            profile.Guid = stream.ReadGuid();
-            profile.Name = stream.ReadT16AS32V();
-            profile.Properties = new Property[stream.ReadS32V()];
-            for (int i = 0; i < profile.Properties.Count; i++)
+            stream.WriteGuid(Guid);
+            stream.WriteT16AS32V(Name);
+            stream.WriteS32V(Properties.Count);
+            foreach(Property property in Properties)
             {
-                Property property = new();
-                property.Name = stream.ReadT16AS32V();
-                property.Value = stream.ReadT16AS32V();
-                if (stream.ReadBool())
-                {
-                    property.Signature = stream.ReadT16AS32V();
-                }
-                profile.Properties[i] = property;
+                property.Serialize(stream);
             }
-            return profile;
         }
     }
 }
