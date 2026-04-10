@@ -51,6 +51,7 @@ namespace Net.Myzuc.Minecraft.Common.Data
             if (nbt.ContainsKey("texture")) Skin = nbt["texture"].Get<StringNbtTag>();
             if (nbt.ContainsKey("cape")) Cape = nbt["cape"].Get<StringNbtTag>();
             if (nbt.ContainsKey("elytra")) Elytra = nbt["elytra"].Get<StringNbtTag>();
+            if (nbt.ContainsKey("model")) ModelType = (PlayerModelType)nbt["model"].Get<IntNbtTag>().Value;
         }
 
         internal CompoundNbtTag Serialize()
@@ -65,6 +66,7 @@ namespace Net.Myzuc.Minecraft.Common.Data
             if (Skin is not null) nbt["skin"] = (StringNbtTag)Skin;
             if (Cape is not null) nbt["cape"] = (StringNbtTag)Cape;
             if (Elytra is not null) nbt["elytra"] = (StringNbtTag)Elytra;
+            if (ModelType.HasValue) nbt["model"] = (IntNbtTag)(int)ModelType;
             return nbt;
         }
     }
