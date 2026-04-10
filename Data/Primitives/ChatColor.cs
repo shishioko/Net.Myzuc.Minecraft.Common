@@ -167,6 +167,14 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
         {
             return $"#{Rgb:X6}";
         }
+        public static bool operator ==(ChatColor a, ChatColor b)
+        {
+            return a.R == b.R && a.G == b.G && a.B == b.B;
+        }
+        public static bool operator !=(ChatColor a, ChatColor b)
+        {
+            return a.R != b.R || a.G != b.G || a.B != b.B;
+        }
         public static Color operator +(ChatColor a)
         {
             return new(a.Rgb);

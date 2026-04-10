@@ -97,6 +97,14 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
         {
             return $"#{Argb:X8}";
         }
+        public static bool operator ==(Color a, Color b)
+        {
+            return a.A == b.A && a.R == b.R && a.G == b.G && a.B == b.B;
+        }
+        public static bool operator !=(Color a, Color b)
+        {
+            return a.A != b.A || a.R != b.R || a.G != b.G || a.B != b.B;
+        }
         public static Color operator +(Color a)
         {
             return new(a.Argb);
