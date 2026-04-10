@@ -5,6 +5,11 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
 {
     public static class Nbt
     {
+        public static void Serialize(NbtTag? nbt, Stream stream)
+        {
+            stream.WriteS8((sbyte)(nbt?.ValueKind ?? NbtValueKind.End));
+            nbt?.SerializeValue(stream);
+        }
         public static NbtTag? Deserialize(Stream stream)
         {
             NbtValueKind valueKind = (NbtValueKind)stream.ReadS8();

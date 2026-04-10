@@ -15,11 +15,6 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
         public abstract NbtTag Merge(NbtTag nbt);
         internal abstract void SerializeValue(Stream stream);
         public abstract override string ToString();
-        public void Serialize(Stream stream)
-        {
-            stream.WriteS8((sbyte)ValueKind);
-            SerializeValue(stream);
-        }
         internal static NbtTag? DeserializeValue(Stream stream, NbtValueKind valueKind)
         {
             return valueKind switch
