@@ -20,16 +20,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Play
         public bool ReduceDebugInfo { get; init; } = false;
         public bool ShowRespawnScreen { get; init; } = false;
         public bool LimitedCrafting { get; init; } = false;
-        public int CurrentDimensionTypeId { get; init; } = 0;
-        public Identifier CurrentDimensionName { get; init; } = new();
-        public long NoiseSeed { get; init; } = 0;
-        public Gamemode CurrentGamemode { get; init; } = Gamemode.Survival;
-        public Gamemode PreviousGamemode { get; init; } = Gamemode.Survival;
-        public bool IsDebugWorld { get; init; } = false;
-        public bool IsSuperflatWorld { get; init; } = false;
-        public GlobalLocation? DeathLocation { get; init; } = null;
-        public int PortalCooldown { get; init; } = 0;
-        public int OceanHeight { get; init; } = 0;
+        public RespawnMetadata RespawnMetadata { get; init; } = new();
         public bool EnableCensorship { get; init; } = false;
         
         public PlayStartPacket()
@@ -53,19 +44,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Play
             ReduceDebugInfo = stream.ReadBool();
             ShowRespawnScreen = stream.ReadBool();
             LimitedCrafting = stream.ReadBool();
-            CurrentDimensionTypeId = stream.ReadS32V();
-            CurrentDimensionName = new(stream);
-            NoiseSeed = stream.ReadS64();
-            CurrentGamemode = (Gamemode)stream.ReadS8();
-            PreviousGamemode = (Gamemode)stream.ReadS8();
-            IsDebugWorld = stream.ReadBool();
-            IsSuperflatWorld = stream.ReadBool();
-            if (stream.ReadBool())
-            {
-                DeathLocation = new(stream);
-            }
-            PortalCooldown = stream.ReadS32V();
-            OceanHeight = stream.ReadS32V();
+            RespawnMetadata = new(stream);
             EnableCensorship = stream.ReadBool();
         }
         
@@ -84,20 +63,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Play
             stream.WriteBool(ReduceDebugInfo);
             stream.WriteBool(ShowRespawnScreen);
             stream.WriteBool(LimitedCrafting);
-            stream.WriteS32V(CurrentDimensionTypeId); //
-            CurrentDimensionName.Serialize(stream); //
-            stream.WriteS64(NoiseSeed); //
-            stream.WriteS8((sbyte)CurrentGamemode); //
-            stream.WriteS8((sbyte)PreviousGamemode); //
-            stream.WriteBool(IsDebugWorld); //
-            stream.WriteBool(IsSuperflatWorld); //
-            stream.WriteBool(DeathLocation.HasValue); //
-            if (DeathLocation.HasValue) //
-            {
-                DeathLocation.Value.Serialize(stream); //
-            }
-            stream.WriteS32V(PortalCooldown); //
-            stream.WriteS32V(OceanHeight); //
+            RespawnMetadata.Serialize(stream);
             stream.WriteBool(EnableCensorship);
         }
     }
