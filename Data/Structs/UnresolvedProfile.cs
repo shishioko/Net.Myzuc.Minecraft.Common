@@ -1,8 +1,9 @@
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters;
+using Net.Myzuc.Minecraft.Common.Data.Enums;
 using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 
-namespace Net.Myzuc.Minecraft.Common.Data
+namespace Net.Myzuc.Minecraft.Common.Data.Structs
 {
     public readonly record struct UnresolvedProfile
     {

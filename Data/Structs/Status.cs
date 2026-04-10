@@ -1,8 +1,7 @@
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.ChatComponents;
 
-namespace Net.Myzuc.Minecraft.Common.Data
+namespace Net.Myzuc.Minecraft.Common.Data.Structs
 {
     public readonly record struct Status
     {

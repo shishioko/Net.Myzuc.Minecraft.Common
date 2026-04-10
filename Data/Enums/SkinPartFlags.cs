@@ -1,4 +1,4 @@
-namespace Net.Myzuc.Minecraft.Common.Data
+namespace Net.Myzuc.Minecraft.Common.Data.Enums
 {
     [Flags]
     public enum SkinPartFlags : byte

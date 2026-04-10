@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Net.Myzuc.Minecraft.Common.Data
+namespace Net.Myzuc.Minecraft.Common.Data.Structs
 {
     public readonly record struct PlayersInfo
     {

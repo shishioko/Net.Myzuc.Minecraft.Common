@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.Objects.JsonConverters;
 
-namespace Net.Myzuc.Minecraft.Common.Data
+namespace Net.Myzuc.Minecraft.Common.Data.Structs
 {
     public readonly record struct PlayerSample
     {

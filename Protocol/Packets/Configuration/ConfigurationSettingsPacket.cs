@@ -1,4 +1,5 @@
 using Net.Myzuc.Minecraft.Common.Data;
+using Net.Myzuc.Minecraft.Common.Data.Enums;
 using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
