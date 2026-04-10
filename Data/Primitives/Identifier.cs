@@ -1,6 +1,7 @@
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.Data.Primitives.JsonConverters;
+using Net.Myzuc.Minecraft.Common.IO;
 using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 
 namespace Net.Myzuc.Minecraft.Common.Data.Primitives
@@ -43,11 +44,23 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
             if (Value.Any(c => !ValidValueCharacters.Contains(c))) throw new ArgumentException($"Invalid identifier value '{Value}'!");
         }
         
+        internal Identifier(Stream stream)
+        {
+            Identifier id = new(stream.ReadT16AS32V());
+            Namespace = id.Namespace;
+            Value = id.Value;
+        }
         internal Identifier(StringNbtTag nbt)
         {
             Identifier id = new(nbt.Value);
+            Namespace = id.Namespace;
+            Value = id.Value;
         }
         
+        internal void Serialize(Stream stream)
+        {
+            stream.WriteT16AS32V(FullIdentifier);
+        }
         internal StringNbtTag Serialize()
         {
             return FullIdentifier;
