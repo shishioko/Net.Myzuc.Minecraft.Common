@@ -15,6 +15,12 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
         {
             Value = value;
         }
+        public override TNbtTag Get<TNbtTag>()
+        {
+            if (typeof(TNbtTag) != typeof(ShortNbtTag)) throw new InvalidDataException();
+            NbtTag nbt = this;
+            return (TNbtTag)nbt;
+        }
         public override TNbtTag As<TNbtTag>()
         {
             NbtTag nbt = typeof(TNbtTag) switch

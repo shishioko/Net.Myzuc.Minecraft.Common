@@ -10,6 +10,7 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
         {
             
         }
+        public abstract TNbtTag Get<TNbtTag>() where TNbtTag : NbtTag;
         public abstract TNbtTag As<TNbtTag>() where TNbtTag : NbtTag;
         public abstract NbtTag Copy();
         public abstract NbtTag Merge(NbtTag nbt);

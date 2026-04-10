@@ -75,6 +75,12 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
         {
             return ((IEnumerable<long>)Value).GetEnumerator();
         }
+        public override TNbtTag Get<TNbtTag>()
+        {
+            if (typeof(TNbtTag) != typeof(LongArrayNbtTag)) throw new InvalidDataException();
+            NbtTag nbt = this;
+            return (TNbtTag)nbt;
+        }
         public override TNbtTag As<TNbtTag>()
         {
             NbtTag nbt = typeof(TNbtTag) switch
