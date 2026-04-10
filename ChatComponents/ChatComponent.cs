@@ -1,7 +1,7 @@
-using System.Drawing;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters;
+using Net.Myzuc.Minecraft.Common.Data;
 
 namespace Net.Myzuc.Minecraft.Common.ChatComponents
 {
@@ -13,7 +13,6 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         protected abstract string Type { get; }
         [JsonPropertyName("extra")]
         public IList<ChatComponent>? Children { get; set; } = null;
-        [JsonConverter(typeof(ChatColorJsonConverter))]
         [JsonPropertyName("color")]
         public Color? Color { get; set; } = null;
         [JsonPropertyName("font")]
