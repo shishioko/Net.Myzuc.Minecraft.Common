@@ -35,14 +35,5 @@ namespace Net.Myzuc.Minecraft.Common.Data
             Version = version;
             Players = players;
         }
-        
-        public override string ToString()
-        {
-            return JsonSerializer.Serialize(this, Global.JsonSerializerOptions);
-        }
-        public static Status Parse(string data)
-        {
-            return JsonSerializer.Deserialize<Status>(data, Global.JsonSerializerOptions) ?? throw new InvalidDataException();
-        }
     }
 }

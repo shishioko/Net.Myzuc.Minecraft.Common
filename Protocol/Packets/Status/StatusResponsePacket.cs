@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
@@ -17,12 +18,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
 
         internal StatusResponsePacket(Stream stream) : base(stream)
         {
-            Status = Data.Status.Parse(stream.ReadT16AS32V());
+            Status = JsonSerializer.Deserialize<Data.Status>(stream.ReadT16AS32V(), Global.JsonSerializerOptions);
         }
         
         internal override void Serialize(Stream stream)
         {
-            stream.WriteT16AS32V(Status.ToString());
+            stream.WriteT16AS32V(JsonSerializer.Serialize(Status, Global.JsonSerializerOptions) ?? throw new InvalidDataException());
         }
     }
 }
