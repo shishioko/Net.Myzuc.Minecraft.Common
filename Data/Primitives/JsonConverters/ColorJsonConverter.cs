@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Net.Myzuc.Minecraft.Common.Data.JsonConverters
+namespace Net.Myzuc.Minecraft.Common.Data.Primitives.JsonConverters
 {
     internal sealed class ColorJsonConverter : JsonConverter<Color>
     {

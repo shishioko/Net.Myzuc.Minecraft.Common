@@ -1,9 +1,9 @@
 using System.Globalization;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
-using Net.Myzuc.Minecraft.Common.Data.JsonConverters;
+using Net.Myzuc.Minecraft.Common.Data.Primitives.JsonConverters;
 
-namespace Net.Myzuc.Minecraft.Common.Data
+namespace Net.Myzuc.Minecraft.Common.Data.Primitives
 {
     [JsonConverter(typeof(ChatColorJsonConverter))]
     public readonly struct ChatColor

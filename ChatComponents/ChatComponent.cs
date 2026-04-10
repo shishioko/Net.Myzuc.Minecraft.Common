@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters;
 using Net.Myzuc.Minecraft.Common.Data;
+using Net.Myzuc.Minecraft.Common.Data.Primitives;
 
 namespace Net.Myzuc.Minecraft.Common.ChatComponents
 {
