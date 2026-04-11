@@ -387,7 +387,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TNbtSerializable ReadNbt<TNbtSerializable>() where TNbtSerializable : INbtSerializable<TNbtSerializable>
             {
-                return TNbtSerializable.FromNbt(stream.ReadNbt());
+                return TNbtSerializable.FromNbt(stream.ReadNbt() ?? throw new SerializationException());
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void WriteNbt<TNbtSerializable>(TNbtSerializable data) where TNbtSerializable : INbtSerializable<TNbtSerializable>
