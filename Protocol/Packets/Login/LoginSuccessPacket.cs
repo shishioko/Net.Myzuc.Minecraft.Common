@@ -1,4 +1,3 @@
-using Net.Myzuc.Minecraft.Common.Data;
 using Net.Myzuc.Minecraft.Common.Data.Structs;
 using Net.Myzuc.Minecraft.Common.IO;
 

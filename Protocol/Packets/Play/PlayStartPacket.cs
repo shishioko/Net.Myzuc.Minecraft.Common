@@ -1,4 +1,3 @@
-using Net.Myzuc.Minecraft.Common.Data.Enums;
 using Net.Myzuc.Minecraft.Common.Data.Primitives;
 using Net.Myzuc.Minecraft.Common.Data.Structs;
 using Net.Myzuc.Minecraft.Common.IO;

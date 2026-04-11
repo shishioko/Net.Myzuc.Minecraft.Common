@@ -1,10 +1,8 @@
 using System.Buffers.Binary;
-using System.Net;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
-using Net.Myzuc.Minecraft.Common.Nbt;
 using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 
 namespace Net.Myzuc.Minecraft.Common.IO

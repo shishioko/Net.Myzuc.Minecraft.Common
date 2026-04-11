@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using Net.Myzuc.Minecraft.Common.Nbt;
 using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 
 namespace Net.Myzuc.Minecraft.Common.ChatComponents

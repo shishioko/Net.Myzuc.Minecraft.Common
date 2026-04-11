@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using Net.Myzuc.Minecraft.Common.Data;
 using Net.Myzuc.Minecraft.Common.Data.Structs;
 using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 

@@ -1,12 +1,10 @@
 using System.Data;
 using System.Net;
 using System.Numerics;
-using System.Security;
 using System.Security.Authentication;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using Net.Myzuc.Minecraft.Common.Data;
 using Net.Myzuc.Minecraft.Common.Data.Structs;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets.Login;
 

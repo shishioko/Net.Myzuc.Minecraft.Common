@@ -1,4 +1,3 @@
-using System.Runtime.Serialization;
 using System.Text.Json;
 using Net.Myzuc.Minecraft.Common.ChatComponents;
 using Net.Myzuc.Minecraft.Common.IO;
