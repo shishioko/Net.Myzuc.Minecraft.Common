@@ -8,9 +8,9 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
 {
     public sealed record ConfigurationDisconnectPacket : IPacket
     {
-        public static bool Serverbound => false;
-        public static ProtocolStage ProtocolStage => ProtocolStage.Configuration;
-        static int IPacket.PacketId => 0x02;
+        public bool Serverbound => false;
+        public ProtocolStage ProtocolStage => ProtocolStage.Configuration;
+        int IPacket.PacketId => 0x02;
 
         public ChatComponent? Message { get; set; } = null;
 

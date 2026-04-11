@@ -6,9 +6,9 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
 {
     public sealed record ConfigurationSettingsPacket : IPacket
     {
-        public static bool Serverbound => true;
-        public static ProtocolStage ProtocolStage => ProtocolStage.Configuration;
-        static int IPacket.PacketId => 0x00;
+        public bool Serverbound => true;
+        public ProtocolStage ProtocolStage => ProtocolStage.Configuration;
+        int IPacket.PacketId => 0x00;
 
         public string Locale { get; set; } = string.Empty;
         public byte ViewDistance { get; set; } = 0;

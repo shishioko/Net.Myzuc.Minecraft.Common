@@ -5,9 +5,9 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 {
     public sealed record LoginCustomResponsePacket: IPacket
     {
-        public static bool Serverbound => true;
-        public static ProtocolStage ProtocolStage => ProtocolStage.Login;
-        static int IPacket.PacketId => 0x02;
+        public bool Serverbound => true;
+        public ProtocolStage ProtocolStage => ProtocolStage.Login;
+        int IPacket.PacketId => 0x02;
 
         public int Id { get; set; } = 0;
         public Memory<byte>? Data { get; set; } = null;

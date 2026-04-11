@@ -7,9 +7,9 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Play
 {
     public sealed record PlayStartPacket : IPacket
     {
-        public static bool Serverbound => false;
-        public static ProtocolStage ProtocolStage => ProtocolStage.Play;
-        static int IPacket.PacketId => 0x30;
+        public bool Serverbound => false;
+        public ProtocolStage ProtocolStage => ProtocolStage.Play;
+        int IPacket.PacketId => 0x30;
 
         public int EntityId { get; set; } = 0;
         public bool Hardcore { get; set; } = false;

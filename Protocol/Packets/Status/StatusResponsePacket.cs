@@ -6,9 +6,9 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
 {
     public sealed record StatusResponsePacket : IPacket
     {
-        public static bool Serverbound => false;
-        public static ProtocolStage ProtocolStage => ProtocolStage.Status;
-        static int IPacket.PacketId => 0x00;
+        public bool Serverbound => false;
+        public ProtocolStage ProtocolStage => ProtocolStage.Status;
+        int IPacket.PacketId => 0x00;
 
         public Data.Structs.Status Status { get; set; } = new();
         

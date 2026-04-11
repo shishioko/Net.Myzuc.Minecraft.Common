@@ -5,9 +5,9 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
 {
     public sealed record PingRequestPacket : IPacket
     {
-        public static bool Serverbound => true;
-        public static ProtocolStage ProtocolStage => ProtocolStage.Status;
-        static int IPacket.PacketId => 0x01;
+        public bool Serverbound => true;
+        public ProtocolStage ProtocolStage => ProtocolStage.Status;
+        int IPacket.PacketId => 0x01;
 
         public long Data { get; set; } = 0;
         

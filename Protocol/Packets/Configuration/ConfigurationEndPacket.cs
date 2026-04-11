@@ -2,9 +2,9 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
 {
     public sealed record ConfigurationEndPacket : IPacket
     {
-        public static bool Serverbound => true;
-        public static ProtocolStage ProtocolStage => ProtocolStage.Configuration;
-        static int IPacket.PacketId => 0x03;
+        public bool Serverbound => true;
+        public ProtocolStage ProtocolStage => ProtocolStage.Configuration;
+        int IPacket.PacketId => 0x03;
 
         public ConfigurationEndPacket()
         {

@@ -2,11 +2,14 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets
 {
     public interface IPacket
     {
-        public static abstract bool Serverbound { get; }
-        public static abstract ProtocolStage ProtocolStage { get; }
-        internal static abstract int PacketId { get; }
+        public abstract bool Serverbound { get; }
+        public abstract ProtocolStage ProtocolStage { get; }
+        internal abstract int PacketId { get; }
 
         internal abstract void Serialize(Stream stream);
-        internal static abstract IPacket Deserialize(Stream stream);
+        internal static virtual IPacket Deserialize(Stream stream)
+        {
+            throw new InvalidOperationException();
+        }
     }
 }

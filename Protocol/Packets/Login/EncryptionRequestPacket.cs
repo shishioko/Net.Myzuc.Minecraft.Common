@@ -4,9 +4,9 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 {
     public sealed record EncryptionRequestPacket: IPacket
     {
-        public static bool Serverbound => false;
-        public static ProtocolStage ProtocolStage => ProtocolStage.Login;
-        static int IPacket.PacketId => 0x01;
+        public bool Serverbound => false;
+        public ProtocolStage ProtocolStage => ProtocolStage.Login;
+        int IPacket.PacketId => 0x01;
 
         public string ServerId { get; set; } = string.Empty;
         public Memory<byte> PublicKey { get; set; } = new();

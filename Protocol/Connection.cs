@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using CommunityToolkit.HighPerformance;
-using Net.Myzuc.Minecraft.Common.Data;
 using Net.Myzuc.Minecraft.Common.Data.Enums;
 using Net.Myzuc.Minecraft.Common.IO;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets;
@@ -20,10 +19,10 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
         static Connection()
         {
             Dictionary<(bool serverbound, ProtocolStage stage, int id), Type> packets = [];
-            IEnumerable<Type> types = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.IsSubclassOf(typeof(Packet)) && !type.IsAbstract);
+            IEnumerable<Type> types = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.IsAssignableTo(typeof(IPacket)) && !type.IsAbstract);
             foreach (Type type in types)
             {
-                Packet? instance = Activator.CreateInstance(type) as Packet;
+                IPacket? instance = Activator.CreateInstance(type) as IPacket;
                 Contract.Assert(instance is not null);
                 (bool serverbound, ProtocolStage stage, int id) signature = (instance.Serverbound, instance.ProtocolStage, instance.PacketId);
                 packets.Add(signature, type);
@@ -45,12 +44,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
         {
             Stream = new AesCfbStream(Stream, secret, secret, false);
         }
-        public async Task<Packet> ReadAsync(CancellationToken cancellationToken = default)
+        public async Task<IPacket> ReadAsync(CancellationToken cancellationToken = default)
         {
             using Stream stream1 = await readRawAsync();
             int id = stream1.ReadS32V();
             Packets.TryGetValue((RemoteIsClient, ProtocolStage, id), out Type? type);
-            Packet? packet = type is not null ? Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.NonPublic, null, [stream1], null) as Packet : null;
+            IPacket? packet = type is not null ? Activator.CreateInstance(type) as IPacket : null;
             if (packet is null) throw new ProtocolViolationException($"Unknown packet {(RemoteIsClient ? "Serverbound" : "Clientbound")}/{ProtocolStage}/{id:X2}!");
             Run(packet);
             return packet;
@@ -66,7 +65,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                 return zlib.ReadU8A(decompressedSize).ToArray().AsMemory().AsStream();
             }
         }
-        public async Task WriteAsync(Packet packet, CancellationToken cancellationToken = default)
+        public async Task WriteAsync(IPacket packet, CancellationToken cancellationToken = default)
         {
             if (packet.Serverbound == RemoteIsClient || packet.ProtocolStage != ProtocolStage) throw new ProtocolViolationException($"Tried writing unexpected packet: {SignatureToString(packet)}");
             using MemoryStream ms = new();
@@ -98,7 +97,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                 await Stream.WriteU8AS32VAsync(data.AsMemory(), cancellationToken);
             }
         }
-        private void Run(Packet packet)
+        private void Run(IPacket packet)
         {
             switch (packet)
             {
@@ -151,7 +150,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
             Disposed = true;
             await Stream.DisposeAsync();
         }
-        private static string SignatureToString(Packet packet)
+        private static string SignatureToString(IPacket packet)
         {
             return $"{(packet.Serverbound ? "Serverbound" : "Clientbound")}/{packet.ProtocolStage}/{packet.PacketId:X2}";
         }

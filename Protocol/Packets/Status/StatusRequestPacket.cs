@@ -2,9 +2,9 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
 {
     public sealed record StatusRequestPacket : IPacket
     {
-        public static bool Serverbound => true;
-        public static ProtocolStage ProtocolStage => ProtocolStage.Status;
-        static int IPacket.PacketId => 0x00;
+        public bool Serverbound => true;
+        public ProtocolStage ProtocolStage => ProtocolStage.Status;
+        int IPacket.PacketId => 0x00;
         
         public StatusRequestPacket()
         {

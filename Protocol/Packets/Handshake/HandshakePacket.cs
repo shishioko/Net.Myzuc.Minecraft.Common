@@ -5,9 +5,9 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake
 {
     public sealed record HandshakePacket : IPacket
     {
-        public static bool Serverbound => true;
-        public static ProtocolStage ProtocolStage => ProtocolStage.Handshake;
-        static int IPacket.PacketId => 0x00;
+        public bool Serverbound => true;
+        public ProtocolStage ProtocolStage => ProtocolStage.Handshake;
+        int IPacket.PacketId => 0x00;
         
         public int ProtocolVersion { get; set; } = 0;
         public string Address { get; set; } = "";
