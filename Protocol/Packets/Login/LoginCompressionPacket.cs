@@ -3,11 +3,11 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 {
-    public sealed record LoginCompressionPacket: Packet
+    public sealed record LoginCompressionPacket: IPacket
     {
-        public override bool Serverbound => false;
-        public override ProtocolStage ProtocolStage => ProtocolStage.Login;
-        protected internal override int PacketId => 0x03;
+        public static bool Serverbound => false;
+        public static ProtocolStage ProtocolStage => ProtocolStage.Login;
+        static int IPacket.PacketId => 0x03;
 
         public int Threshold { get; set; } = 0;
 
@@ -15,15 +15,16 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         {
             
         }
-
-        internal LoginCompressionPacket(Stream stream) : base(stream)
-        {
-            Threshold = stream.ReadS32V();
-        }
         
-        internal override void Serialize(Stream stream)
+        void IPacket.Serialize(Stream stream)
         {
             stream.WriteS32V(Threshold);
+        }
+        static IPacket IPacket.Deserialize(Stream stream)
+        {
+            LoginCompressionPacket packet = new();
+            packet.Threshold = stream.ReadS32V();
+            return packet;
         }
     }
 }

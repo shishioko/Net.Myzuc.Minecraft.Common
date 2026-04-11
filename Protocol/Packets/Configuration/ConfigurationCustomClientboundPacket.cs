@@ -3,11 +3,11 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
 {
-    public sealed record ConfigurationCustomClientboundPacket: Packet
+    public sealed record ConfigurationCustomClientboundPacket: IPacket
     {
-        public override bool Serverbound => false;
-        public override ProtocolStage ProtocolStage => ProtocolStage.Configuration;
-        protected internal override int PacketId => 0x01;
+        public static bool Serverbound => false;
+        public static ProtocolStage ProtocolStage => ProtocolStage.Configuration;
+        static int IPacket.PacketId => 0x01;
 
         public Identifier Channel { get; set; } = new();
         public Memory<byte> Data { get; set; } = new();
@@ -16,17 +16,18 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
         {
             
         }
-
-        internal ConfigurationCustomClientboundPacket(Stream stream) : base(stream)
-        {
-            Channel = new(stream);
-            Data = stream.ReadU8A().ToArray().AsMemory();
-        }
         
-        internal override void Serialize(Stream stream)
+        void IPacket.Serialize(Stream stream)
         {
-            Channel.Serialize(stream);
+            stream.Write(Channel);
             stream.WriteU8A(Data.Span);
+        }
+        static IPacket IPacket.Deserialize(Stream stream)
+        {
+            ConfigurationCustomClientboundPacket packet = new();
+            packet.Channel = stream.Read<Identifier>();
+            packet.Data = stream.ReadU8A().ToArray().AsMemory();
+            return packet;
         }
     }
 }

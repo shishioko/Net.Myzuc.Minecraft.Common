@@ -3,11 +3,11 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 {
-    public sealed record LoginCookieResponsePacket : Packet
+    public sealed record LoginCookieResponsePacket : IPacket
     {
-        public override bool Serverbound => true;
-        public override ProtocolStage ProtocolStage => ProtocolStage.Login;
-        protected internal override int PacketId => 0x04;
+        public static bool Serverbound => true;
+        public static ProtocolStage ProtocolStage => ProtocolStage.Login;
+        static int IPacket.PacketId => 0x04;
 
         public Identifier Id { get; set; } = new();
         public Memory<byte>? Data { get; set; } = null;
@@ -16,24 +16,25 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         {
             
         }
-
-        internal LoginCookieResponsePacket(Stream stream) : base(stream)
-        {
-            Id = new(stream);
-            if(stream.ReadBool())
-            {
-                Data = stream.ReadU8AS32V().ToArray().AsMemory();
-            }
-        }
         
-        internal override void Serialize(Stream stream)
+        void IPacket.Serialize(Stream stream)
         {
-            Id.Serialize(stream);
+            stream.Write(Id);
             stream.WriteBool(Data.HasValue);
             if (Data.HasValue)
             {
                 stream.WriteU8AS32V(Data.Value.Span);
             }
+        }
+        static IPacket IPacket.Deserialize(Stream stream)
+        {
+            LoginCookieResponsePacket packet = new();
+            packet.Id = stream.Read<Identifier>();
+            if(stream.ReadBool())
+            {
+                packet.Data = stream.ReadU8AS32V().ToArray().AsMemory();
+            }
+            return packet;
         }
     }
 }

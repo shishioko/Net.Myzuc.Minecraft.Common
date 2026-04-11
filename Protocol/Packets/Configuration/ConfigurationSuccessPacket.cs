@@ -1,24 +1,23 @@
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
 {
-    public sealed record ConfigurationSuccessPacket : Packet
+    public sealed record ConfigurationSuccessPacket : IPacket
     {
-        public override bool Serverbound => false;
-        public override ProtocolStage ProtocolStage => ProtocolStage.Configuration;
-        protected internal override int PacketId => 0x03;
+        public static bool Serverbound => false;
+        public static ProtocolStage ProtocolStage => ProtocolStage.Configuration;
+        static int IPacket.PacketId => 0x03;
 
         public ConfigurationSuccessPacket()
         {
             
         }
-
-        internal ConfigurationSuccessPacket(Stream stream) : base(stream)
+        
+        void IPacket.Serialize(Stream stream)
         {
             
         }
-        
-        internal override void Serialize(Stream stream)
+        static IPacket IPacket.Deserialize(Stream stream)
         {
-            
+            return new ConfigurationSuccessPacket();
         }
     }
 }

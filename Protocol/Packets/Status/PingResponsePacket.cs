@@ -3,11 +3,11 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
 {
-    public sealed record PingResponsePacket : Packet
+    public sealed record PingResponsePacket : IPacket
     {
-        public override bool Serverbound => false;
-        public override ProtocolStage ProtocolStage => ProtocolStage.Status;
-        protected internal override int PacketId => 0x01;
+        public static bool Serverbound => false;
+        public static ProtocolStage ProtocolStage => ProtocolStage.Status;
+        static int IPacket.PacketId => 0x01;
 
         public long Data { get; set; } = 0;
         
@@ -15,15 +15,16 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
         {
             
         }
-
-        internal PingResponsePacket(Stream stream) : base(stream)
-        {
-            Data = stream.ReadS64();
-        }
         
-        internal override void Serialize(Stream stream)
+        void IPacket.Serialize(Stream stream)
         {
             stream.WriteS64(Data);
+        }
+        static IPacket IPacket.Deserialize(Stream stream)
+        {
+            PingResponsePacket packet = new();
+            packet.Data = stream.ReadS64();
+            return packet;
         }
     }
 }

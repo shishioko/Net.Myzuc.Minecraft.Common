@@ -1,3 +1,4 @@
+using System.Runtime.Serialization;
 using Net.Myzuc.Minecraft.Common.ChatComponents;
 using Net.Myzuc.Minecraft.Common.IO;
 using Net.Myzuc.Minecraft.Common.Nbt;
@@ -5,27 +6,28 @@ using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
 {
-    public sealed record ConfigurationDisconnectPacket : Packet
+    public sealed record ConfigurationDisconnectPacket : IPacket
     {
-        public override bool Serverbound => false;
-        public override ProtocolStage ProtocolStage => ProtocolStage.Configuration;
-        protected internal override int PacketId => 0x02;
+        public static bool Serverbound => false;
+        public static ProtocolStage ProtocolStage => ProtocolStage.Configuration;
+        static int IPacket.PacketId => 0x02;
 
-        public ChatComponent Message { get; set; } = new TextChatComponent();
+        public ChatComponent? Message { get; set; } = null;
 
         public ConfigurationDisconnectPacket()
         {
             
         }
-
-        internal ConfigurationDisconnectPacket(Stream stream) : base(stream)
-        {
-            Message = ChatComponent.Deserialize(stream.ReadNbt());
-        }
         
-        internal override void Serialize(Stream stream)
+        void IPacket.Serialize(Stream stream)
         {
-            stream.WriteNbt(Message.Serialize());
+            stream.WriteNbt(Nbt.Nbt.ToNullableNbt(Message));
+        }
+        static IPacket IPacket.Deserialize(Stream stream)
+        {
+            ConfigurationDisconnectPacket packet = new();
+            packet.Message = Nbt.Nbt.FromNullableNbt<ChatComponent>(stream.ReadNbt());
+            return packet;
         }
     }
 }

@@ -2,11 +2,11 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 {
-    public sealed record EncryptionRequestPacket: Packet
+    public sealed record EncryptionRequestPacket: IPacket
     {
-        public override bool Serverbound => false;
-        public override ProtocolStage ProtocolStage => ProtocolStage.Login;
-        protected internal override int PacketId => 0x01;
+        public static bool Serverbound => false;
+        public static ProtocolStage ProtocolStage => ProtocolStage.Login;
+        static int IPacket.PacketId => 0x01;
 
         public string ServerId { get; set; } = string.Empty;
         public Memory<byte> PublicKey { get; set; } = new();
@@ -17,21 +17,22 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         {
             
         }
-
-        internal EncryptionRequestPacket(Stream stream) : base(stream)
-        {
-            ServerId = stream.ReadT16AS32V();
-            PublicKey = stream.ReadU8AS32V().ToArray().AsMemory();
-            DecryptedSample = stream.ReadU8AS32V().ToArray().AsMemory();
-            Authenticate = stream.ReadBool();
-        }
         
-        internal override void Serialize(Stream stream)
+        void IPacket.Serialize(Stream stream)
         {
             stream.WriteT16AS32V(ServerId);
             stream.WriteU8AS32V(PublicKey.Span);
             stream.WriteU8AS32V(DecryptedSample.Span);
             stream.WriteBool(Authenticate);
+        }
+        static IPacket IPacket.Deserialize(Stream stream)
+        {
+            EncryptionRequestPacket packet = new();
+            packet.ServerId = stream.ReadT16AS32V();
+            packet.PublicKey = stream.ReadU8AS32V().ToArray().AsMemory();
+            packet.DecryptedSample = stream.ReadU8AS32V().ToArray().AsMemory();
+            packet.Authenticate = stream.ReadBool();
+            return packet;
         }
     }
 }

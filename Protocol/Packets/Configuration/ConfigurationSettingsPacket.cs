@@ -4,11 +4,11 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
 {
-    public sealed record ConfigurationSettingsPacket : Packet
+    public sealed record ConfigurationSettingsPacket : IPacket
     {
-        public override bool Serverbound => true;
-        public override ProtocolStage ProtocolStage => ProtocolStage.Configuration;
-        protected internal override int PacketId => 0x00;
+        public static bool Serverbound => true;
+        public static ProtocolStage ProtocolStage => ProtocolStage.Configuration;
+        static int IPacket.PacketId => 0x00;
 
         public string Locale { get; set; } = string.Empty;
         public byte ViewDistance { get; set; } = 0;
@@ -24,21 +24,8 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
         {
             
         }
-
-        internal ConfigurationSettingsPacket(Stream stream) : base(stream)
-        {
-            Locale = stream.ReadT16AS32V();
-            ViewDistance = stream.ReadU8();
-            ChatMode = (ChatMode)stream.ReadS32V();
-            ChatColors = stream.ReadBool();
-            SkinParts = (SkinPartFlags)stream.ReadU8();
-            MainHand = (MainHand)stream.ReadS32V();
-            EnableCensorship = stream.ReadBool();
-            AllowListing = stream.ReadBool();
-            ParticleSettings = (ParticleSetting)stream.ReadS32V();
-        }
         
-        internal override void Serialize(Stream stream)
+        void IPacket.Serialize(Stream stream)
         {
             stream.WriteT16AS32V(Locale);
             stream.WriteU8(ViewDistance);
@@ -49,6 +36,20 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
             stream.WriteBool(EnableCensorship);
             stream.WriteBool(AllowListing);
             stream.WriteS32V((int)ParticleSettings);
+        }
+        static IPacket IPacket.Deserialize(Stream stream)
+        {
+            ConfigurationSettingsPacket packet = new();
+            packet.Locale = stream.ReadT16AS32V();
+            packet.ViewDistance = stream.ReadU8();
+            packet.ChatMode = (ChatMode)stream.ReadS32V();
+            packet.ChatColors = stream.ReadBool();
+            packet.SkinParts = (SkinPartFlags)stream.ReadU8();
+            packet.MainHand = (MainHand)stream.ReadS32V();
+            packet.EnableCensorship = stream.ReadBool();
+            packet.AllowListing = stream.ReadBool();
+            packet.ParticleSettings = (ParticleSetting)stream.ReadS32V();
+            return packet;
         }
     }
 }

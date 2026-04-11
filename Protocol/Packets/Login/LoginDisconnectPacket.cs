@@ -5,27 +5,28 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 {
-    public sealed record LoginDisconnectPacket : Packet
+    public sealed record LoginDisconnectPacket : IPacket
     {
-        public override bool Serverbound => false;
-        public override ProtocolStage ProtocolStage => ProtocolStage.Login;
-        protected internal override int PacketId => 0x00;
+        public static bool Serverbound => false;
+        public static ProtocolStage ProtocolStage => ProtocolStage.Login;
+        static int IPacket.PacketId => 0x00;
 
-        public ChatComponent Message { get; set; } = new TextChatComponent();
+        public ChatComponent? Message { get; set; } = null;
 
         public LoginDisconnectPacket()
         {
             
         }
-
-        internal LoginDisconnectPacket(Stream stream) : base(stream)
-        {
-            Message = JsonSerializer.Deserialize<ChatComponent>(stream.ReadT16AS32V(), Global.JsonSerializerOptions) ?? throw new SerializationException();
-        }
         
-        internal override void Serialize(Stream stream)
+        void IPacket.Serialize(Stream stream)
         {
             stream.WriteT16AS32V(JsonSerializer.Serialize(Message, Global.JsonSerializerOptions));
+        }
+        static IPacket IPacket.Deserialize(Stream stream)
+        {
+            LoginDisconnectPacket packet = new();
+            packet.Message = JsonSerializer.Deserialize<ChatComponent>(stream.ReadT16AS32V(), Global.JsonSerializerOptions);
+            return packet;
         }
     }
 }

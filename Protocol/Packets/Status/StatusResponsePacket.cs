@@ -1,13 +1,14 @@
+using System.Runtime.Serialization;
 using System.Text.Json;
 using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
 {
-    public sealed record StatusResponsePacket : Packet
+    public sealed record StatusResponsePacket : IPacket
     {
-        public override bool Serverbound => false;
-        public override ProtocolStage ProtocolStage => ProtocolStage.Status;
-        protected internal override int PacketId => 0x00;
+        public static bool Serverbound => false;
+        public static ProtocolStage ProtocolStage => ProtocolStage.Status;
+        static int IPacket.PacketId => 0x00;
 
         public Data.Structs.Status Status { get; set; } = new();
         
@@ -16,14 +17,15 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
             
         }
 
-        internal StatusResponsePacket(Stream stream) : base(stream)
-        {
-            Status = JsonSerializer.Deserialize<Data.Structs.Status>(stream.ReadT16AS32V(), Global.JsonSerializerOptions);
-        }
-        
-        internal override void Serialize(Stream stream)
+        void IPacket.Serialize(Stream stream)
         {
             stream.WriteT16AS32V(JsonSerializer.Serialize(Status, Global.JsonSerializerOptions) ?? throw new InvalidDataException());
+        }
+        static IPacket IPacket.Deserialize(Stream stream)
+        {
+            StatusResponsePacket packet = new();
+            packet.Status = JsonSerializer.Deserialize<Data.Structs.Status>(stream.ReadT16AS32V(), Global.JsonSerializerOptions) ?? throw new SerializationException();
+            return packet;
         }
     }
 }

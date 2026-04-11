@@ -1,24 +1,23 @@
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
 {
-    public sealed record StatusRequestPacket : Packet
+    public sealed record StatusRequestPacket : IPacket
     {
-        public override bool Serverbound => true;
-        public override ProtocolStage ProtocolStage => ProtocolStage.Status;
-        protected internal override int PacketId => 0x00;
+        public static bool Serverbound => true;
+        public static ProtocolStage ProtocolStage => ProtocolStage.Status;
+        static int IPacket.PacketId => 0x00;
         
         public StatusRequestPacket()
         {
             
         }
-
-        internal StatusRequestPacket(Stream stream) : base(stream)
+        
+        void IPacket.Serialize(Stream stream)
         {
             
         }
-        
-        internal override void Serialize(Stream stream)
+        static IPacket IPacket.Deserialize(Stream stream)
         {
-            
+            return new StatusRequestPacket();
         }
     }
 }

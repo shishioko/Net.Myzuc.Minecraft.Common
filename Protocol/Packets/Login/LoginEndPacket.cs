@@ -1,24 +1,23 @@
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
 {
-    public sealed record LoginEndPacket: Packet
+    public sealed record LoginEndPacket: IPacket
     {
-        public override bool Serverbound => true;
-        public override ProtocolStage ProtocolStage => ProtocolStage.Login;
-        protected internal override int PacketId => 0x03;
+        public static bool Serverbound => true;
+        public static ProtocolStage ProtocolStage => ProtocolStage.Login;
+        static int IPacket.PacketId => 0x03;
 
         public LoginEndPacket()
         {
             
         }
-
-        internal LoginEndPacket(Stream stream) : base(stream)
+        
+        void IPacket.Serialize(Stream stream)
         {
             
         }
-        
-        internal override void Serialize(Stream stream)
+        static IPacket IPacket.Deserialize(Stream stream)
         {
-            
+            return new LoginEndPacket();
         }
     }
 }

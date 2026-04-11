@@ -5,11 +5,11 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Play
 {
-    public sealed record PlayStartPacket : Packet
+    public sealed record PlayStartPacket : IPacket
     {
-        public override bool Serverbound => false;
-        public override ProtocolStage ProtocolStage => ProtocolStage.Play;
-        protected internal override int PacketId => 0x30;
+        public static bool Serverbound => false;
+        public static ProtocolStage ProtocolStage => ProtocolStage.Play;
+        static int IPacket.PacketId => 0x30;
 
         public int EntityId { get; set; } = 0;
         public bool Hardcore { get; set; } = false;
@@ -27,35 +27,15 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Play
         {
             
         }
-
-        internal PlayStartPacket(Stream stream) : base(stream)
-        {
-            EntityId = stream.ReadS32();
-            Hardcore = stream.ReadBool();
-            Identifier[] dimensionNames = new Identifier[stream.ReadS32V()];
-            for (int i = 0; i < dimensionNames.Length; i++)
-            {
-                dimensionNames[i] = new(stream);
-            }
-            DimensionNames = dimensionNames;
-            TablistSize = stream.ReadS32V();
-            ViewDistance = stream.ReadS32V();
-            SimulationDistance = stream.ReadS32V();
-            ReduceDebugInfo = stream.ReadBool();
-            ShowRespawnScreen = stream.ReadBool();
-            LimitedCrafting = stream.ReadBool();
-            RespawnMetadata = new(stream);
-            EnableCensorship = stream.ReadBool();
-        }
         
-        internal override void Serialize(Stream stream)
+        void IPacket.Serialize(Stream stream)
         {
             stream.WriteS32(EntityId);
             stream.WriteBool(Hardcore);
             stream.WriteS32V(DimensionNames.Count);
             foreach (Identifier dimensionName in DimensionNames)
             {
-                dimensionName.Serialize(stream);
+                stream.Write(dimensionName);
             }
             stream.WriteS32V(TablistSize);
             stream.WriteS32V(ViewDistance);
@@ -63,8 +43,29 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Play
             stream.WriteBool(ReduceDebugInfo);
             stream.WriteBool(ShowRespawnScreen);
             stream.WriteBool(LimitedCrafting);
-            RespawnMetadata.Serialize(stream);
+            stream.Write(RespawnMetadata);
             stream.WriteBool(EnableCensorship);
+        }
+        static IPacket IPacket.Deserialize(Stream stream)
+        {
+            PlayStartPacket packet = new();
+            packet.EntityId = stream.ReadS32();
+            packet.Hardcore = stream.ReadBool();
+            Identifier[] dimensionNames = new Identifier[stream.ReadS32V()];
+            for (int i = 0; i < dimensionNames.Length; i++)
+            {
+                dimensionNames[i] = stream.Read<Identifier>();
+            }
+            packet.DimensionNames = dimensionNames;
+            packet.TablistSize = stream.ReadS32V();
+            packet.ViewDistance = stream.ReadS32V();
+            packet.SimulationDistance = stream.ReadS32V();
+            packet.ReduceDebugInfo = stream.ReadBool();
+            packet.ShowRespawnScreen = stream.ReadBool();
+            packet.LimitedCrafting = stream.ReadBool();
+            packet.RespawnMetadata = stream.Read<RespawnMetadata>();
+            packet.EnableCensorship = stream.ReadBool();
+            return packet;
         }
     }
 }

@@ -1,12 +1,13 @@
 using Net.Myzuc.Minecraft.Common.Data.Primitives;
+using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
 {
-    public sealed record ConfigurationCookieRequestPacket : Packet
+    public sealed record ConfigurationCookieRequestPacket : IPacket
     {
-        public override bool Serverbound => false;
-        public override ProtocolStage ProtocolStage => ProtocolStage.Configuration;
-        protected internal override int PacketId => 0x00;
+        public static bool Serverbound => false;
+        public static ProtocolStage ProtocolStage => ProtocolStage.Configuration;
+        static int IPacket.PacketId => 0x00;
 
         public Identifier Id { get; set; } = new();
 
@@ -14,15 +15,16 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
         {
             
         }
-
-        internal ConfigurationCookieRequestPacket(Stream stream) : base(stream)
-        {
-            Id = new(stream);
-        }
         
-        internal override void Serialize(Stream stream)
+        void IPacket.Serialize(Stream stream)
         {
-            Id.Serialize(stream);
+            stream.Write(Id);
+        }
+        static IPacket IPacket.Deserialize(Stream stream)
+        {
+            ConfigurationCookieRequestPacket packet = new();
+            packet.Id = stream.Read<Identifier>();
+            return packet;
         }
     }
 }
