@@ -363,6 +363,18 @@ namespace Net.Myzuc.Minecraft.Common.IO
             
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TBinarySerializable Read<TBinarySerializable>() where TBinarySerializable : IBinarySerializable<TBinarySerializable>
+            {
+                return TBinarySerializable.Deserialize(stream);
+            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void Write<TBinarySerializable>(TBinarySerializable data) where TBinarySerializable : IBinarySerializable<TBinarySerializable>
+            {
+                TBinarySerializable.Serialize(data, stream);
+            }
+            
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public NbtTag? ReadNbt()
             {
                 return Nbt.Nbt.Deserialize(stream);
@@ -371,6 +383,16 @@ namespace Net.Myzuc.Minecraft.Common.IO
             public void WriteNbt(NbtTag? data)
             {
                 Nbt.Nbt.Serialize(data, stream);
+            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TNbtSerializable ReadNbt<TNbtSerializable>() where TNbtSerializable : INbtSerializable<TNbtSerializable>
+            {
+                return TNbtSerializable.FromNbt(stream.ReadNbt());
+            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void WriteNbt<TNbtSerializable>(TNbtSerializable data) where TNbtSerializable : INbtSerializable<TNbtSerializable>
+            {
+                stream.WriteNbt(TNbtSerializable.ToNbt(data));
             }
             
             

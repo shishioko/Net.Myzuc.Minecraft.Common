@@ -1,11 +1,12 @@
 using Net.Myzuc.Minecraft.Common.Data.Primitives;
+using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Data.Structs
 {
-    public readonly record struct GlobalLocation
+    public sealed record GlobalLocation : IBinarySerializable<GlobalLocation>
     {
-        public Identifier Dimension { get; } = new();
-        public Location Location { get; } = new();
+        public Identifier Dimension { get; set; } = new();
+        public Location Location { get; set; } = new();
         public GlobalLocation()
         {
             
@@ -20,16 +21,17 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs
             Location = location;
         }
         
-        internal GlobalLocation(Stream stream)
+        static GlobalLocation IBinarySerializable<GlobalLocation>.Deserialize(Stream stream)
         {
-            Dimension = new(stream);
-            Location = new(stream);
+            GlobalLocation data = new();
+            data.Dimension = stream.Read<Identifier>();
+            data.Location = stream.Read<Location>();
+            return data;
         }
-        
-        internal void Serialize(Stream stream)
+        static void IBinarySerializable<GlobalLocation>.Serialize(GlobalLocation data, Stream stream)
         {
-            Dimension.Serialize(stream);
-            Location.Serialize(stream);
+            stream.Write(data.Dimension);
+            stream.Write(data.Location);
         }
     }
 }

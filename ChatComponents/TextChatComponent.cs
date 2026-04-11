@@ -9,20 +9,24 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         protected override string Type => "text";
         [JsonRequired]
         [JsonPropertyName("text")]
-        public string Text { get; init; }
-        public TextChatComponent(string text = "")
+        public string Text { get; set; } = "";
+        
+        public TextChatComponent()
+        {
+            
+        }
+        public TextChatComponent(string text)
         {
             Text = text;
         }
-
         internal TextChatComponent(CompoundNbtTag nbt) : base(nbt)
         {
             Text = nbt["text"].Get<StringNbtTag>();
         }
-
-        internal override CompoundNbtTag Serialize()
+        
+        protected override CompoundNbtTag ToNbt()
         {
-            CompoundNbtTag nbt = base.Serialize();
+            CompoundNbtTag nbt = base.ToNbt();
             nbt["text"] = (StringNbtTag)Text;
             return nbt;
         }

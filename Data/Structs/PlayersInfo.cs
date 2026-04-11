@@ -2,12 +2,12 @@ using System.Text.Json.Serialization;
 
 namespace Net.Myzuc.Minecraft.Common.Data.Structs
 {
-    public readonly record struct PlayersInfo
+    public sealed record PlayersInfo
     {
         [JsonPropertyName("max")]
-        public int Maximum { get; init; } = 0;
+        public int Maximum { get; set; } = 0;
         [JsonPropertyName("online")]
-        public int Online { get; init; } = 0;
+        public int Online { get; set; } = 0;
         [JsonPropertyName("sample")] 
         public IReadOnlyList<PlayerSample>? Samples { get; } = null;
         public PlayersInfo()
@@ -24,7 +24,7 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs
         {
             Maximum = maximum;
             Online = online;
-            Samples = null;
+            Samples = samples;
         }
     }
 }

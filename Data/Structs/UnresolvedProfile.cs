@@ -1,27 +1,29 @@
+using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters;
 using Net.Myzuc.Minecraft.Common.Data.Enums;
+using Net.Myzuc.Minecraft.Common.IO;
 using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 
 namespace Net.Myzuc.Minecraft.Common.Data.Structs
 {
-    public readonly record struct UnresolvedProfile
+    public sealed record UnresolvedProfile : INbtSerializable<UnresolvedProfile>
     {
         [JsonConverter(typeof(GuidNbtJsonConverter))]
         [JsonPropertyName("id")]
-        public Guid? Guid { get; init; } = null;
+        public Guid? Guid { get; set; } = null;
         [JsonPropertyName("name")]
-        public string? Name { get; init; } = null;
+        public string? Name { get; set; } = null;
         [JsonPropertyName("properties")]
-        public IReadOnlyList<Property>? Properties { get; init; } = null;
+        public IReadOnlyList<Property>? Properties { get; set; } = null;
         [JsonPropertyName("texture")]
-        public string? Skin { get; init; } = null;
+        public string? Skin { get; set; } = null;
         [JsonPropertyName("cape")]
-        public string? Cape { get; init; } = null;
+        public string? Cape { get; set; } = null;
         [JsonPropertyName("elytra")]
-        public string? Elytra { get; init; } = null;
+        public string? Elytra { get; set; } = null;
         [JsonPropertyName("model")]
-        public PlayerModelType? ModelType { get; init; } = null;
+        public PlayerModelType? ModelType { get; set; } = null;
         public UnresolvedProfile()
         {
             
@@ -41,33 +43,35 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs
             Properties = profile.Properties;
         }
         
-        internal UnresolvedProfile(CompoundNbtTag nbt)
+        static UnresolvedProfile INbtSerializable<UnresolvedProfile>.FromNbt(NbtTag nbt)
         {
-            if (nbt.ContainsKey("id")) Guid = nbt["id"].Get<IntArrayNbtTag>();
-            if (nbt.ContainsKey("name")) Name = nbt["name"].Get<StringNbtTag>();
-            if (nbt.ContainsKey("properties"))
+            if (nbt is not CompoundNbtTag compound) throw new SerializationException();
+            UnresolvedProfile data = new();
+            if (compound.ContainsKey("id")) data.Guid = compound["id"].Get<IntArrayNbtTag>();
+            if (compound.ContainsKey("name")) data.Name = compound["name"].Get<StringNbtTag>();
+            if (compound.ContainsKey("properties"))
             {
-                Properties = nbt["properties"].Get<ListNbtTag>().Select(property => new Property(property.Get<CompoundNbtTag>())).ToList();
+                data.Properties = compound["properties"].Get<ListNbtTag>().Select(Nbt.Nbt.FromNbt<Property>).ToList();
             }
-            if (nbt.ContainsKey("texture")) Skin = nbt["texture"].Get<StringNbtTag>();
-            if (nbt.ContainsKey("cape")) Cape = nbt["cape"].Get<StringNbtTag>();
-            if (nbt.ContainsKey("elytra")) Elytra = nbt["elytra"].Get<StringNbtTag>();
-            if (nbt.ContainsKey("model")) ModelType = (PlayerModelType)nbt["model"].Get<IntNbtTag>().Value;
+            if (compound.ContainsKey("texture")) data.Skin = compound["texture"].Get<StringNbtTag>();
+            if (compound.ContainsKey("cape")) data.Cape = compound["cape"].Get<StringNbtTag>();
+            if (compound.ContainsKey("elytra")) data.Elytra = compound["elytra"].Get<StringNbtTag>();
+            if (compound.ContainsKey("model")) data.ModelType = (PlayerModelType)compound["model"].Get<IntNbtTag>().Value;
+            return data;
         }
-
-        internal CompoundNbtTag Serialize()
+        static NbtTag INbtSerializable<UnresolvedProfile>.ToNbt(UnresolvedProfile data)
         {
             CompoundNbtTag nbt = new();
-            if (Guid is not null) nbt["id"] = (IntArrayNbtTag)Guid;
-            if (Name is not null) nbt["name"] = (StringNbtTag)Name;
-            if (Properties is not null)
+            if (data.Guid is not null) nbt["id"] = (IntArrayNbtTag)data.Guid;
+            if (data.Name is not null) nbt["name"] = (StringNbtTag)data.Name;
+            if (data.Properties is not null)
             {
-                nbt["properties"] = new ListNbtTag(Properties.Select(entry => entry.Serialize()).ToList());
+                nbt["properties"] = new ListNbtTag(data.Properties.Select(Nbt.Nbt.ToNbt).ToList());
             }
-            if (Skin is not null) nbt["skin"] = (StringNbtTag)Skin;
-            if (Cape is not null) nbt["cape"] = (StringNbtTag)Cape;
-            if (Elytra is not null) nbt["elytra"] = (StringNbtTag)Elytra;
-            if (ModelType.HasValue) nbt["model"] = (IntNbtTag)(int)ModelType;
+            if (data.Skin is not null) nbt["skin"] = (StringNbtTag)data.Skin;
+            if (data.Cape is not null) nbt["cape"] = (StringNbtTag)data.Cape;
+            if (data.Elytra is not null) nbt["elytra"] = (StringNbtTag)data.Elytra;
+            if (data.ModelType.HasValue) nbt["model"] = (IntNbtTag)(int)data.ModelType;
             return nbt;
         }
     }

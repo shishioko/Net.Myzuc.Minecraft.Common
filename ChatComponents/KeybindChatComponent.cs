@@ -8,20 +8,20 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         protected override string Type => "keybind";
         [JsonRequired]
         [JsonPropertyName("keybind")]
-        public string Keybind { get; init; }
-        public KeybindChatComponent(string keybind = "")
+        public string Keybind { get; set; } = "";
+        
+        public KeybindChatComponent(string keybind)
         {
             Keybind = keybind;
         }
-        
         internal KeybindChatComponent(CompoundNbtTag nbt) : base(nbt)
         {
             Keybind = nbt["keybind"].Get<StringNbtTag>();
         }
-
-        internal override CompoundNbtTag Serialize()
+        
+        protected override CompoundNbtTag ToNbt()
         {
-            CompoundNbtTag nbt = base.Serialize();
+            CompoundNbtTag nbt = base.ToNbt();
             nbt["keybind"] = (StringNbtTag)Keybind;
             return nbt;
         }

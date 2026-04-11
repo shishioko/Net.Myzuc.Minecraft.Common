@@ -2,12 +2,12 @@ using System.Text.Json.Serialization;
 
 namespace Net.Myzuc.Minecraft.Common.Data.Structs
 {
-    public record struct VersionInfo
+    public sealed record VersionInfo
     {
         [JsonPropertyName("name")]
-        public string Name { get; init; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
         [JsonPropertyName("protocol")]
-        public int Protocol { get; init; } = -1;
+        public int Protocol { get; set; } = -1;
         public VersionInfo()
         {
             

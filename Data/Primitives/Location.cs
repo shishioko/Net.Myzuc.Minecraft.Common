@@ -3,7 +3,7 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Data.Primitives
 {
-    public readonly record struct Location
+    public readonly record struct Location : IBinarySerializable<Location>
     {
         public long Value { get; }
         [IgnoreDataMember]
@@ -50,16 +50,6 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
             Value = (long)((ulong)y | (ulong)(z << 12) | ((ulong)x << 38));
         }
         
-        internal Location(Stream stream)
-        {
-            Value = stream.ReadS64();
-        }
-        
-        internal void Serialize(Stream stream)
-        {
-            stream.WriteS64(Value);
-        }
-        
         public static Location operator +(Location a, Location b)
         {
             return new(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
@@ -67,6 +57,15 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
         public static Location operator -(Location a, Location b)
         {
             return new(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
+        }
+        
+        static Location IBinarySerializable<Location>.Deserialize(Stream stream)
+        {
+            return new(stream.ReadS64());
+        }
+        static void IBinarySerializable<Location>.Serialize(Location data, Stream stream)
+        {
+            stream.WriteS64(data.Value);
         }
     }
 }

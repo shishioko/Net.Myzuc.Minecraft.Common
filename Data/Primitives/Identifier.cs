@@ -7,7 +7,7 @@ using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 namespace Net.Myzuc.Minecraft.Common.Data.Primitives
 {
     [JsonConverter(typeof(IdentifierJsonConverter))]
-    public readonly record struct Identifier
+    public readonly record struct Identifier : IBinarySerializable<Identifier>, INbtSerializable<Identifier>
     {
         private const string ValidNamespaceCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYZ0123456789.-_";
         private const string ValidValueCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYZ0123456789.-_/";
@@ -44,32 +44,11 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
             if (Value.Any(c => !ValidValueCharacters.Contains(c))) throw new ArgumentException($"Invalid identifier value '{Value}'!");
         }
         
-        internal Identifier(Stream stream)
-        {
-            Identifier id = new(stream.ReadT16AS32V());
-            Namespace = id.Namespace;
-            Value = id.Value;
-        }
-        internal Identifier(StringNbtTag nbt)
-        {
-            Identifier id = new(nbt.Value);
-            Namespace = id.Namespace;
-            Value = id.Value;
-        }
-        
-        internal void Serialize(Stream stream)
-        {
-            stream.WriteT16AS32V(FullIdentifier);
-        }
-        internal StringNbtTag Serialize()
-        {
-            return FullIdentifier;
-        }
-        
         public override string ToString()
         {
             return FullIdentifier;
         }
+        
         public static implicit operator Identifier(string value)
         {
             return new(value);
@@ -77,6 +56,24 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
         public static implicit operator string(Identifier value)
         {
             return value.FullIdentifier;
+        }
+        
+        static Identifier IBinarySerializable<Identifier>.Deserialize(Stream stream)
+        {
+            return new(stream.ReadT16AS32V());
+        }
+        static void IBinarySerializable<Identifier>.Serialize(Identifier data, Stream stream)
+        {
+            stream.WriteT16AS32V(data.FullIdentifier);
+        }
+        static Identifier INbtSerializable<Identifier>.FromNbt(NbtTag nbt)
+        {
+            if (nbt is not StringNbtTag stringNbt) throw new SerializationException();
+            return new(stringNbt);
+        }
+        static NbtTag INbtSerializable<Identifier>.ToNbt(Identifier data)
+        {
+            return (StringNbtTag)data.FullIdentifier;
         }
     }
 }

@@ -4,15 +4,15 @@ using Net.Myzuc.Minecraft.Common.Objects.JsonConverters;
 
 namespace Net.Myzuc.Minecraft.Common.Data.Structs
 {
-    public readonly record struct ResolvedProfile
+    public sealed record ResolvedProfile : IBinarySerializable<ResolvedProfile>
     {
         [JsonConverter(typeof(GuidStringJsonConverter))]
         [JsonPropertyName("id")]
-        public Guid Guid { get; init; } = Guid.Empty;
+        public Guid Guid { get; set; } = Guid.Empty;
         [JsonPropertyName("name")]
-        public string Name { get; init; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
         [JsonPropertyName("properties")]
-        public IReadOnlyList<Property> Properties { get; init; } = [];
+        public IReadOnlyList<Property> Properties { get; set; } = [];
         public ResolvedProfile()
         {
             
@@ -29,26 +29,27 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs
             Properties = properties;
         }
         
-        internal ResolvedProfile(Stream stream)
+        static ResolvedProfile IBinarySerializable<ResolvedProfile>.Deserialize(Stream stream)
         {
-            Guid = stream.ReadGuid();
-            Name = stream.ReadT16AS32V();
+            ResolvedProfile data = new();
+            data.Guid = stream.ReadGuid();
+            data.Name = stream.ReadT16AS32V();
             Property[] properties = new Property[stream.ReadS32V()];
             for (int i = 0; i < properties.Length; i++)
             {
-                properties[i] = new(stream);
+                properties[i] = stream.Read<Property>();
             }
-            Properties = properties;
+            data.Properties = properties;
+            return data;
         }
-        
-        internal void Serialize(Stream stream)
+        static void IBinarySerializable<ResolvedProfile>.Serialize(ResolvedProfile data, Stream stream)
         {
-            stream.WriteGuid(Guid);
-            stream.WriteT16AS32V(Name);
-            stream.WriteS32V(Properties.Count);
-            foreach(Property property in Properties)
+            stream.WriteGuid(data.Guid);
+            stream.WriteT16AS32V(data.Name);
+            stream.WriteS32V(data.Properties.Count);
+            foreach(Property property in data.Properties)
             {
-                property.Serialize(stream);
+                stream.Write(property);
             }
         }
     }

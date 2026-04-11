@@ -12,24 +12,23 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         [JsonInclude]
         [JsonPropertyName("object")]
         protected abstract string Object { get; }
+        
         protected internal ObjectChatComponent()
         {
             
         }
-        
-        internal ObjectChatComponent(CompoundNbtTag nbt) : base(nbt)
+        protected internal ObjectChatComponent(CompoundNbtTag nbt) : base(nbt)
         {
             
         }
-
-        internal override CompoundNbtTag Serialize()
+        
+        protected override CompoundNbtTag ToNbt()
         {
-            CompoundNbtTag nbt = base.Serialize();
+            CompoundNbtTag nbt = base.ToNbt();
             nbt["object"] = (StringNbtTag)Object;
             return nbt;
         }
-
-        internal static ObjectChatComponent Deserialize(CompoundNbtTag nbt)
+        internal static ObjectChatComponent FromNbt(CompoundNbtTag nbt)
         {
             return nbt switch
             {

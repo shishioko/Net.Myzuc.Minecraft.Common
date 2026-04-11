@@ -9,25 +9,25 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         protected override string Object => "atlas";
         [JsonRequired]
         [JsonPropertyName("atlas")]
-        public string Atlas { get; init; }
+        public string Atlas { get; set; } = "";
         [JsonRequired]
         [JsonPropertyName("sprite")]
-        public string Sprite { get; init; }
+        public string Sprite { get; set; } = "";
+        
         public AtlasObjectChatComponent(string atlas, string sprite)
         {
             Atlas = atlas;
             Sprite = sprite;
         }
-        
         internal AtlasObjectChatComponent(CompoundNbtTag nbt) : base(nbt)
         {
             Atlas = nbt["atlas"].Get<StringNbtTag>();
             Sprite = nbt["sprite"].Get<StringNbtTag>();
         }
-
-        internal override CompoundNbtTag Serialize()
+        
+        protected override CompoundNbtTag ToNbt()
         {
-            CompoundNbtTag nbt = base.Serialize();
+            CompoundNbtTag nbt = base.ToNbt();
             nbt["atlas"] = (StringNbtTag)Atlas;
             nbt["sprite"] = (StringNbtTag)Sprite;
             return nbt;

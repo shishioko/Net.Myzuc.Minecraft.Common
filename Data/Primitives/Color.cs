@@ -2,11 +2,13 @@ using System.Globalization;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.Data.Primitives.JsonConverters;
+using Net.Myzuc.Minecraft.Common.IO;
+using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 
 namespace Net.Myzuc.Minecraft.Common.Data.Primitives
 {
     [JsonConverter(typeof(ColorJsonConverter))]
-    public readonly record struct Color
+    public readonly record struct Color : INbtSerializable<Color>
     {
         [IgnoreDataMember]
         public Color Opaque
@@ -164,6 +166,16 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
         public static implicit operator Color(int n)
         {
             return new((byte)n, (byte)n, (byte)n, (byte)n);
+        }
+        
+        static Color INbtSerializable<Color>.FromNbt(NbtTag nbt)
+        {
+            if (nbt is not IntNbtTag intNbt) throw new SerializationException();
+            return new(intNbt);
+        }
+        static NbtTag INbtSerializable<Color>.ToNbt(Color data)
+        {
+            return (IntNbtTag)data.Argb;
         }
     }
 }

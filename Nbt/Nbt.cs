@@ -15,6 +15,16 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
             NbtValueKind valueKind = (NbtValueKind)stream.ReadS8();
             return NbtTag.DeserializeValue(stream, valueKind);
         }
+
+        internal static NbtTag ToNbt<TNbtSerializable>(TNbtSerializable data) where TNbtSerializable : INbtSerializable<TNbtSerializable>
+        {
+            return TNbtSerializable.ToNbt(data);
+        }
+        internal static TNbtSerializable FromNbt<TNbtSerializable>(NbtTag nbt) where TNbtSerializable : INbtSerializable<TNbtSerializable>
+        {
+            return TNbtSerializable.FromNbt(nbt);
+        }
+        
         public static NbtTag FromSNbt(string data)
         {
             throw new NotImplementedException();

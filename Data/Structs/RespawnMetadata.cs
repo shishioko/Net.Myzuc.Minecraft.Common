@@ -4,57 +4,58 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Data.Structs
 {
-    public record struct RespawnMetadata
+    public sealed record RespawnMetadata : IBinarySerializable<RespawnMetadata>
     {
-        public int CurrentDimensionTypeId { get; init; } = 0;
-        public Identifier CurrentDimensionName { get; init; } = new();
-        public long NoiseSeed { get; init; } = 0;
-        public Gamemode CurrentGamemode { get; init; } = Gamemode.Survival;
-        public Gamemode PreviousGamemode { get; init; } = Gamemode.Survival;
-        public bool IsDebugWorld { get; init; } = false;
-        public bool IsSuperflatWorld { get; init; } = false;
-        public GlobalLocation? DeathLocation { get; init; } = null;
-        public int PortalCooldown { get; init; } = 0;
-        public int OceanHeight { get; init; } = 0;
+        public int CurrentDimensionTypeId { get; set; } = 0;
+        public Identifier CurrentDimensionName { get; set; } = new();
+        public long NoiseSeed { get; set; } = 0;
+        public Gamemode CurrentGamemode { get; set; } = Gamemode.Survival;
+        public Gamemode PreviousGamemode { get; set; } = Gamemode.Survival;
+        public bool IsDebugWorld { get; set; } = false;
+        public bool IsSuperflatWorld { get; set; } = false;
+        public GlobalLocation? DeathLocation { get; set; } = null;
+        public int PortalCooldown { get; set; } = 0;
+        public int OceanHeight { get; set; } = 0;
         
         public RespawnMetadata()
         {
             
         }
-
-        internal RespawnMetadata(Stream stream)
+        
+        static RespawnMetadata IBinarySerializable<RespawnMetadata>.Deserialize(Stream stream)
         {
-            CurrentDimensionTypeId = stream.ReadS32V();
-            CurrentDimensionName = new(stream);
-            NoiseSeed = stream.ReadS64();
-            CurrentGamemode = (Gamemode)stream.ReadS8();
-            PreviousGamemode = (Gamemode)stream.ReadS8();
-            IsDebugWorld = stream.ReadBool();
-            IsSuperflatWorld = stream.ReadBool();
+            RespawnMetadata data = new();
+            data.CurrentDimensionTypeId = stream.ReadS32V();
+            data.CurrentDimensionName = stream.Read<Identifier>();
+            data.NoiseSeed = stream.ReadS64();
+            data.CurrentGamemode = (Gamemode)stream.ReadS8();
+            data.PreviousGamemode = (Gamemode)stream.ReadS8();
+            data.IsDebugWorld = stream.ReadBool();
+            data.IsSuperflatWorld = stream.ReadBool();
             if (stream.ReadBool())
             {
-                DeathLocation = new(stream);
+                data.DeathLocation = stream.Read<GlobalLocation>();
             }
-            PortalCooldown = stream.ReadS32V();
-            OceanHeight = stream.ReadS32V();
+            data.PortalCooldown = stream.ReadS32V();
+            data.OceanHeight = stream.ReadS32V();
+            return data;
         }
-        
-        internal void Serialize(Stream stream)
+        static void IBinarySerializable<RespawnMetadata>.Serialize(RespawnMetadata data, Stream stream)
         {
-            stream.WriteS32V(CurrentDimensionTypeId);
-            CurrentDimensionName.Serialize(stream);
-            stream.WriteS64(NoiseSeed);
-            stream.WriteS8((sbyte)CurrentGamemode);
-            stream.WriteS8((sbyte)PreviousGamemode);
-            stream.WriteBool(IsDebugWorld);
-            stream.WriteBool(IsSuperflatWorld);
-            stream.WriteBool(DeathLocation.HasValue);
-            if (DeathLocation.HasValue)
+            stream.WriteS32V(data.CurrentDimensionTypeId);
+            stream.Write(data.CurrentDimensionName);
+            stream.WriteS64(data.NoiseSeed);
+            stream.WriteS8((sbyte)data.CurrentGamemode);
+            stream.WriteS8((sbyte)data.PreviousGamemode);
+            stream.WriteBool(data.IsDebugWorld);
+            stream.WriteBool(data.IsSuperflatWorld);
+            stream.WriteBool(data.DeathLocation is not null);
+            if (data.DeathLocation is not null)
             {
-                DeathLocation.Value.Serialize(stream);
+                stream.Write(data.DeathLocation);
             }
-            stream.WriteS32V(PortalCooldown);
-            stream.WriteS32V(OceanHeight);
+            stream.WriteS32V(data.PortalCooldown);
+            stream.WriteS32V(data.OceanHeight);
         }
     }
 }

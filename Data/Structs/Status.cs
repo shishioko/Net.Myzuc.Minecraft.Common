@@ -3,18 +3,18 @@ using Net.Myzuc.Minecraft.Common.ChatComponents;
 
 namespace Net.Myzuc.Minecraft.Common.Data.Structs
 {
-    public readonly record struct Status
+    public sealed record Status
     {
         [JsonPropertyName("version")]
-        public VersionInfo? Version { get; init; } = null;
+        public VersionInfo? Version { get; set; } = null;
         [JsonPropertyName("players")]
-        public PlayersInfo? Players { get; init; } = null;
+        public PlayersInfo? Players { get; set; } = null;
         [JsonPropertyName("description")]
-        public ChatComponent? Description { get; init; } = null;
+        public ChatComponent? Description { get; set; } = null;
         [JsonPropertyName("favicon")]
-        public string? Icon { get; init; } = null;
+        public string? Icon { get; set; } = null;
         [JsonPropertyName("enforcesSecureChat")]
-        public bool? EnforcesSecureChat { get; init; } = null;
+        public bool? EnforcesSecureChat { get; set; } = null;
         public Status()
         {
             

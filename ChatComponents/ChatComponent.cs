@@ -3,12 +3,13 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters;
 using Net.Myzuc.Minecraft.Common.Data.Primitives;
+using Net.Myzuc.Minecraft.Common.IO;
 using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 
 namespace Net.Myzuc.Minecraft.Common.ChatComponents
 {
     [JsonConverter(typeof(ChatComponentJsonConverter))]
-    public abstract record ChatComponent
+    public abstract record ChatComponent : INbtSerializable<ChatComponent>
     {
         [JsonInclude]
         [JsonPropertyName("type")]
@@ -16,31 +17,31 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         [JsonPropertyName("extra")]
         public IList<ChatComponent>? Children { get; set; } = null;
         [JsonPropertyName("color")]
-        public ChatColor? Color { get; init; } = null;
+        public ChatColor? Color { get; set; } = null;
         [JsonPropertyName("font")]
-        public string? Font { get; init; } = null;
+        public string? Font { get; set; } = null;
         [JsonPropertyName("bold")]
-        public bool? Bold { get; init; } = null;
+        public bool? Bold { get; set; } = null;
         [JsonPropertyName("italic")]
-        public bool? Italic { get; init; } = null;
+        public bool? Italic { get; set; } = null;
         [JsonPropertyName("underlined")]
-        public bool? Underlined { get; init; } = null;
+        public bool? Underlined { get; set; } = null;
         [JsonPropertyName("strikethrough")]
-        public bool? Strikethrough { get; init; } = null;
+        public bool? Strikethrough { get; set; } = null;
         [JsonPropertyName("obfuscated")]
-        public bool? Obfuscated { get; init; } = null;
+        public bool? Obfuscated { get; set; } = null;
         [JsonPropertyName("shadow_color")]
-        public Color? ShadowColor { get; init; } = null;
+        public Color? ShadowColor { get; set; } = null;
+        
         protected internal ChatComponent()
         {
             
         }
-        
-        internal ChatComponent(CompoundNbtTag nbt)
+        protected internal ChatComponent(CompoundNbtTag nbt)
         {
             if (nbt.ContainsKey("extra"))
             {
-                Children = nbt["extra"].Get<ListNbtTag>().Select(Deserialize).ToList();
+                Children = nbt["extra"].Get<ListNbtTag>().Select(Nbt.Nbt.FromNbt<ChatComponent>).ToList();
             }
             if (nbt.ContainsKey("color")) Color = new(nbt["color"].Get<StringNbtTag>());
             if (nbt.ContainsKey("font")) Font = nbt["font"].Get<StringNbtTag>();
@@ -52,13 +53,13 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
             if (nbt.ContainsKey("shadow_color")) ShadowColor = new(nbt["shadow_color"].Get<StringNbtTag>());
         }
         
-        internal virtual CompoundNbtTag Serialize()
+        protected virtual CompoundNbtTag ToNbt()
         {
             CompoundNbtTag nbt = new();
             nbt["type"] = (StringNbtTag)Type;
             if (Children is not null)
             {
-                nbt["extra"] = new ListNbtTag(Children.Select(entry => entry.Serialize()).ToList());
+                nbt["extra"] = new ListNbtTag(Children.Select(entry => entry.ToNbt()).ToList());
             }
             if (Color.HasValue) nbt["color"] = (StringNbtTag)Color.Value.ToString();
             if (Font is not null) nbt["font"] = (StringNbtTag)Font;
@@ -70,19 +71,13 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
             if (ShadowColor.HasValue) nbt["shadow_color"] = (IntNbtTag)ShadowColor.Value.Argb;
             return nbt;
         }
-        
-        public override string ToString()
-        {
-            return JsonSerializer.Serialize(this, Global.JsonSerializerOptions);
-        }
-
-        internal static ChatComponent Deserialize(NbtTag? nbt)
+        protected static ChatComponent FromNbt(NbtTag nbt)
         {
             return nbt switch
             {
                 ListNbtTag listNbt => new TextChatComponent()
                 {
-                    Children = listNbt.Select(Deserialize).ToList()
+                    Children = listNbt.Select(Nbt.Nbt.FromNbt<ChatComponent>).ToList()
                 },
                 StringNbtTag stringNbt => new TextChatComponent(stringNbt.Value),
                 CompoundNbtTag compound => nbt switch
@@ -92,29 +87,27 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
                         "text" => new TextChatComponent(compound),
                         "translatable" => new TranslatableChatComponent(compound),
                         "keybind" => new KeybindChatComponent(compound),
-                        "object" => ObjectChatComponent.Deserialize(compound),
+                        "object" => ObjectChatComponent.FromNbt(compound),
                         _ => throw new SerializationException()
                     },
                     _ when compound.ContainsKey("text") => new TextChatComponent(compound),
                     _ when compound.ContainsKey("translate") => new TranslatableChatComponent(compound),
                     _ when compound.ContainsKey("keybind") => new KeybindChatComponent(compound),
-                    _ when compound.ContainsKey("object") => ObjectChatComponent.Deserialize(compound),
+                    _ when compound.ContainsKey("object") => ObjectChatComponent.FromNbt(compound),
                     _ => new TextChatComponent(compound),
                 },
                 _ =>  throw new SerializationException(),
             };
         }
         
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this, Global.JsonSerializerOptions);
+        }
+        
         public static implicit operator ChatComponent(string data)
         {
             return new TextChatComponent(data);
-        }
-        public static implicit operator ChatComponent(ChatComponent[] data)
-        {
-            return new TextChatComponent()
-            {
-                Children = data,
-            };
         }
         public static implicit operator ChatComponent(string[] data)
         {
@@ -122,6 +115,29 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
             {
                 Children = data.Select<string, ChatComponent>(child => new TextChatComponent(child)).ToList(),
             };
+        }
+        public static implicit operator ChatComponent(ChatComponent[] data)
+        {
+            return new TextChatComponent()
+            {
+                Children = data.ToList(),
+            };
+        }
+        public static implicit operator ChatComponent(List<ChatComponent> data)
+        {
+            return new TextChatComponent()
+            {
+                Children = data,
+            };
+        }
+        
+        static NbtTag INbtSerializable<ChatComponent>.ToNbt(ChatComponent data)
+        {
+            return data.ToNbt();
+        }
+        static ChatComponent INbtSerializable<ChatComponent>.FromNbt(NbtTag nbt)
+        {
+            return FromNbt(nbt);
         }
     }
 }
