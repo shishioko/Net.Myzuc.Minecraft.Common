@@ -116,9 +116,9 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
                     Children = listNbt.Select(Nbt.Nbt.FromNbt<ChatComponent>).ToList()
                 },
                 StringNbtTag stringNbt => new TextChatComponent(stringNbt.Value),
-                CompoundNbtTag compoundNbt => nbt switch
+                _ => nbt.As<CompoundNbtTag>() switch
                 {
-                    _ when compoundNbt.ContainsKey("type") => compoundNbt["type"].Get<StringNbtTag>().Value switch
+                    var compoundNbt when compoundNbt.ContainsKey("type") => compoundNbt["type"].Get<StringNbtTag>().Value switch
                     {
                         "text" => new TextChatComponent(compoundNbt),
                         "translatable" => new TranslatableChatComponent(compoundNbt),
@@ -126,13 +126,12 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
                         "object" => ObjectChatComponent.FromNbt(compoundNbt),
                         _ => throw new SerializationException()
                     },
-                    _ when compoundNbt.ContainsKey("text") => new TextChatComponent(compoundNbt),
-                    _ when compoundNbt.ContainsKey("translate") => new TranslatableChatComponent(compoundNbt),
-                    _ when compoundNbt.ContainsKey("keybind") => new KeybindChatComponent(compoundNbt),
-                    _ when compoundNbt.ContainsKey("object") => ObjectChatComponent.FromNbt(compoundNbt),
-                    _ => new TextChatComponent(compoundNbt),
+                    var compoundNbt when compoundNbt.ContainsKey("text") => new TextChatComponent(compoundNbt),
+                    var compoundNbt when compoundNbt.ContainsKey("translate") => new TranslatableChatComponent(compoundNbt),
+                    var compoundNbt when compoundNbt.ContainsKey("keybind") => new KeybindChatComponent(compoundNbt),
+                    var compoundNbt when compoundNbt.ContainsKey("object") => ObjectChatComponent.FromNbt(compoundNbt),
+                    var compoundNbt => new TextChatComponent(compoundNbt),
                 },
-                _ =>  throw new SerializationException(),
             };
         }
     }
