@@ -20,11 +20,10 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
         {
             stream.Write(Id);
         }
-        static IPacket IPacket.Deserialize(Stream stream)
+        void IPacket.Deserialize(Stream stream)
         {
             ConfigurationCookieRequestPacket packet = new();
-            packet.Id = stream.Read<Identifier>();
-            return packet;
+            Id = stream.Read<Identifier>();
         }
     }
 }

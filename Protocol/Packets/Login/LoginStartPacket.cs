@@ -21,12 +21,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
             stream.WriteT16AS32V(Name);
             stream.WriteGuid(Guid);
         }
-        static IPacket IPacket.Deserialize(Stream stream)
+        void IPacket.Deserialize(Stream stream)
         {
             LoginStartPacket packet = new();
-            packet.Name = stream.ReadT16AS32V();
-            packet.Guid = stream.ReadGuid();
-            return packet;
+            Name = stream.ReadT16AS32V();
+            Guid = stream.ReadGuid();
         }
     }
 }

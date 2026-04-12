@@ -26,14 +26,13 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake
             stream.WriteU16(Port);
             stream.WriteS32V((int)Intent);
         }
-        static IPacket IPacket.Deserialize(Stream stream)
+        void IPacket.Deserialize(Stream stream)
         {
             HandshakePacket packet = new();
-            packet.ProtocolVersion = stream.ReadS32V();
-            packet.Address = stream.ReadT16AS32V();
-            packet.Port = stream.ReadU16();
-            packet.Intent = (HandshakeIntent)stream.ReadS32V();
-            return packet;
+            ProtocolVersion = stream.ReadS32V();
+            Address = stream.ReadT16AS32V();
+            Port = stream.ReadU16();
+            Intent = (HandshakeIntent)stream.ReadS32V();
         }
     }
 }

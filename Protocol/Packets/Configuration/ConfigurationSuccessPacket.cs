@@ -15,9 +15,9 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
         {
             
         }
-        static IPacket IPacket.Deserialize(Stream stream)
+        void IPacket.Deserialize(Stream stream)
         {
-            return new ConfigurationSuccessPacket();
+            
         }
     }
 }

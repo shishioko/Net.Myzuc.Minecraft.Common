@@ -21,11 +21,10 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
         {
             stream.WriteT16AS32V(JsonSerializer.Serialize(Status, Global.JsonSerializerOptions) ?? throw new InvalidDataException());
         }
-        static IPacket IPacket.Deserialize(Stream stream)
+        void IPacket.Deserialize(Stream stream)
         {
             StatusResponsePacket packet = new();
-            packet.Status = JsonSerializer.Deserialize<Data.Structs.Status>(stream.ReadT16AS32V(), Global.JsonSerializerOptions) ?? throw new SerializationException();
-            return packet;
+            Status = JsonSerializer.Deserialize<Data.Structs.Status>(stream.ReadT16AS32V(), Global.JsonSerializerOptions) ?? throw new SerializationException();
         }
     }
 }

@@ -25,14 +25,13 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
             stream.WriteU8AS32V(DecryptedSample.Span);
             stream.WriteBool(Authenticate);
         }
-        static IPacket IPacket.Deserialize(Stream stream)
+        void IPacket.Deserialize(Stream stream)
         {
             EncryptionRequestPacket packet = new();
-            packet.ServerId = stream.ReadT16AS32V();
-            packet.PublicKey = stream.ReadU8AS32V().ToArray().AsMemory();
-            packet.DecryptedSample = stream.ReadU8AS32V().ToArray().AsMemory();
-            packet.Authenticate = stream.ReadBool();
-            return packet;
+            ServerId = stream.ReadT16AS32V();
+            PublicKey = stream.ReadU8AS32V().ToArray().AsMemory();
+            DecryptedSample = stream.ReadU8AS32V().ToArray().AsMemory();
+            Authenticate = stream.ReadBool();
         }
     }
 }

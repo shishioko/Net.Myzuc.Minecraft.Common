@@ -21,11 +21,10 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
         {
             stream.Write(Registry.Encode());
         }
-        static IPacket IPacket.Deserialize(Stream stream)
+        void IPacket.Deserialize(Stream stream)
         {
             ConfigurationRegistryPacket packet = new();
-            packet.Registry = Registries.Registry.Decode(stream.Read<Registry<NbtTag>>());
-            return packet;
+            Registry = Registries.Registry.Decode(stream.Read<Registry<NbtTag>>());
         }
     }
 }

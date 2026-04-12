@@ -21,11 +21,10 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         {
             stream.WriteT16AS32V(JsonSerializer.Serialize(Message, Global.JsonSerializerOptions));
         }
-        static IPacket IPacket.Deserialize(Stream stream)
+        void IPacket.Deserialize(Stream stream)
         {
             LoginDisconnectPacket packet = new();
-            packet.Message = JsonSerializer.Deserialize<ChatComponent>(stream.ReadT16AS32V(), Global.JsonSerializerOptions);
-            return packet;
+            Message = JsonSerializer.Deserialize<ChatComponent>(stream.ReadT16AS32V(), Global.JsonSerializerOptions);
         }
     }
 }

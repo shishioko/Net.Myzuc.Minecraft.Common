@@ -20,11 +20,9 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status
         {
             stream.WriteS64(Data);
         }
-        static IPacket IPacket.Deserialize(Stream stream)
+        void IPacket.Deserialize(Stream stream)
         {
-            PingRequestPacket packet = new();
-            packet.Data = stream.ReadS64();
-            return packet;
+            Data = stream.ReadS64();
         }
     }
 }

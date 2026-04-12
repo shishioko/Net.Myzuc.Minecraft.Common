@@ -20,11 +20,10 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         {
             stream.WriteS32V(Threshold);
         }
-        static IPacket IPacket.Deserialize(Stream stream)
+        void IPacket.Deserialize(Stream stream)
         {
             LoginCompressionPacket packet = new();
-            packet.Threshold = stream.ReadS32V();
-            return packet;
+            Threshold = stream.ReadS32V();
         }
     }
 }

@@ -36,19 +36,18 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
             stream.WriteBool(AllowListing);
             stream.WriteS32V((int)ParticleSettings);
         }
-        static IPacket IPacket.Deserialize(Stream stream)
+        void IPacket.Deserialize(Stream stream)
         {
             ConfigurationSettingsPacket packet = new();
-            packet.Locale = stream.ReadT16AS32V();
-            packet.ViewDistance = stream.ReadU8();
-            packet.ChatMode = (ChatMode)stream.ReadS32V();
-            packet.ChatColors = stream.ReadBool();
-            packet.SkinParts = (SkinPartFlags)stream.ReadU8();
-            packet.MainHand = (MainHand)stream.ReadS32V();
-            packet.EnableCensorship = stream.ReadBool();
-            packet.AllowListing = stream.ReadBool();
-            packet.ParticleSettings = (ParticleSetting)stream.ReadS32V();
-            return packet;
+            Locale = stream.ReadT16AS32V();
+            ViewDistance = stream.ReadU8();
+            ChatMode = (ChatMode)stream.ReadS32V();
+            ChatColors = stream.ReadBool();
+            SkinParts = (SkinPartFlags)stream.ReadU8();
+            MainHand = (MainHand)stream.ReadS32V();
+            EnableCensorship = stream.ReadBool();
+            AllowListing = stream.ReadBool();
+            ParticleSettings = (ParticleSetting)stream.ReadS32V();
         }
     }
 }

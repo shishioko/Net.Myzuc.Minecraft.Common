@@ -51,6 +51,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
             Packets.TryGetValue((RemoteIsClient, ProtocolStage, id), out Type? type);
             IPacket? packet = type is not null ? Activator.CreateInstance(type) as IPacket : null;
             if (packet is null) throw new ProtocolViolationException($"Unknown packet {(RemoteIsClient ? "Serverbound" : "Clientbound")}/{ProtocolStage}/{id:X2}!");
+            packet.Deserialize(stream1);
             Run(packet);
             return packet;
 

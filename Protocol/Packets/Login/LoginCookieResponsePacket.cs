@@ -26,15 +26,14 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
                 stream.WriteU8AS32V(Data.Value.Span);
             }
         }
-        static IPacket IPacket.Deserialize(Stream stream)
+        void IPacket.Deserialize(Stream stream)
         {
             LoginCookieResponsePacket packet = new();
-            packet.Id = stream.Read<Identifier>();
+            Id = stream.Read<Identifier>();
             if(stream.ReadBool())
             {
-                packet.Data = stream.ReadU8AS32V().ToArray().AsMemory();
+                Data = stream.ReadU8AS32V().ToArray().AsMemory();
             }
-            return packet;
         }
     }
 }

@@ -20,11 +20,10 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
         {
             stream.Write(Profile);
         }
-        static IPacket IPacket.Deserialize(Stream stream)
+        void IPacket.Deserialize(Stream stream)
         {
             LoginSuccessPacket packet = new();
-            packet.Profile = stream.Read<ResolvedProfile>();
-            return packet;
+            Profile = stream.Read<ResolvedProfile>();
         }
     }
 }

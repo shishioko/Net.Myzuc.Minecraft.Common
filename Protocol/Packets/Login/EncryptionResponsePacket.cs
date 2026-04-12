@@ -26,12 +26,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
             stream.WriteU8AS32V(EncryptedSecret.Span);
             stream.WriteU8AS32V(EncryptedSample.Span);
         }
-        static IPacket IPacket.Deserialize(Stream stream)
+        void IPacket.Deserialize(Stream stream)
         {
             EncryptionResponsePacket packet = new();
-            packet.EncryptedSecret = stream.ReadU8AS32V().ToArray().AsMemory();
-            packet.EncryptedSample = stream.ReadU8AS32V().ToArray().AsMemory();
-            return packet;
+            EncryptedSecret = stream.ReadU8AS32V().ToArray().AsMemory();
+            EncryptedSample = stream.ReadU8AS32V().ToArray().AsMemory();
         }
     }
 }

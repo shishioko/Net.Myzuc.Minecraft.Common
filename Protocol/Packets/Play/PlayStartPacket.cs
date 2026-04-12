@@ -45,26 +45,25 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Play
             stream.Write(RespawnMetadata);
             stream.WriteBool(EnableCensorship);
         }
-        static IPacket IPacket.Deserialize(Stream stream)
+        void IPacket.Deserialize(Stream stream)
         {
             PlayStartPacket packet = new();
-            packet.EntityId = stream.ReadS32();
-            packet.Hardcore = stream.ReadBool();
+            EntityId = stream.ReadS32();
+            Hardcore = stream.ReadBool();
             Identifier[] dimensionNames = new Identifier[stream.ReadS32V()];
             for (int i = 0; i < dimensionNames.Length; i++)
             {
                 dimensionNames[i] = stream.Read<Identifier>();
             }
-            packet.DimensionNames = dimensionNames;
-            packet.TablistSize = stream.ReadS32V();
-            packet.ViewDistance = stream.ReadS32V();
-            packet.SimulationDistance = stream.ReadS32V();
-            packet.ReduceDebugInfo = stream.ReadBool();
-            packet.ShowRespawnScreen = stream.ReadBool();
-            packet.LimitedCrafting = stream.ReadBool();
-            packet.RespawnMetadata = stream.Read<RespawnMetadata>();
-            packet.EnableCensorship = stream.ReadBool();
-            return packet;
+            DimensionNames = dimensionNames;
+            TablistSize = stream.ReadS32V();
+            ViewDistance = stream.ReadS32V();
+            SimulationDistance = stream.ReadS32V();
+            ReduceDebugInfo = stream.ReadBool();
+            ShowRespawnScreen = stream.ReadBool();
+            LimitedCrafting = stream.ReadBool();
+            RespawnMetadata = stream.Read<RespawnMetadata>();
+            EnableCensorship = stream.ReadBool();
         }
     }
 }

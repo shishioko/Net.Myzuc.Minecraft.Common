@@ -24,13 +24,12 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login
             stream.Write(Channel);
             stream.WriteU8A(Data.Span);
         }
-        static IPacket IPacket.Deserialize(Stream stream)
+        void IPacket.Deserialize(Stream stream)
         {
             LoginCustomRequestPacket packet = new();
-            packet.Id = stream.ReadS32V();
-            packet.Channel = stream.Read<Identifier>();
-            packet.Data = stream.ReadU8A().ToArray().AsMemory();
-            return packet;
+            Id = stream.ReadS32V();
+            Channel = stream.Read<Identifier>();
+            Data = stream.ReadU8A().ToArray().AsMemory();
         }
     }
 }

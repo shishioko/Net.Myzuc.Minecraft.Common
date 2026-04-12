@@ -20,11 +20,10 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration
         {
             stream.WriteNbt(Nbt.Nbt.ToNullableNbt(Message));
         }
-        static IPacket IPacket.Deserialize(Stream stream)
+        void IPacket.Deserialize(Stream stream)
         {
             ConfigurationDisconnectPacket packet = new();
-            packet.Message = Nbt.Nbt.FromNullableNbt<ChatComponent>(stream.ReadNbt());
-            return packet;
+            Message = Nbt.Nbt.FromNullableNbt<ChatComponent>(stream.ReadNbt());
         }
     }
 }

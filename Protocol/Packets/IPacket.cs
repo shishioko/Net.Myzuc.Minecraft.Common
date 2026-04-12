@@ -7,9 +7,6 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets
         internal abstract int PacketId { get; }
 
         internal abstract void Serialize(Stream stream);
-        internal static virtual IPacket Deserialize(Stream stream)
-        {
-            throw new InvalidOperationException();
-        }
+        internal abstract void Deserialize(Stream stream);
     }
 }
