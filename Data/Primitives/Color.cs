@@ -170,7 +170,7 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
         
         static Color INbtSerializable<Color>.FromNbt(NbtTag nbt)
         {
-            if (nbt is not IntNbtTag intNbt) throw new SerializationException();
+            IntNbtTag intNbt = nbt.As<IntNbtTag>();
             return new(intNbt);
         }
         NbtTag INbtSerializable<Color>.ToNbt()

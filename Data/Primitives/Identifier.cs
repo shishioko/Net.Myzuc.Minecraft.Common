@@ -68,7 +68,7 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
         }
         static Identifier INbtSerializable<Identifier>.FromNbt(NbtTag nbt)
         {
-            if (nbt is not StringNbtTag stringNbt) throw new SerializationException();
+            StringNbtTag stringNbt = nbt.As<StringNbtTag>();
             return new(stringNbt);
         }
         NbtTag INbtSerializable<Identifier>.ToNbt()

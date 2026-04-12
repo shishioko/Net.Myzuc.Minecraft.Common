@@ -1,4 +1,3 @@
-using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using Net.Myzuc.Minecraft.Common.ChatComponents.JsonConverters;
 using Net.Myzuc.Minecraft.Common.Data.Enums;
@@ -45,18 +44,18 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs
         
         static UnresolvedProfile INbtSerializable<UnresolvedProfile>.FromNbt(NbtTag nbt)
         {
-            if (nbt is not CompoundNbtTag compound) throw new SerializationException();
+            CompoundNbtTag compoundNbt = nbt.As<CompoundNbtTag>();
             UnresolvedProfile data = new();
-            if (compound.ContainsKey("id")) data.Guid = compound["id"].Get<IntArrayNbtTag>();
-            if (compound.ContainsKey("name")) data.Name = compound["name"].Get<StringNbtTag>();
-            if (compound.ContainsKey("properties"))
+            if (compoundNbt.ContainsKey("id")) data.Guid = compoundNbt["id"].Get<IntArrayNbtTag>();
+            if (compoundNbt.ContainsKey("name")) data.Name = compoundNbt["name"].Get<StringNbtTag>();
+            if (compoundNbt.ContainsKey("properties"))
             {
-                data.Properties = compound["properties"].Get<ListNbtTag>().Select(Nbt.Nbt.FromNbt<Property>).ToList();
+                data.Properties = compoundNbt["properties"].Get<ListNbtTag>().Select(Nbt.Nbt.FromNbt<Property>).ToList();
             }
-            if (compound.ContainsKey("texture")) data.Skin = compound["texture"].Get<StringNbtTag>();
-            if (compound.ContainsKey("cape")) data.Cape = compound["cape"].Get<StringNbtTag>();
-            if (compound.ContainsKey("elytra")) data.Elytra = compound["elytra"].Get<StringNbtTag>();
-            if (compound.ContainsKey("model")) data.ModelType = (PlayerModelType)compound["model"].Get<IntNbtTag>().Value;
+            if (compoundNbt.ContainsKey("texture")) data.Skin = compoundNbt["texture"].Get<StringNbtTag>();
+            if (compoundNbt.ContainsKey("cape")) data.Cape = compoundNbt["cape"].Get<StringNbtTag>();
+            if (compoundNbt.ContainsKey("elytra")) data.Elytra = compoundNbt["elytra"].Get<StringNbtTag>();
+            if (compoundNbt.ContainsKey("model")) data.ModelType = (PlayerModelType)compoundNbt["model"].Get<IntNbtTag>().Value;
             return data;
         }
         NbtTag INbtSerializable<UnresolvedProfile>.ToNbt()

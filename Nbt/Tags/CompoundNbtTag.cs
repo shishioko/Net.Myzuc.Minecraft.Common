@@ -113,9 +113,9 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
         }
         public override NbtTag Merge(NbtTag nbt)
         {
-            if (nbt is not CompoundNbtTag compound) return nbt;
+            CompoundNbtTag compoundNbt = nbt.As<CompoundNbtTag>();
             Dictionary<string, NbtTag> map = Copy().Value;
-            foreach (KeyValuePair<string, NbtTag> kvp in compound)
+            foreach (KeyValuePair<string, NbtTag> kvp in compoundNbt)
             {
                 map[kvp.Key] = map[kvp.Key].Merge(kvp.Value);
             }

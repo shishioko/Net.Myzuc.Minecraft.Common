@@ -49,7 +49,7 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs
         }
         static Property INbtSerializable<Property>.FromNbt(NbtTag nbt)
         {
-            if (nbt is not CompoundNbtTag compoundNbt) throw new SerializationException();
+            CompoundNbtTag compoundNbt = nbt.As<CompoundNbtTag>();
             Property data = new();
             data.Name = compoundNbt["name"].Get<StringNbtTag>();
             data.Value = compoundNbt["value"].Get<StringNbtTag>();
