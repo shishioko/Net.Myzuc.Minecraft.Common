@@ -5,7 +5,7 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs.SpawnConditions
 {
     public sealed record BiomeSpawnCondition : SpawnCondition
     {
-        public override string Type => "biome";
+        protected override string Type => "biome";
 
         public IList<Identifier> Biomes { get; set; } = [];
         

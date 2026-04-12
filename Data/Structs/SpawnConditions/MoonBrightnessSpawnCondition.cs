@@ -4,7 +4,7 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs.SpawnConditions
 {
     public sealed record MoonBrightnessSpawnCondition : SpawnCondition
     {
-        public override string Type => "moon_brightness";
+        protected override string Type => "moon_brightness";
 
         public double Minimum = 0.0;
         public double Maximum = 0.0;

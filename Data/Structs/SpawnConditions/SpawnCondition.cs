@@ -6,7 +6,7 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs.SpawnConditions
 {
     public abstract record SpawnCondition : INbtSerializable<SpawnCondition>
     {
-        public abstract string Type { get; }
+        protected abstract string Type { get; }
 
         internal SpawnCondition()
         {

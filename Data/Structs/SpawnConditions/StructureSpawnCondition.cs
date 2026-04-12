@@ -5,7 +5,7 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs.SpawnConditions
 {
     public sealed record StructureSpawnCondition : SpawnCondition
     {
-        public override string Type => "structure";
+        protected override string Type => "structure";
 
         public IList<Identifier> Structures { get; set; } = [];
         
