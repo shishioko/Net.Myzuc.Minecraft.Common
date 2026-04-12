@@ -1,6 +1,8 @@
 using Net.Myzuc.Minecraft.Common.IO;
 using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 using Net.Myzuc.Minecraft.Common.Objects;
+using Net.Myzuc.Minecraft.Common.Objects.Variants.Entities;
+using Net.Myzuc.Minecraft.Common.Objects.Variants.Sounds;
 using Net.Myzuc.Minecraft.Common.Primitives;
 
 namespace Net.Myzuc.Minecraft.Common.Registries
@@ -12,7 +14,16 @@ namespace Net.Myzuc.Minecraft.Common.Registries
             //todo: implement using first time generated list of registry types using reflection like in connection for packets
             return registry.Id.FullIdentifier switch
             {
-                var id when id == DimensionType.RegistryId => Registry<DimensionType>.Decode(registry),
+                var id when id == "minecraft:dimension_type" => Registry<DimensionType>.Decode(registry),
+                var id when id == "minecraft:worldgen/biome" => Registry<BiomeType>.Decode(registry),
+                var id when id == "minecraft:damage_type" => Registry<DamageType>.Decode(registry),
+                var id when id == "minecraft:cat_variant" => Registry<CatEntityVariant>.Decode(registry),
+                var id when id == "minecraft:chicken_variant" => Registry<ChickenEntityVariant>.Decode(registry),
+                var id when id == "minecraft:cow_variant" => Registry<CowEntityVariant>.Decode(registry),
+                var id when id == "minecraft:frog_variant" => Registry<FrogEntityVariant>.Decode(registry),
+                var id when id == "minecraft:pig_variant" => Registry<PigEntityVariant>.Decode(registry),
+                var id when id == "minecraft:wolf_variant" => Registry<WolfEntityVariant>.Decode(registry),
+                var id when id == "minecraft:wolf_sound_variant" => Registry<WolfSoundVariant>.Decode(registry),
                 _ => registry,
             };
         }
