@@ -80,21 +80,21 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
                     Children = listNbt.Select(Nbt.Nbt.FromNbt<ChatComponent>).ToList()
                 },
                 StringNbtTag stringNbt => new TextChatComponent(stringNbt.Value),
-                CompoundNbtTag compound => nbt switch
+                CompoundNbtTag compoundNbt => nbt switch
                 {
-                    _ when compound.ContainsKey("type") => compound["type"].Get<StringNbtTag>().Value switch
+                    _ when compoundNbt.ContainsKey("type") => compoundNbt["type"].Get<StringNbtTag>().Value switch
                     {
-                        "text" => new TextChatComponent(compound),
-                        "translatable" => new TranslatableChatComponent(compound),
-                        "keybind" => new KeybindChatComponent(compound),
-                        "object" => ObjectChatComponent.FromNbt(compound),
+                        "text" => new TextChatComponent(compoundNbt),
+                        "translatable" => new TranslatableChatComponent(compoundNbt),
+                        "keybind" => new KeybindChatComponent(compoundNbt),
+                        "object" => ObjectChatComponent.FromNbt(compoundNbt),
                         _ => throw new SerializationException()
                     },
-                    _ when compound.ContainsKey("text") => new TextChatComponent(compound),
-                    _ when compound.ContainsKey("translate") => new TranslatableChatComponent(compound),
-                    _ when compound.ContainsKey("keybind") => new KeybindChatComponent(compound),
-                    _ when compound.ContainsKey("object") => ObjectChatComponent.FromNbt(compound),
-                    _ => new TextChatComponent(compound),
+                    _ when compoundNbt.ContainsKey("text") => new TextChatComponent(compoundNbt),
+                    _ when compoundNbt.ContainsKey("translate") => new TranslatableChatComponent(compoundNbt),
+                    _ when compoundNbt.ContainsKey("keybind") => new KeybindChatComponent(compoundNbt),
+                    _ when compoundNbt.ContainsKey("object") => ObjectChatComponent.FromNbt(compoundNbt),
+                    _ => new TextChatComponent(compoundNbt),
                 },
                 _ =>  throw new SerializationException(),
             };

@@ -152,8 +152,8 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
                 data = data.Select(
                     nbt =>
                     {
-                        CompoundNbtTag compound = (nbt as CompoundNbtTag)!;
-                        if (compound.Count == 1 && compound.ContainsKey(string.Empty)) return compound[string.Empty];
+                        CompoundNbtTag compoundNbt = (nbt as CompoundNbtTag)!;
+                        if (compoundNbt.Count == 1 && compoundNbt.ContainsKey(string.Empty)) return compoundNbt[string.Empty];
                         return nbt;
                     }
                 ).ToArray();
