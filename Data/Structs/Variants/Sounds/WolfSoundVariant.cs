@@ -1,10 +1,14 @@
+using Net.Myzuc.Minecraft.Common.Data.Primitives;
 using Net.Myzuc.Minecraft.Common.IO;
 using Net.Myzuc.Minecraft.Common.Nbt.Tags;
+using Net.Myzuc.Minecraft.Common.Registries;
 
 namespace Net.Myzuc.Minecraft.Common.Data.Structs.Variants.Sounds
 {
-    public sealed record WolfSoundVariant : INbtSerializable<WolfSoundVariant>
+    public sealed record WolfSoundVariant : IRegistryEntry, INbtSerializable<WolfSoundVariant>
     {
+        public static Identifier RegistryId => "minecraft:wolf_sound_variant";
+        
         public WolfSoundVariantAssetInfo AdultAssets { get; set; } = new();
         public WolfSoundVariantAssetInfo BabyAssets { get; set; } = new();
 
