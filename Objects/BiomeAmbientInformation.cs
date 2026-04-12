@@ -2,7 +2,7 @@ using Net.Myzuc.Minecraft.Common.IO;
 using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 using Net.Myzuc.Minecraft.Common.Primitives;
 
-namespace Net.Myzuc.Minecraft.Common.Objects.Variants
+namespace Net.Myzuc.Minecraft.Common.Objects
 {
     public sealed record BiomeAmbientInformation : INbtSerializable<BiomeAmbientInformation>
     {
