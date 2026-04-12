@@ -9,8 +9,8 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
     [JsonConverter(typeof(IdentifierJsonConverter))]
     public readonly record struct Identifier : IBinarySerializable<Identifier>, INbtSerializable<Identifier>
     {
-        private const string ValidNamespaceCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYZ0123456789.-_";
-        private const string ValidValueCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYZ0123456789.-_/";
+        private const string ValidNamespaceCharacters = "#abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYZ0123456789.-_";
+        private const string ValidValueCharacters = "#abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYZ0123456789.-_/";
         
         [IgnoreDataMember]
         public string FullIdentifier
