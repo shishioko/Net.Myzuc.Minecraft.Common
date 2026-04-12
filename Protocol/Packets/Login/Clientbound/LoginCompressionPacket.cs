@@ -1,0 +1,29 @@
+
+using Net.Myzuc.Minecraft.Common.IO;
+
+namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound
+{
+    public sealed record LoginCompressionPacket: IPacket
+    {
+        public bool Serverbound => false;
+        public ProtocolStage ProtocolStage => ProtocolStage.Login;
+        int IPacket.PacketId => 0x03;
+
+        public int Threshold { get; set; } = 0;
+
+        public LoginCompressionPacket()
+        {
+            
+        }
+        
+        void IPacket.Serialize(Stream stream)
+        {
+            stream.WriteS32V(Threshold);
+        }
+        void IPacket.Deserialize(Stream stream)
+        {
+            LoginCompressionPacket packet = new();
+            Threshold = stream.ReadS32V();
+        }
+    }
+}

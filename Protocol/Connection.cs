@@ -4,13 +4,18 @@ using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using CommunityToolkit.HighPerformance;
-using Net.Myzuc.Minecraft.Common.Data.Enums;
 using Net.Myzuc.Minecraft.Common.IO;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets.Login;
 using System.Threading;
+using Net.Myzuc.Minecraft.Common.Enums;
+using Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Clientbound;
+using Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Serverbound;
+using Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake.Serverbound;
+using Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound;
+using Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Serverbound;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol
 {

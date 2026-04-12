@@ -25,5 +25,10 @@
     <ItemGroup>
       <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.4.2" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="Protocol\Packets\Handshake\Clientbound\" />
+      <Folder Include="Protocol\Packets\Play\Serverbound\" />
+    </ItemGroup>
 
 </Project>

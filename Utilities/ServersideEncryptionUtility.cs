@@ -5,8 +5,10 @@ using System.Security.Authentication;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using Net.Myzuc.Minecraft.Common.Data.Structs;
+using Net.Myzuc.Minecraft.Common.Objects;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets.Login;
+using Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound;
+using Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Serverbound;
 
 namespace Net.Myzuc.Minecraft.Common.Utilities
 {

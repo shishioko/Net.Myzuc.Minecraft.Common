@@ -1,6 +1,5 @@
-
-using Net.Myzuc.Minecraft.Common.Data.Primitives;
 using Net.Myzuc.Minecraft.Common.IO;
+using Net.Myzuc.Minecraft.Common.Primitives;
 using Net.Myzuc.Minecraft.Common.Registries;
 
 namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
