@@ -13,6 +13,13 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
         private const string ValidValueCharacters = "#abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYZ0123456789.-_/";
         
         [IgnoreDataMember]
+        public bool Tag
+        {
+            get
+            {
+                return Namespace.StartsWith('#');
+            }
+        }
         public string FullIdentifier
         {
             get
@@ -20,7 +27,9 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
                 return $"{Namespace}:{Value}";
             }
         }
+        [IgnoreDataMember]
         public string Namespace { get; }
+        [IgnoreDataMember]
         public string Value { get; }
         public Identifier()
         {
