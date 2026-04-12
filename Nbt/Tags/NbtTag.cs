@@ -1,10 +1,13 @@
 
+using Net.Myzuc.Minecraft.Common.Data.Primitives;
 using Net.Myzuc.Minecraft.Common.IO;
+using Net.Myzuc.Minecraft.Common.Registries;
 
 namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
 {
-    public abstract record NbtTag : INbtSerializable<NbtTag>
+    public abstract record NbtTag : INbtSerializable<NbtTag>, IRegistryEntry
     {
+        public static Identifier RegistryId => new();
         protected internal abstract NbtValueKind ValueKind { get; }
         internal NbtTag()
         {
