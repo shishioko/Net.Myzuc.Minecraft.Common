@@ -69,6 +69,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Data
         {
             return ((IEnumerable)Container).GetEnumerator();
         }
+        
         void IBinarySerializable<PalettedArrayApproximation>.Serialize(Stream stream)
         {
             SerializeDirect(Container, stream);
