@@ -1,7 +1,9 @@
 
+using Net.Myzuc.Minecraft.Common.IO;
+
 namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
 {
-    public abstract record NbtTag
+    public abstract record NbtTag : INbtSerializable<NbtTag>
     {
         protected internal abstract NbtValueKind ValueKind { get; }
         internal NbtTag()
@@ -34,6 +36,16 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
                 _ => null,
             };
         }
+        
+        public NbtTag ToNbt()
+        {
+            return this;
+        }
+        public static NbtTag FromNbt(NbtTag nbt)
+        {
+            return nbt;
+        }
+        
         public static NbtTag Parse(StringReader reader)
         {
             throw new NotImplementedException();
