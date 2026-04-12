@@ -44,7 +44,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects
                 nbt["has_fixed_time"] = (ByteNbtTag)HasNoTime.Value;
             }
             nbt["monster_spawn_block_light_limit"] = (IntNbtTag)MobSpawnBlocklightLimit;
-            nbt["monster_spawn_light_level"] = (IntNbtTag)MobSpawnLight;
+            nbt["monster_spawn_light_level"] = (IntNbtTag)MobSpawnLight; //todo: int providers
             nbt["logical_height"] = (IntNbtTag)LogicalHeight;
             nbt["min_y"] = (IntNbtTag)Depth;
             nbt["height"] = (IntNbtTag)Height;
@@ -65,13 +65,49 @@ namespace Net.Myzuc.Minecraft.Common.Objects
             }
             else
             {
-                nbt["timelines"] = new ListNbtTag(Timelines.Select(timeline => (StringNbtTag)(string)timeline));
+                nbt["timelines"] = new ListNbtTag(Timelines.Select(Nbt.Nbt.ToNbt));
             }
             return nbt;
         }
         static DimensionType INbtSerializable<DimensionType>.FromNbt(NbtTag nbt)
         {
-            throw new NotImplementedException();
+            CompoundNbtTag compoundNbt = nbt.As<CompoundNbtTag>();
+            DimensionType data = new();
+            data.CoordinateScale = compoundNbt["coordinate_scale"].As<DoubleNbtTag>();
+            data.HasSkylight = compoundNbt["has_skylight"].As<ByteNbtTag>();
+            data.HasCeiling = compoundNbt["has_ceiling"].As<ByteNbtTag>();
+            data.HasEnderdragon = compoundNbt["has_ender_dragon_fight"].As<ByteNbtTag>();
+            data.AmbientLight = compoundNbt["ambient_light"].As<FloatNbtTag>();
+            if (compoundNbt.ContainsKey("has_fixed_time"))
+            {
+                 data.HasNoTime = compoundNbt["has_fixed_time"].As<ByteNbtTag>();
+            }
+            data.MobSpawnBlocklightLimit = compoundNbt["monster_spawn_block_light_limit"].As<IntNbtTag>();
+            data.MobSpawnLight = compoundNbt["monster_spawn_light_level"].As<IntNbtTag>(); //todo: int providers
+            data.LogicalHeight = compoundNbt["logical_height"].As<IntNbtTag>();
+            data.Depth = compoundNbt["min_y"].As<IntNbtTag>();
+            data.Height = compoundNbt["height"].As<IntNbtTag>();
+            data.InfiniteBurnBlockTag = (string)compoundNbt["infiniburn"].As<StringNbtTag>();
+            if (compoundNbt.ContainsKey("skybox"))
+            {
+                 data.Skybox = compoundNbt["skybox"].As<StringNbtTag>();
+            }
+            if (compoundNbt.ContainsKey("cardinal_light"))
+            {
+                data.CardinalLight = compoundNbt["cardinal_light"].As<StringNbtTag>();
+            }
+            //todo: attribues
+            data.Clock = (string)compoundNbt["default_clock"].As<StringNbtTag>();
+            if (compoundNbt["timelines"] is StringNbtTag timeline)
+            {
+                data.Timelines = [Nbt.Nbt.FromNbt<Identifier>(timeline)];
+            }
+            else
+            {
+                ListNbtTag timelines = compoundNbt["timelines"].As<ListNbtTag>();
+                data.Timelines = timelines.Select(Nbt.Nbt.FromNbt<Identifier>).ToList();
+            }
+            return data;
         }
     }
 }
