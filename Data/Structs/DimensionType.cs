@@ -20,12 +20,12 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs
         public int LogicalHeight { get; set; } = 256;
         public int Depth { get; set; } = 0;
         public int Height { get; set; } = 256;
-        public Identifier InfiniteBurnBlockTag { get; set; } = new(); //string? identifier? ??
+        public Identifier InfiniteBurnBlockTag { get; set; } = "#minecraft:infiniburn_overworld";
         public string? Skybox { get; set; } = null;
         public string? CardinalLight { get; set; } = null;
         //todo: attribute provider thingy
         public Identifier Clock { get; set; } = new();
-        public IList<Identifier> Timelines { get; set; } = [ new() ];
+        public IList<Identifier> Timelines { get; set; } = [ ];
         
         public DimensionType()
         {
