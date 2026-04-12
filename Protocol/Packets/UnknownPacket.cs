@@ -11,11 +11,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets
         public int Id { get; set; } = 0x00;
         public Memory<byte> Content { get; set; } = new();
 
-        internal UnknownPacket()
+        public UnknownPacket()
         {
             
         }
-        internal UnknownPacket(int id)
+        public UnknownPacket(int id)
         {
             Id = id;
         }
