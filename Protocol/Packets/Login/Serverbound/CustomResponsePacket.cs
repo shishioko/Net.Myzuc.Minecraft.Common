@@ -3,7 +3,7 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Serverbound
 {
-    public sealed record LoginCustomResponsePacket: IPacket
+    public sealed record CustomResponsePacket: IPacket
     {
         public bool Serverbound => true;
         public ProtocolStage ProtocolStage => ProtocolStage.Login;
@@ -12,7 +12,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Serverbound
         public int Id { get; set; } = 0;
         public Memory<byte>? Data { get; set; } = null;
 
-        public LoginCustomResponsePacket()
+        public CustomResponsePacket()
         {
             
         }
@@ -25,7 +25,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Serverbound
         }
         void IPacket.Deserialize(Stream stream)
         {
-            LoginCustomResponsePacket packet = new();
+            CustomResponsePacket packet = new();
             Id = stream.ReadS32V();
             if (stream.ReadBool())
             {

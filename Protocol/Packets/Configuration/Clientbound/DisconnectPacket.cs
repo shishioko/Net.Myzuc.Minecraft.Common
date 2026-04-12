@@ -3,7 +3,7 @@ using Net.Myzuc.Minecraft.Common.Objects.ChatComponents;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Clientbound
 {
-    public sealed record ConfigurationDisconnectPacket : IPacket
+    public sealed record DisconnectPacket : IPacket
     {
         public bool Serverbound => false;
         public ProtocolStage ProtocolStage => ProtocolStage.Configuration;
@@ -11,7 +11,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Clientbound
 
         public ChatComponent? Message { get; set; } = null;
 
-        public ConfigurationDisconnectPacket()
+        public DisconnectPacket()
         {
             
         }
@@ -22,7 +22,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Clientbound
         }
         void IPacket.Deserialize(Stream stream)
         {
-            ConfigurationDisconnectPacket packet = new();
+            DisconnectPacket packet = new();
             Message = Nbt.Nbt.FromNullableNbt<ChatComponent>(stream.ReadNbt());
         }
     }

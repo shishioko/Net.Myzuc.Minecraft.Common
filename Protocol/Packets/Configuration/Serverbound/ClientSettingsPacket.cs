@@ -3,7 +3,7 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Serverbound
 {
-    public sealed record ConfigurationSettingsPacket : IPacket
+    public sealed record ClientSettingsPacket : IPacket
     {
         public bool Serverbound => true;
         public ProtocolStage ProtocolStage => ProtocolStage.Configuration;
@@ -19,7 +19,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Serverbound
         public bool AllowListing { get; set; } = false;
         public ParticleSetting ParticleSettings { get; set; } = ParticleSetting.All;
 
-        public ConfigurationSettingsPacket()
+        public ClientSettingsPacket()
         {
             
         }
@@ -38,7 +38,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Serverbound
         }
         void IPacket.Deserialize(Stream stream)
         {
-            ConfigurationSettingsPacket packet = new();
+            ClientSettingsPacket packet = new();
             Locale = stream.ReadT16AS32V();
             ViewDistance = stream.ReadU8();
             ChatMode = (ChatMode)stream.ReadS32V();

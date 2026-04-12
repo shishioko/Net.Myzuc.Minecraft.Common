@@ -16,6 +16,8 @@ using Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Serverbound;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake.Serverbound;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Serverbound;
+using DisconnectPacket = Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Clientbound.DisconnectPacket;
+using EndPacket = Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Serverbound.EndPacket;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol
 {
@@ -137,27 +139,27 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                     };
                     break;
                 }
-                case LoginDisconnectPacket:
+                case Protocol.Packets.Login.Clientbound.DisconnectPacket:
                 {
                     ProtocolStage = ProtocolStage.Disconnected;
                     break;
                 }
-                case LoginCompressionPacket loginCompressionPacket:
+                case CompressionPacket loginCompressionPacket:
                 {
                     CompressionThreshold = loginCompressionPacket.Threshold;
                     break;
                 }
-                case LoginEndPacket:
+                case Protocol.Packets.Login.Serverbound.EndPacket:
                 {
                     ProtocolStage = ProtocolStage.Configuration;
                     break;
                 }
-                case ConfigurationDisconnectPacket:
+                case DisconnectPacket:
                 {
                     ProtocolStage = ProtocolStage.Disconnected;
                     break;
                 }
-                case ConfigurationEndPacket:
+                case EndPacket:
                 {
                     ProtocolStage = ProtocolStage.Play;
                     break;

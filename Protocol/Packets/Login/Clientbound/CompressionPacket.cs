@@ -3,7 +3,7 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound
 {
-    public sealed record LoginCompressionPacket: IPacket
+    public sealed record CompressionPacket: IPacket
     {
         public bool Serverbound => false;
         public ProtocolStage ProtocolStage => ProtocolStage.Login;
@@ -11,7 +11,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound
 
         public int Threshold { get; set; } = 0;
 
-        public LoginCompressionPacket()
+        public CompressionPacket()
         {
             
         }
@@ -22,7 +22,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound
         }
         void IPacket.Deserialize(Stream stream)
         {
-            LoginCompressionPacket packet = new();
+            CompressionPacket packet = new();
             Threshold = stream.ReadS32V();
         }
     }

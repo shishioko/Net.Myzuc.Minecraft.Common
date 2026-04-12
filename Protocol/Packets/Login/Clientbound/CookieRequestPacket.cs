@@ -3,7 +3,7 @@ using Net.Myzuc.Minecraft.Common.Primitives;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound
 {
-    public sealed record LoginCookieRequestPacket : IPacket
+    public sealed record CookieRequestPacket : IPacket
     {
         public bool Serverbound => false;
         public ProtocolStage ProtocolStage => ProtocolStage.Login;
@@ -11,7 +11,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound
 
         public Identifier Id { get; set; } = new();
 
-        public LoginCookieRequestPacket()
+        public CookieRequestPacket()
         {
             
         }
@@ -22,7 +22,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound
         }
         void IPacket.Deserialize(Stream stream)
         {
-            LoginCookieRequestPacket packet = new();
+            CookieRequestPacket packet = new();
             Id = stream.Read<Identifier>();
         }
     }

@@ -3,7 +3,7 @@ using Net.Myzuc.Minecraft.Common.Objects;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound
 {
-    public sealed record LoginSuccessPacket: IPacket
+    public sealed record SuccessPacket: IPacket
     {
         public bool Serverbound => false;
         public ProtocolStage ProtocolStage => ProtocolStage.Login;
@@ -11,7 +11,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound
 
         public ResolvedProfile Profile { get; set; } = new();
 
-        public LoginSuccessPacket()
+        public SuccessPacket()
         {
             
         }
@@ -22,7 +22,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound
         }
         void IPacket.Deserialize(Stream stream)
         {
-            LoginSuccessPacket packet = new();
+            SuccessPacket packet = new();
             Profile = stream.Read<ResolvedProfile>();
         }
     }

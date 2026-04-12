@@ -4,7 +4,7 @@ using Net.Myzuc.Minecraft.Common.Registries;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Clientbound
 {
-    public sealed record ConfigurationRegistryPacket : IPacket
+    public sealed record RegistryPacket : IPacket
     {
         public bool Serverbound => false;
         public ProtocolStage ProtocolStage => ProtocolStage.Configuration;
@@ -12,7 +12,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Clientbound
 
         public IRegistry Registry { get; set; } = new Registry<NbtTag>();
 
-        public ConfigurationRegistryPacket()
+        public RegistryPacket()
         {
             
         }
@@ -23,7 +23,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Clientbound
         }
         void IPacket.Deserialize(Stream stream)
         {
-            ConfigurationRegistryPacket packet = new();
+            RegistryPacket packet = new();
             Registry = Registries.Registry.Decode(stream.Read<Registry<NbtTag>>());
         }
     }

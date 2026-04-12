@@ -1,18 +1,18 @@
 using Net.Myzuc.Minecraft.Common.IO;
 using Net.Myzuc.Minecraft.Common.Primitives;
 
-namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Serverbound
+namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Serverbound
 {
-    public sealed record ConfigurationCookieResponsePacket : IPacket
+    public sealed record CookieResponsePacket : IPacket
     {
         public bool Serverbound => true;
-        public ProtocolStage ProtocolStage => ProtocolStage.Configuration;
-        int IPacket.PacketId => 0x01;
+        public ProtocolStage ProtocolStage => ProtocolStage.Login;
+        int IPacket.PacketId => 0x04;
 
         public Identifier Id { get; set; } = new();
         public Memory<byte>? Data { get; set; } = null;
 
-        public ConfigurationCookieResponsePacket()
+        public CookieResponsePacket()
         {
             
         }
@@ -28,7 +28,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Serverbound
         }
         void IPacket.Deserialize(Stream stream)
         {
-            ConfigurationCookieResponsePacket packet = new();
+            CookieResponsePacket packet = new();
             Id = stream.Read<Identifier>();
             if(stream.ReadBool())
             {

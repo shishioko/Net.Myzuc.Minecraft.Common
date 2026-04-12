@@ -4,7 +4,7 @@ using Net.Myzuc.Minecraft.Common.Objects.ChatComponents;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound
 {
-    public sealed record LoginDisconnectPacket : IPacket
+    public sealed record DisconnectPacket : IPacket
     {
         public bool Serverbound => false;
         public ProtocolStage ProtocolStage => ProtocolStage.Login;
@@ -12,7 +12,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound
 
         public ChatComponent? Message { get; set; } = null;
 
-        public LoginDisconnectPacket()
+        public DisconnectPacket()
         {
             
         }
@@ -23,7 +23,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound
         }
         void IPacket.Deserialize(Stream stream)
         {
-            LoginDisconnectPacket packet = new();
+            DisconnectPacket packet = new();
             Message = JsonSerializer.Deserialize<ChatComponent>(stream.ReadT16AS32V(), Global.JsonSerializerOptions);
         }
     }

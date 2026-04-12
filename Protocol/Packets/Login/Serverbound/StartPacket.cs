@@ -2,7 +2,7 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Serverbound
 {
-    public sealed record LoginStartPacket : IPacket
+    public sealed record StartPacket : IPacket
     {
         public bool Serverbound => true;
         int IPacket.PacketId => 0x00;
@@ -11,7 +11,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Serverbound
         public string Name { get; set; } = string.Empty;
         public Guid Guid { get; set; } = Guid.Empty;
 
-        public LoginStartPacket()
+        public StartPacket()
         {
             
         }
@@ -23,7 +23,7 @@ namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Serverbound
         }
         void IPacket.Deserialize(Stream stream)
         {
-            LoginStartPacket packet = new();
+            StartPacket packet = new();
             Name = stream.ReadT16AS32V();
             Guid = stream.ReadGuid();
         }

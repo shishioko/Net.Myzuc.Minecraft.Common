@@ -1,12 +1,12 @@
-namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Serverbound
+namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Serverbound
 {
-    public sealed record ConfigurationEndPacket : IPacket
+    public sealed record EndPacket: IPacket
     {
         public bool Serverbound => true;
-        public ProtocolStage ProtocolStage => ProtocolStage.Configuration;
+        public ProtocolStage ProtocolStage => ProtocolStage.Login;
         int IPacket.PacketId => 0x03;
 
-        public ConfigurationEndPacket()
+        public EndPacket()
         {
             
         }
