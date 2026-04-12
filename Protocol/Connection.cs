@@ -60,7 +60,11 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
             int id = stream1.ReadS32V();
             Packets.TryGetValue((RemoteIsClient, ProtocolStage, id), out Type? type);
             IPacket? packet = type is not null ? Activator.CreateInstance(type) as IPacket : null;
-            if (packet is null) throw new ProtocolViolationException($"Unknown packet {(RemoteIsClient ? "Serverbound" : "Clientbound")}/{ProtocolStage}/{id:X2}!");
+            if (packet is null)
+            {
+                //throw new ProtocolViolationException($"Unknown packet {(RemoteIsClient ? "Serverbound" : "Clientbound")}/{ProtocolStage}/{id:X2}!");
+                packet = new UnknownPacket(id);
+            }
             packet.Deserialize(stream1);
             Run(packet);
             return packet;
