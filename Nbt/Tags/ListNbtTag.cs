@@ -127,8 +127,8 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
                 return;
             }
             stream.WriteS8((sbyte)valueKind);
-            if (valueKind == NbtValueKind.End) return;
             stream.WriteS32(Value.Count);
+            if (valueKind == NbtValueKind.End) return;
             foreach (NbtTag nbt in Value)
             {
                 nbt.SerializeValue(stream);
@@ -141,8 +141,8 @@ namespace Net.Myzuc.Minecraft.Common.Nbt.Tags
         internal static ListNbtTag DeserializeValue(Stream stream)
         {
             NbtValueKind valueKind = (NbtValueKind)stream.ReadS8();
-            if (valueKind == NbtValueKind.End) return new();
             NbtTag[] data = new NbtTag[stream.ReadS32()];
+            if (valueKind == NbtValueKind.End) return new();
             for (int i = 0; i < data.Length; i++)
             {
                 data[i] = NbtTag.DeserializeValue(stream, valueKind)!;
