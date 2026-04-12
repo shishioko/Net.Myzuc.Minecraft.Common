@@ -71,34 +71,6 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
             if (ShadowColor.HasValue) nbt["shadow_color"] = (IntNbtTag)ShadowColor.Value.Argb;
             return nbt;
         }
-        protected static ChatComponent FromNbt(NbtTag nbt)
-        {
-            return nbt switch
-            {
-                ListNbtTag listNbt => new TextChatComponent()
-                {
-                    Children = listNbt.Select(Nbt.Nbt.FromNbt<ChatComponent>).ToList()
-                },
-                StringNbtTag stringNbt => new TextChatComponent(stringNbt.Value),
-                CompoundNbtTag compoundNbt => nbt switch
-                {
-                    _ when compoundNbt.ContainsKey("type") => compoundNbt["type"].Get<StringNbtTag>().Value switch
-                    {
-                        "text" => new TextChatComponent(compoundNbt),
-                        "translatable" => new TranslatableChatComponent(compoundNbt),
-                        "keybind" => new KeybindChatComponent(compoundNbt),
-                        "object" => ObjectChatComponent.FromNbt(compoundNbt),
-                        _ => throw new SerializationException()
-                    },
-                    _ when compoundNbt.ContainsKey("text") => new TextChatComponent(compoundNbt),
-                    _ when compoundNbt.ContainsKey("translate") => new TranslatableChatComponent(compoundNbt),
-                    _ when compoundNbt.ContainsKey("keybind") => new KeybindChatComponent(compoundNbt),
-                    _ when compoundNbt.ContainsKey("object") => ObjectChatComponent.FromNbt(compoundNbt),
-                    _ => new TextChatComponent(compoundNbt),
-                },
-                _ =>  throw new SerializationException(),
-            };
-        }
         
         public override string ToString()
         {
@@ -137,7 +109,31 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
         }
         static ChatComponent INbtSerializable<ChatComponent>.FromNbt(NbtTag nbt)
         {
-            return FromNbt(nbt);
+            return nbt switch
+            {
+                ListNbtTag listNbt => new TextChatComponent()
+                {
+                    Children = listNbt.Select(Nbt.Nbt.FromNbt<ChatComponent>).ToList()
+                },
+                StringNbtTag stringNbt => new TextChatComponent(stringNbt.Value),
+                CompoundNbtTag compoundNbt => nbt switch
+                {
+                    _ when compoundNbt.ContainsKey("type") => compoundNbt["type"].Get<StringNbtTag>().Value switch
+                    {
+                        "text" => new TextChatComponent(compoundNbt),
+                        "translatable" => new TranslatableChatComponent(compoundNbt),
+                        "keybind" => new KeybindChatComponent(compoundNbt),
+                        "object" => ObjectChatComponent.FromNbt(compoundNbt),
+                        _ => throw new SerializationException()
+                    },
+                    _ when compoundNbt.ContainsKey("text") => new TextChatComponent(compoundNbt),
+                    _ when compoundNbt.ContainsKey("translate") => new TranslatableChatComponent(compoundNbt),
+                    _ when compoundNbt.ContainsKey("keybind") => new KeybindChatComponent(compoundNbt),
+                    _ when compoundNbt.ContainsKey("object") => ObjectChatComponent.FromNbt(compoundNbt),
+                    _ => new TextChatComponent(compoundNbt),
+                },
+                _ =>  throw new SerializationException(),
+            };
         }
     }
 }
