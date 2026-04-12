@@ -8,7 +8,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
 {
     public sealed class PigEntityVariant : IRegistryEntry, INbtSerializable<PigEntityVariant>
     {
-        public static Identifier RegistryId => "minecraft:pig_variant";
+        static Identifier IRegistryEntry.RegistryId => "minecraft:pig_variant";
 
         public Identifier AdultTexture { get; set; } = new();
         public Identifier? BabyTexture { get; set; } = null;
@@ -35,8 +35,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
                 SpawnCondition = nbt["spawn_conditions"].As<ListNbtTag>().Select(Nbt.Nbt.FromNbt<SpawnConditionInfo>).ToList();
             }
         }
-        
-        public NbtTag ToNbt()
+        NbtTag INbtSerializable<PigEntityVariant>.ToNbt()
         {
             CompoundNbtTag nbt = new();
             nbt["asset_id"] = (StringNbtTag)(string)AdultTexture;
@@ -54,7 +53,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
             }
             return nbt;
         }
-        public static PigEntityVariant FromNbt(NbtTag nbt)
+        static PigEntityVariant INbtSerializable<PigEntityVariant>.FromNbt(NbtTag nbt)
         {
             return new(nbt.As<CompoundNbtTag>());
         }

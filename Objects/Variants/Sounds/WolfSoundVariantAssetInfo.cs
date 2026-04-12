@@ -17,7 +17,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Sounds
             
         }
         
-        public NbtTag ToNbt()
+        NbtTag INbtSerializable<WolfSoundVariantAssetInfo>.ToNbt()
         {
             CompoundNbtTag nbt = new();
             nbt["ambient_sound"] = Nbt.Nbt.ToNbt(AmbientSound);
@@ -28,7 +28,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Sounds
             nbt["whine_sound"] = Nbt.Nbt.ToNbt(WhineSound);
             return nbt;
         }
-        public static WolfSoundVariantAssetInfo FromNbt(NbtTag nbt)
+        static WolfSoundVariantAssetInfo INbtSerializable<WolfSoundVariantAssetInfo>.FromNbt(NbtTag nbt)
         {
             CompoundNbtTag compoundNbt = nbt.As<CompoundNbtTag>();
             WolfSoundVariantAssetInfo data = new();

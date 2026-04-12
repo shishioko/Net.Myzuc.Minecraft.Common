@@ -8,7 +8,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
 {
     public sealed class WolfEntityVariant : IRegistryEntry, INbtSerializable<WolfEntityVariant>
     {
-        public static Identifier RegistryId => "minecraft:wolf_variant";
+        static Identifier IRegistryEntry.RegistryId => "minecraft:wolf_variant";
 
         public WolfEntityVariantAssetInfo AdultAssets { get; set; } = new();
         public WolfEntityVariantAssetInfo? BabyAssets { get; set; } = null;
@@ -30,8 +30,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
                 SpawnCondition = nbt["spawn_conditions"].As<ListNbtTag>().Select(Nbt.Nbt.FromNbt<SpawnConditionInfo>).ToList();
             }
         }
-        
-        public NbtTag ToNbt()
+        NbtTag INbtSerializable<WolfEntityVariant>.ToNbt()
         {
             CompoundNbtTag nbt = new();
             nbt["assets"] = Nbt.Nbt.ToNbt(AdultAssets);
@@ -45,7 +44,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
             }
             return nbt;
         }
-        public static WolfEntityVariant FromNbt(NbtTag nbt)
+        static WolfEntityVariant INbtSerializable<WolfEntityVariant>.FromNbt(NbtTag nbt)
         {
             return new(nbt.As<CompoundNbtTag>());
         }

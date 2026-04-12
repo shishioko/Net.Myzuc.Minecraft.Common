@@ -8,7 +8,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
 {
     public sealed class ChickenEntityVariant : IRegistryEntry, INbtSerializable<ChickenEntityVariant>
     {
-        public static Identifier RegistryId => "minecraft:chicken_variant";
+        static Identifier IRegistryEntry.RegistryId => "minecraft:chicken_variant";
 
         public Identifier AdultTexture { get; set; } = new();
         public Identifier? BabyTexture { get; set; } = null;
@@ -35,8 +35,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
                 SpawnConditions = nbt["spawn_conditions"].As<ListNbtTag>().Select(Nbt.Nbt.FromNbt<SpawnConditionInfo>).ToList();
             }
         }
-        
-        public NbtTag ToNbt()
+        NbtTag INbtSerializable<ChickenEntityVariant>.ToNbt()
         {
             CompoundNbtTag nbt = new();
             nbt["asset_id"] = (StringNbtTag)(string)AdultTexture;
@@ -54,7 +53,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
             }
             return nbt;
         }
-        public static ChickenEntityVariant FromNbt(NbtTag nbt)
+        static ChickenEntityVariant INbtSerializable<ChickenEntityVariant>.FromNbt(NbtTag nbt)
         {
             return new(nbt.As<CompoundNbtTag>());
         }

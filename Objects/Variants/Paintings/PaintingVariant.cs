@@ -8,7 +8,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Paintings
 {
     public sealed record PaintingVariant : IRegistryEntry, INbtSerializable<PaintingVariant>
     {
-        public static Identifier RegistryId => "minecraft:painting_variant";
+        static Identifier IRegistryEntry.RegistryId => "minecraft:painting_variant";
 
         public Identifier Texture { get; set; } = new();
         public int Width { get; set; } = 1;
@@ -34,8 +34,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Paintings
                 Author = Nbt.Nbt.FromNbt<ChatComponent>(nbt["author"]);
             }
         }
-        
-        public NbtTag ToNbt()
+        NbtTag INbtSerializable<PaintingVariant>.ToNbt()
         {
             CompoundNbtTag nbt = new();
             nbt["asset_id"] = (StringNbtTag)(string)Texture;
@@ -51,7 +50,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Paintings
             }
             return nbt;
         }
-        public static PaintingVariant FromNbt(NbtTag nbt)
+        static PaintingVariant INbtSerializable<PaintingVariant>.FromNbt(NbtTag nbt)
         {
             return new(nbt.As<CompoundNbtTag>());
         }

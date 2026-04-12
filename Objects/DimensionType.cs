@@ -7,7 +7,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects
 {
     public sealed record DimensionType : INbtSerializable<DimensionType>, IRegistryEntry
     {
-        public static Identifier RegistryId => "minecraft:dimension_type";
+        static Identifier IRegistryEntry.RegistryId => "minecraft:dimension_type";
         
         public double CoordinateScale { get; set; } = 1.0;
         public bool HasSkylight { get; set; } = false;
@@ -31,8 +31,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects
         {
             
         }
-
-        public NbtTag ToNbt()
+        NbtTag INbtSerializable<DimensionType>.ToNbt()
         {
             CompoundNbtTag nbt = new();
             nbt["coordinate_scale"] = (DoubleNbtTag)CoordinateScale;
@@ -70,7 +69,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects
             }
             return nbt;
         }
-        public static DimensionType FromNbt(NbtTag nbt)
+        static DimensionType INbtSerializable<DimensionType>.FromNbt(NbtTag nbt)
         {
             throw new NotImplementedException();
         }

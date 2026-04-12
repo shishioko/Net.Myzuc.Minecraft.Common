@@ -7,7 +7,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Sounds
 {
     public sealed record WolfSoundVariant : IRegistryEntry, INbtSerializable<WolfSoundVariant>
     {
-        public static Identifier RegistryId => "minecraft:wolf_sound_variant";
+        static Identifier IRegistryEntry.RegistryId => "minecraft:wolf_sound_variant";
         
         public WolfSoundVariantAssetInfo AdultAssets { get; set; } = new();
         public WolfSoundVariantAssetInfo BabyAssets { get; set; } = new();
@@ -23,8 +23,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Sounds
             /*AdultAssets = Nbt.Nbt.FromNbt<WolfSoundVariantAssetInfo>(nbt["adult_sounds"]);
             BabyAssets = Nbt.Nbt.FromNbt<WolfSoundVariantAssetInfo>(nbt["baby_sounds"]);*/
         }
-        
-        public NbtTag ToNbt()
+        NbtTag INbtSerializable<WolfSoundVariant>.ToNbt()
         {
             return Nbt.Nbt.ToNbt(AdultAssets);
             //only implemented after 1.21.11:
@@ -33,7 +32,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Sounds
             nbt["baby_sounds"] = Nbt.Nbt.ToNbt(BabyAssets);
             return nbt;*/
         }
-        public static WolfSoundVariant FromNbt(NbtTag nbt)
+        static WolfSoundVariant INbtSerializable<WolfSoundVariant>.FromNbt(NbtTag nbt)
         {
             return new(nbt.As<CompoundNbtTag>());
         }

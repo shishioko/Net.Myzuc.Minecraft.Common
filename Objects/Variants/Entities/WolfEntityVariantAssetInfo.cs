@@ -14,8 +14,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
         {
             
         }
-        
-        public NbtTag ToNbt()
+        NbtTag INbtSerializable<WolfEntityVariantAssetInfo>.ToNbt()
         {
             CompoundNbtTag nbt = new();
             nbt["angry"] = (StringNbtTag)(string)AngryTexture;
@@ -23,7 +22,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
             nbt["tame"] = (StringNbtTag)(string)TameTexture;
             return nbt;
         }
-        public static WolfEntityVariantAssetInfo FromNbt(NbtTag nbt)
+        static WolfEntityVariantAssetInfo INbtSerializable<WolfEntityVariantAssetInfo>.FromNbt(NbtTag nbt)
         {
             CompoundNbtTag compoundNbt = nbt.As<CompoundNbtTag>();
             WolfEntityVariantAssetInfo data = new();

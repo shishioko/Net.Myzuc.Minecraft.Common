@@ -8,7 +8,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
 {
     public sealed class CatEntityVariant : IRegistryEntry, INbtSerializable<CatEntityVariant>
     {
-        public static Identifier RegistryId => "minecraft:cat_variant";
+        static Identifier IRegistryEntry.RegistryId => "minecraft:cat_variant";
 
         public Identifier AdultTexture { get; set; } = new();
         public Identifier? BabyTexture { get; set; } = null;
@@ -30,8 +30,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
                 SpawnConditions = nbt["spawn_conditions"].As<ListNbtTag>().Select(Nbt.Nbt.FromNbt<SpawnConditionInfo>).ToList();
             }
         }
-        
-        public NbtTag ToNbt()
+        NbtTag INbtSerializable<CatEntityVariant>.ToNbt()
         {
             CompoundNbtTag nbt = new();
             nbt["asset_id"] = (StringNbtTag)(string)AdultTexture;
@@ -45,7 +44,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
             }
             return nbt;
         }
-        public static CatEntityVariant FromNbt(NbtTag nbt)
+        static CatEntityVariant INbtSerializable<CatEntityVariant>.FromNbt(NbtTag nbt)
         {
             return new(nbt.As<CompoundNbtTag>());
         }

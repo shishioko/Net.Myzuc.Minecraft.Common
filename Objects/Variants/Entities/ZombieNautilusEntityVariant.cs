@@ -8,7 +8,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
 {
     public sealed class ZombieNautilusEntityVariant : IRegistryEntry, INbtSerializable<ZombieNautilusEntityVariant>
     {
-        public static Identifier RegistryId => "minecraft:zombie_nautilus_variant";
+        static Identifier IRegistryEntry.RegistryId => "minecraft:zombie_nautilus_variant";
 
         public Identifier Texture { get; set; } = new();
         public Identifier? Model { get; set; } = null;
@@ -30,8 +30,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
                 SpawnCondition = nbt["spawn_conditions"].As<ListNbtTag>().Select(Nbt.Nbt.FromNbt<SpawnConditionInfo>).ToList();
             }
         }
-        
-        public NbtTag ToNbt()
+        NbtTag INbtSerializable<ZombieNautilusEntityVariant>.ToNbt()
         {
             CompoundNbtTag nbt = new();
             nbt["asset_id"] = (StringNbtTag)(string)Texture;
@@ -45,7 +44,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
             }
             return nbt;
         }
-        public static ZombieNautilusEntityVariant FromNbt(NbtTag nbt)
+        static ZombieNautilusEntityVariant INbtSerializable<ZombieNautilusEntityVariant>.FromNbt(NbtTag nbt)
         {
             return new(nbt.As<CompoundNbtTag>());
         }

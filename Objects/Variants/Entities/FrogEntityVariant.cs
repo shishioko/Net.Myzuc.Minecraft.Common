@@ -8,7 +8,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
 {
     public sealed class FrogEntityVariant : IRegistryEntry, INbtSerializable<FrogEntityVariant>
     {
-        public static Identifier RegistryId => "minecraft:frog_variant";
+        static Identifier IRegistryEntry.RegistryId => "minecraft:frog_variant";
 
         public Identifier Texture { get; set; } = new();
         public IList<SpawnConditionInfo>? SpawnConditions { get; set; } = null;
@@ -25,8 +25,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
                 SpawnConditions = nbt["spawn_conditions"].As<ListNbtTag>().Select(Nbt.Nbt.FromNbt<SpawnConditionInfo>).ToList();
             }
         }
-        
-        public NbtTag ToNbt()
+        NbtTag INbtSerializable<FrogEntityVariant>.ToNbt()
         {
             CompoundNbtTag nbt = new();
             nbt["asset_id"] = (StringNbtTag)(string)Texture;
@@ -36,7 +35,7 @@ namespace Net.Myzuc.Minecraft.Common.Objects.Variants.Entities
             }
             return nbt;
         }
-        public static FrogEntityVariant FromNbt(NbtTag nbt)
+        static FrogEntityVariant INbtSerializable<FrogEntityVariant>.FromNbt(NbtTag nbt)
         {
             return new(nbt.As<CompoundNbtTag>());
         }
