@@ -1,17 +1,35 @@
 using Net.Myzuc.Minecraft.Common.Data.Primitives;
+using Net.Myzuc.Minecraft.Common.Data.Structs;
 using Net.Myzuc.Minecraft.Common.IO;
 using Net.Myzuc.Minecraft.Common.Nbt.Tags;
 
 namespace Net.Myzuc.Minecraft.Common.Registries
 {
-    public sealed record Registry<T> : IBinarySerializable<Registry<T>>, IRegistry where T : INbtSerializable<T>
+    internal static class Registry
+    {
+        internal static IRegistry Decode(Registry<NbtTag> registry)
+        {
+            //todo: implement using first time generated list of registry types using reflection like in connection for packets
+            return registry.Id.FullIdentifier switch
+            {
+                var id when id == DimensionType.RegistryId => Registry<DimensionType>.Decode(registry),
+                _ => registry,
+            };
+        }
+    }
+    public sealed record Registry<T> : IBinarySerializable<Registry<T>>, IRegistry where T : IRegistryEntry, INbtSerializable<T>
     {
         public Identifier Id { get; set; } = new();
         public OrderedDictionary<Identifier, T?> Content { get; set; } = new();
         
         public Registry()
         {
-            
+            Id = T.RegistryId;
+        }
+        public Registry(OrderedDictionary<Identifier, T?> content)
+        {
+            Id = T.RegistryId;
+            Content = content;
         }
         public Registry(Identifier id)
         {
