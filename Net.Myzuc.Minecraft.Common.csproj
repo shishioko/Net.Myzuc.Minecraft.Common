@@ -25,9 +25,5 @@
     <ItemGroup>
       <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.4.2" />
     </ItemGroup>
-    
-    <ItemGroup>
-      <Folder Include="Data\Structs\Variants\" />
-    </ItemGroup>
 
 </Project>
