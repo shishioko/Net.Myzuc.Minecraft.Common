@@ -18,16 +18,20 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs.Variants.Sounds
         }
         private WolfSoundVariant(CompoundNbtTag nbt)
         {
-            AdultAssets = Nbt.Nbt.FromNbt<WolfSoundVariantAssetInfo>(nbt["adult_sounds"]);
-            BabyAssets = Nbt.Nbt.FromNbt<WolfSoundVariantAssetInfo>(nbt["baby_sounds"]);
+            AdultAssets = Nbt.Nbt.FromNbt<WolfSoundVariantAssetInfo>(nbt);
+            //only implemented after 1.21.11:
+            /*AdultAssets = Nbt.Nbt.FromNbt<WolfSoundVariantAssetInfo>(nbt["adult_sounds"]);
+            BabyAssets = Nbt.Nbt.FromNbt<WolfSoundVariantAssetInfo>(nbt["baby_sounds"]);*/
         }
         
         public NbtTag ToNbt()
         {
-            CompoundNbtTag nbt = new();
+            return Nbt.Nbt.ToNbt(AdultAssets);
+            //only implemented after 1.21.11:
+            /*CompoundNbtTag nbt = new();
             nbt["adult_sounds"] = Nbt.Nbt.ToNbt(AdultAssets);
             nbt["baby_sounds"] = Nbt.Nbt.ToNbt(BabyAssets);
-            return nbt;
+            return nbt;*/
         }
         public static WolfSoundVariant FromNbt(NbtTag nbt)
         {

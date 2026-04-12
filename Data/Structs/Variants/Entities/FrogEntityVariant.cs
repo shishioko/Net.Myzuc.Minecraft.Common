@@ -11,7 +11,7 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs.Variants.Entities
         public static Identifier RegistryId => "minecraft:frog_variant";
 
         public Identifier Texture { get; set; } = new();
-        public IList<SpawnConditionInfo> SpawnCondition { get; set; } = [];
+        public IList<SpawnConditionInfo>? SpawnConditions { get; set; } = null;
 
         public FrogEntityVariant()
         {
@@ -20,14 +20,20 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs.Variants.Entities
         private FrogEntityVariant(CompoundNbtTag nbt)
         {
             Texture = nbt["asset_id"].As<StringNbtTag>().Value;
-            SpawnCondition = nbt["spawn_conditions"].As<ListNbtTag>().Select(Nbt.Nbt.FromNbt<SpawnConditionInfo>).ToList();
+            if (nbt.ContainsKey("spawn_conditions"))
+            {
+                SpawnConditions = nbt["spawn_conditions"].As<ListNbtTag>().Select(Nbt.Nbt.FromNbt<SpawnConditionInfo>).ToList();
+            }
         }
         
         public NbtTag ToNbt()
         {
             CompoundNbtTag nbt = new();
             nbt["asset_id"] = (StringNbtTag)(string)Texture;
-            nbt["spawn_conditions"] = new ListNbtTag(SpawnCondition.Select(Nbt.Nbt.ToNbt));
+            if (SpawnConditions?.Count > 0)
+            {
+                nbt["spawn_conditions"] = new ListNbtTag(SpawnConditions.Select(Nbt.Nbt.ToNbt));
+            }
             return nbt;
         }
         public static FrogEntityVariant FromNbt(NbtTag nbt)

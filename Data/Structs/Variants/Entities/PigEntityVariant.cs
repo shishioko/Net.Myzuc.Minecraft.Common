@@ -11,9 +11,9 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs.Variants.Entities
         public static Identifier RegistryId => "minecraft:pig_variant";
 
         public Identifier AdultTexture { get; set; } = new();
-        public Identifier BabyTexture { get; set; } = new();
-        public Identifier Model { get; set; } = new();
-        public IList<SpawnConditionInfo> SpawnCondition { get; set; } = [];
+        public Identifier? BabyTexture { get; set; } = null;
+        public Identifier? Model { get; set; } = null;
+        public IList<SpawnConditionInfo>? SpawnCondition { get; set; } = null;
 
         public PigEntityVariant()
         {
@@ -22,18 +22,36 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs.Variants.Entities
         private PigEntityVariant(CompoundNbtTag nbt)
         {
             AdultTexture = nbt["asset_id"].As<StringNbtTag>().Value;
-            BabyTexture = nbt["baby_asset_id"].As<StringNbtTag>().Value;
-            Model = nbt["model"].As<StringNbtTag>().Value;
-            SpawnCondition = nbt["spawn_conditions"].As<ListNbtTag>().Select(Nbt.Nbt.FromNbt<SpawnConditionInfo>).ToList();
+            if (nbt.ContainsKey("baby_asset_id"))
+            {
+                BabyTexture = nbt["baby_asset_id"].As<StringNbtTag>().Value;
+            }
+            if (nbt.ContainsKey("model"))
+            {
+                Model = nbt["model"].As<StringNbtTag>().Value;
+            }
+            if (nbt.ContainsKey("spawn_conditions"))
+            {
+                SpawnCondition = nbt["spawn_conditions"].As<ListNbtTag>().Select(Nbt.Nbt.FromNbt<SpawnConditionInfo>).ToList();
+            }
         }
         
         public NbtTag ToNbt()
         {
             CompoundNbtTag nbt = new();
             nbt["asset_id"] = (StringNbtTag)(string)AdultTexture;
-            nbt["baby_asset_id"] = (StringNbtTag)(string)BabyTexture;
-            nbt["model"] = (StringNbtTag)(string)Model;
-            nbt["spawn_conditions"] = new ListNbtTag(SpawnCondition.Select(Nbt.Nbt.ToNbt));
+            if (BabyTexture.HasValue)
+            {
+                nbt["baby_asset_id"] = (StringNbtTag)(string)BabyTexture;
+            }
+            if (Model.HasValue)
+            {
+                nbt["model"] = (StringNbtTag)(string)Model;
+            }
+            if (SpawnCondition?.Count > 0)
+            {
+                nbt["spawn_conditions"] = new ListNbtTag(SpawnCondition.Select(Nbt.Nbt.ToNbt));
+            }
             return nbt;
         }
         public static PigEntityVariant FromNbt(NbtTag nbt)

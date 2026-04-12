@@ -5,12 +5,12 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs.Variants.Sounds
 {
     public sealed record WolfSoundVariantAssetInfo : INbtSerializable<WolfSoundVariantAssetInfo>
     {
-        public SoundEvent AmbientSound { get; set; } = new();
-        public SoundEvent DeathSound { get; set; } = new();
-        public SoundEvent GrowlSound { get; set; } = new();
-        public SoundEvent HurtSound { get; set; } = new();
-        public SoundEvent PantSound { get; set; } = new();
-        public SoundEvent WhineSound { get; set; } = new();
+        public SoundEvent AmbientSound { get; set; } = new("minecraft:entity.wolf.ambient");
+        public SoundEvent DeathSound { get; set; } = new("minecraft:entity.wolf.death");
+        public SoundEvent GrowlSound { get; set; } = new("minecraft:entity.wolf.growl");
+        public SoundEvent HurtSound { get; set; } = new("minecraft:entity.wolf.hurt");
+        public SoundEvent PantSound { get; set; } = new("minecraft:entity.wolf.pant");
+        public SoundEvent WhineSound { get; set; } = new("minecraft:entity.wolf.whine");
 
         public WolfSoundVariantAssetInfo()
         {

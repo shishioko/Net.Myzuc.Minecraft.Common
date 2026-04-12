@@ -11,8 +11,8 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs.Variants.Entities
         public static Identifier RegistryId => "minecraft:wolf_variant";
 
         public WolfEntityVariantAssetInfo AdultAssets { get; set; } = new();
-        public WolfEntityVariantAssetInfo BabyAssets { get; set; } = new();
-        public IList<SpawnConditionInfo> SpawnCondition { get; set; } = [];
+        public WolfEntityVariantAssetInfo? BabyAssets { get; set; } = null;
+        public IList<SpawnConditionInfo>? SpawnCondition { get; set; } = null;
 
         public WolfEntityVariant()
         {
@@ -21,16 +21,28 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs.Variants.Entities
         private WolfEntityVariant(CompoundNbtTag nbt)
         {
             AdultAssets = Nbt.Nbt.FromNbt<WolfEntityVariantAssetInfo>(nbt["assets"]);
-            BabyAssets = Nbt.Nbt.FromNbt<WolfEntityVariantAssetInfo>(nbt["baby_assets"]);
-            SpawnCondition = nbt["spawn_conditions"].As<ListNbtTag>().Select(Nbt.Nbt.FromNbt<SpawnConditionInfo>).ToList();
+            if (nbt.ContainsKey("baby_assets"))
+            {
+                BabyAssets = Nbt.Nbt.FromNbt<WolfEntityVariantAssetInfo>(nbt["baby_assets"]);
+            }
+            if (nbt.ContainsKey("spawn_conditions"))
+            {
+                SpawnCondition = nbt["spawn_conditions"].As<ListNbtTag>().Select(Nbt.Nbt.FromNbt<SpawnConditionInfo>).ToList();
+            }
         }
         
         public NbtTag ToNbt()
         {
             CompoundNbtTag nbt = new();
             nbt["assets"] = Nbt.Nbt.ToNbt(AdultAssets);
-            nbt["baby_assets"] = Nbt.Nbt.ToNbt(BabyAssets);
-            nbt["spawn_conditions"] = new ListNbtTag(SpawnCondition.Select(Nbt.Nbt.ToNbt));
+            if (BabyAssets is not null)
+            {
+                nbt["baby_assets"] = Nbt.Nbt.ToNbt(BabyAssets);
+            }
+            if (SpawnCondition?.Count > 0)
+            {
+                nbt["spawn_conditions"] = new ListNbtTag(SpawnCondition.Select(Nbt.Nbt.ToNbt));
+            }
             return nbt;
         }
         public static WolfEntityVariant FromNbt(NbtTag nbt)
