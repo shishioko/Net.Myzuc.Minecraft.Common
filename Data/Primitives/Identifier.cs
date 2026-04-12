@@ -38,7 +38,7 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
         {
             string[] parts = fullIdentifier.Split(':');
             if (parts.Length > 2) throw new ArgumentException($"Invalid identifier '{fullIdentifier}'!");
-            Namespace = parts.Length > 1 ? parts[1] : "minecraft";
+            Namespace = parts.Length > 1 ? parts[0] : "minecraft";
             Value = parts[^1];
             if (Namespace.Any(c => !ValidNamespaceCharacters.Contains(c))) throw new ArgumentException($"Invalid identifier namespace '{Namespace}'!");
             if (Value.Any(c => !ValidValueCharacters.Contains(c))) throw new ArgumentException($"Invalid identifier value '{Value}'!");
