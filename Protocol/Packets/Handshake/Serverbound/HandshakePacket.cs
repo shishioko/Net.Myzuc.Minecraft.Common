@@ -3,7 +3,7 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake.Serverbound
 {
-    public sealed record HandshakePacket : IPacket
+    public sealed class HandshakePacket : IPacket
     {
         public bool Serverbound => true;
         public ProtocolStage ProtocolStage => ProtocolStage.Handshake;

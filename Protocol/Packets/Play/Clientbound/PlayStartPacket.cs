@@ -4,7 +4,7 @@ using Net.Myzuc.Minecraft.Common.Primitives;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Play.Clientbound
 {
-    public sealed record PlayStartPacket : IPacket
+    public sealed class PlayStartPacket : IPacket
     {
         public bool Serverbound => false;
         public ProtocolStage ProtocolStage => ProtocolStage.Play;

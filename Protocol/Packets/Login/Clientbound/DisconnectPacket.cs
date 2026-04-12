@@ -4,7 +4,7 @@ using Net.Myzuc.Minecraft.Common.Objects.ChatComponents;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound
 {
-    public sealed record DisconnectPacket : IPacket
+    public sealed class DisconnectPacket : IPacket
     {
         public bool Serverbound => false;
         public ProtocolStage ProtocolStage => ProtocolStage.Login;

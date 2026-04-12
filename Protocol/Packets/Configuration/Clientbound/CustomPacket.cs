@@ -3,7 +3,7 @@ using Net.Myzuc.Minecraft.Common.Primitives;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Clientbound
 {
-    public sealed record CustomPacket: IPacket
+    public sealed class CustomPacket: IPacket
     {
         public bool Serverbound => false;
         public ProtocolStage ProtocolStage => ProtocolStage.Configuration;

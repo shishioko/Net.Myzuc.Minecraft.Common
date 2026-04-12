@@ -2,7 +2,7 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound
 {
-    public sealed record EncryptionRequestPacket: IPacket
+    public sealed class EncryptionRequestPacket: IPacket
     {
         public bool Serverbound => false;
         public ProtocolStage ProtocolStage => ProtocolStage.Login;

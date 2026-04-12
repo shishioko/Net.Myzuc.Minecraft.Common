@@ -3,7 +3,7 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status.Clientbound
 {
-    public sealed record PingResponsePacket : IPacket
+    public sealed class PingResponsePacket : IPacket
     {
         public bool Serverbound => false;
         public ProtocolStage ProtocolStage => ProtocolStage.Status;

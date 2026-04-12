@@ -3,7 +3,7 @@ using Net.Myzuc.Minecraft.Common.Objects;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Clientbound
 {
-    public sealed record SuccessPacket: IPacket
+    public sealed class SuccessPacket: IPacket
     {
         public bool Serverbound => false;
         public ProtocolStage ProtocolStage => ProtocolStage.Login;

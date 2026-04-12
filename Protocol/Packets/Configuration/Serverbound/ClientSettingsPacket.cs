@@ -3,7 +3,7 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Serverbound
 {
-    public sealed record ClientSettingsPacket : IPacket
+    public sealed class ClientSettingsPacket : IPacket
     {
         public bool Serverbound => true;
         public ProtocolStage ProtocolStage => ProtocolStage.Configuration;

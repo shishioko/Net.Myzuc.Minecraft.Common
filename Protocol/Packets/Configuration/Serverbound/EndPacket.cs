@@ -1,6 +1,6 @@
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Serverbound
 {
-    public sealed record EndPacket : IPacket
+    public sealed class EndPacket : IPacket
     {
         public bool Serverbound => true;
         public ProtocolStage ProtocolStage => ProtocolStage.Configuration;

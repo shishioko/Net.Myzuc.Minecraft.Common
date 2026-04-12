@@ -2,7 +2,7 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Login.Serverbound
 {
-    public sealed record StartPacket : IPacket
+    public sealed class StartPacket : IPacket
     {
         public bool Serverbound => true;
         int IPacket.PacketId => 0x00;

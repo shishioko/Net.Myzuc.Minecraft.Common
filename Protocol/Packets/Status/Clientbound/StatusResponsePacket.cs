@@ -4,7 +4,7 @@ using Net.Myzuc.Minecraft.Common.IO;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Status.Clientbound
 {
-    public sealed record StatusResponsePacket : IPacket
+    public sealed class StatusResponsePacket : IPacket
     {
         public bool Serverbound => false;
         public ProtocolStage ProtocolStage => ProtocolStage.Status;

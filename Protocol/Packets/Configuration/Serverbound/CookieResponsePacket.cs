@@ -3,7 +3,7 @@ using Net.Myzuc.Minecraft.Common.Primitives;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Serverbound
 {
-    public sealed record CookieResponsePacket : IPacket
+    public sealed class CookieResponsePacket : IPacket
     {
         public bool Serverbound => true;
         public ProtocolStage ProtocolStage => ProtocolStage.Configuration;

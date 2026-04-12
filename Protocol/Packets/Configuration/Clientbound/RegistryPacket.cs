@@ -4,7 +4,7 @@ using Net.Myzuc.Minecraft.Common.Registries;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration.Clientbound
 {
-    public sealed record RegistryPacket : IPacket
+    public sealed class RegistryPacket : IPacket
     {
         public bool Serverbound => false;
         public ProtocolStage ProtocolStage => ProtocolStage.Configuration;
