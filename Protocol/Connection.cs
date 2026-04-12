@@ -10,6 +10,7 @@ using Net.Myzuc.Minecraft.Common.Protocol.Packets;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets.Configuration;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets.Handshake;
 using Net.Myzuc.Minecraft.Common.Protocol.Packets.Login;
+using System.Threading;
 
 namespace Net.Myzuc.Minecraft.Common.Protocol
 {
@@ -31,6 +32,8 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
         }
         private bool Disposed { get; set; }
         private Stream Stream { get; set; }
+        private SemaphoreSlim ReadSync { get; } = new(1, 1);
+        private SemaphoreSlim WriteSync { get; } = new(1, 1);
         private bool RemoteIsClient { get; }
         private int CompressionThreshold { get; set; } = -1;
         public ProtocolStage ProtocolStage { get; private set; } = ProtocolStage.Handshake;
@@ -57,7 +60,16 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
 
             async Task<Stream> readRawAsync()
             {
-                Memory<byte> data = await Stream.ReadU8AS32VAsync(cancellationToken);
+                Memory<byte> data;
+                try
+                {
+                    await ReadSync.WaitAsync();
+                    data = await Stream.ReadU8AS32VAsync(cancellationToken);
+                }
+                finally
+                {
+                    ReadSync.Release();
+                }
                 if (CompressionThreshold < 0) return data.AsStream();
                 Stream stream2 = data.AsStream();
                 int decompressedSize = stream2.ReadS32V();
@@ -95,7 +107,15 @@ namespace Net.Myzuc.Minecraft.Common.Protocol
                     }
                     data = ms2.ToArray();
                 }
-                await Stream.WriteU8AS32VAsync(data.AsMemory(), cancellationToken);
+                try
+                {
+                    await WriteSync.WaitAsync();
+                    await Stream.WriteU8AS32VAsync(data.AsMemory(), cancellationToken);
+                }
+                finally
+                {
+                    WriteSync.Release();
+                }
             }
         }
         private void Run(IPacket packet)
