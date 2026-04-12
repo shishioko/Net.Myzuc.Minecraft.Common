@@ -37,14 +37,14 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs
             if (stream.ReadBool()) data.Signature = stream.ReadT16AS32V();
             return data;
         }
-        static void IBinarySerializable<Property>.Serialize(Property data, Stream stream)
+        void IBinarySerializable<Property>.Serialize(Stream stream)
         {
-            stream.WriteT16AS32V(data.Name);
-            stream.WriteT16AS32V(data.Value);
-            stream.WriteBool(data.Signature is not null);
-            if (data.Signature is not null)
+            stream.WriteT16AS32V(Name);
+            stream.WriteT16AS32V(Value);
+            stream.WriteBool(Signature is not null);
+            if (Signature is not null)
             {
-                stream.WriteT16AS32V(data.Signature);
+                stream.WriteT16AS32V(Signature);
             }
         }
         static Property INbtSerializable<Property>.FromNbt(NbtTag nbt)
@@ -59,12 +59,12 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs
             }
             return data;
         }
-        static NbtTag INbtSerializable<Property>.ToNbt(Property data)
+        NbtTag INbtSerializable<Property>.ToNbt()
         {
             CompoundNbtTag nbt = new();
-            nbt["name"] = (StringNbtTag)data.Name;
-            nbt["value"] = (StringNbtTag)data.Value;
-            if (data.Signature is not null) nbt["signature"] = (StringNbtTag)data.Signature;
+            nbt["name"] = (StringNbtTag)Name;
+            nbt["value"] = (StringNbtTag)Value;
+            if (Signature is not null) nbt["signature"] = (StringNbtTag)Signature;
             return nbt;
         }
     }

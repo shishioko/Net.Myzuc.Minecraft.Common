@@ -63,9 +63,9 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
         {
             return new(stream.ReadS64());
         }
-        static void IBinarySerializable<Location>.Serialize(Location data, Stream stream)
+        void IBinarySerializable<Location>.Serialize(Stream stream)
         {
-            stream.WriteS64(data.Value);
+            stream.WriteS64(Value);
         }
     }
 }

@@ -173,9 +173,9 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
             if (nbt is not IntNbtTag intNbt) throw new SerializationException();
             return new(intNbt);
         }
-        static NbtTag INbtSerializable<Color>.ToNbt(Color data)
+        NbtTag INbtSerializable<Color>.ToNbt()
         {
-            return (IntNbtTag)data.Argb;
+            return (IntNbtTag)Argb;
         }
     }
 }

@@ -42,12 +42,12 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs
             data.Properties = properties;
             return data;
         }
-        static void IBinarySerializable<ResolvedProfile>.Serialize(ResolvedProfile data, Stream stream)
+        void IBinarySerializable<ResolvedProfile>.Serialize(Stream stream)
         {
-            stream.WriteGuid(data.Guid);
-            stream.WriteT16AS32V(data.Name);
-            stream.WriteS32V(data.Properties.Count);
-            foreach(Property property in data.Properties)
+            stream.WriteGuid(Guid);
+            stream.WriteT16AS32V(Name);
+            stream.WriteS32V(Properties.Count);
+            foreach(Property property in Properties)
             {
                 stream.Write(property);
             }

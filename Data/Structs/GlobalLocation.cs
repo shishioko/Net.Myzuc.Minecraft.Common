@@ -28,10 +28,10 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs
             data.Location = stream.Read<Location>();
             return data;
         }
-        static void IBinarySerializable<GlobalLocation>.Serialize(GlobalLocation data, Stream stream)
+        void IBinarySerializable<GlobalLocation>.Serialize(Stream stream)
         {
-            stream.Write(data.Dimension);
-            stream.Write(data.Location);
+            stream.Write(Dimension);
+            stream.Write(Location);
         }
     }
 }

@@ -131,9 +131,9 @@ namespace Net.Myzuc.Minecraft.Common.ChatComponents
             };
         }
         
-        static NbtTag INbtSerializable<ChatComponent>.ToNbt(ChatComponent data)
+        NbtTag INbtSerializable<ChatComponent>.ToNbt()
         {
-            return data.ToNbt();
+            return ToNbt();
         }
         static ChatComponent INbtSerializable<ChatComponent>.FromNbt(NbtTag nbt)
         {

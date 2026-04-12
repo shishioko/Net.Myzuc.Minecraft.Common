@@ -59,19 +59,19 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs
             if (compound.ContainsKey("model")) data.ModelType = (PlayerModelType)compound["model"].Get<IntNbtTag>().Value;
             return data;
         }
-        static NbtTag INbtSerializable<UnresolvedProfile>.ToNbt(UnresolvedProfile data)
+        NbtTag INbtSerializable<UnresolvedProfile>.ToNbt()
         {
             CompoundNbtTag nbt = new();
-            if (data.Guid is not null) nbt["id"] = (IntArrayNbtTag)data.Guid;
-            if (data.Name is not null) nbt["name"] = (StringNbtTag)data.Name;
-            if (data.Properties is not null)
+            if (Guid is not null) nbt["id"] = (IntArrayNbtTag)Guid;
+            if (Name is not null) nbt["name"] = (StringNbtTag)Name;
+            if (Properties is not null)
             {
-                nbt["properties"] = new ListNbtTag(data.Properties.Select(Nbt.Nbt.ToNbt).ToList());
+                nbt["properties"] = new ListNbtTag(Properties.Select(Nbt.Nbt.ToNbt).ToList());
             }
-            if (data.Skin is not null) nbt["skin"] = (StringNbtTag)data.Skin;
-            if (data.Cape is not null) nbt["cape"] = (StringNbtTag)data.Cape;
-            if (data.Elytra is not null) nbt["elytra"] = (StringNbtTag)data.Elytra;
-            if (data.ModelType.HasValue) nbt["model"] = (IntNbtTag)(int)data.ModelType;
+            if (Skin is not null) nbt["skin"] = (StringNbtTag)Skin;
+            if (Cape is not null) nbt["cape"] = (StringNbtTag)Cape;
+            if (Elytra is not null) nbt["elytra"] = (StringNbtTag)Elytra;
+            if (ModelType.HasValue) nbt["model"] = (IntNbtTag)(int)ModelType;
             return nbt;
         }
     }

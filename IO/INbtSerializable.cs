@@ -4,7 +4,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
 {
     internal interface INbtSerializable<TSelf>
     {
-        internal static abstract NbtTag ToNbt(TSelf data);
+        internal abstract NbtTag ToNbt();
         internal static abstract TSelf FromNbt(NbtTag nbt);
     }
 }

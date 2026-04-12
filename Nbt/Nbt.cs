@@ -18,12 +18,12 @@ namespace Net.Myzuc.Minecraft.Common.Nbt
 
         internal static NbtTag ToNbt<TNbtSerializable>(TNbtSerializable data) where TNbtSerializable : INbtSerializable<TNbtSerializable>
         {
-            return TNbtSerializable.ToNbt(data);
+            return data.ToNbt();
         }
         internal static NbtTag? ToNullableNbt<TNbtSerializable>(TNbtSerializable? data) where TNbtSerializable : INbtSerializable<TNbtSerializable>
         {
             if (data is null) return null;
-            return TNbtSerializable.ToNbt(data);
+            return data.ToNbt();
         }
         internal static TNbtSerializable FromNbt<TNbtSerializable>(NbtTag nbt) where TNbtSerializable : INbtSerializable<TNbtSerializable>
         {

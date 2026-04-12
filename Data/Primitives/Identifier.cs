@@ -62,18 +62,18 @@ namespace Net.Myzuc.Minecraft.Common.Data.Primitives
         {
             return new(stream.ReadT16AS32V());
         }
-        static void IBinarySerializable<Identifier>.Serialize(Identifier data, Stream stream)
+        void IBinarySerializable<Identifier>.Serialize(Stream stream)
         {
-            stream.WriteT16AS32V(data.FullIdentifier);
+            stream.WriteT16AS32V(FullIdentifier);
         }
         static Identifier INbtSerializable<Identifier>.FromNbt(NbtTag nbt)
         {
             if (nbt is not StringNbtTag stringNbt) throw new SerializationException();
             return new(stringNbt);
         }
-        static NbtTag INbtSerializable<Identifier>.ToNbt(Identifier data)
+        NbtTag INbtSerializable<Identifier>.ToNbt()
         {
-            return (StringNbtTag)data.FullIdentifier;
+            return (StringNbtTag)FullIdentifier;
         }
     }
 }

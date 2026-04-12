@@ -368,7 +368,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void Write<TBinarySerializable>(TBinarySerializable data) where TBinarySerializable : IBinarySerializable<TBinarySerializable>
             {
-                TBinarySerializable.Serialize(data, stream);
+                 data.Serialize(stream);
             }
             
             
@@ -390,7 +390,7 @@ namespace Net.Myzuc.Minecraft.Common.IO
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void WriteNbt<TNbtSerializable>(TNbtSerializable data) where TNbtSerializable : INbtSerializable<TNbtSerializable>
             {
-                stream.WriteNbt(TNbtSerializable.ToNbt(data));
+                stream.WriteNbt(data.ToNbt());
             }
             
             

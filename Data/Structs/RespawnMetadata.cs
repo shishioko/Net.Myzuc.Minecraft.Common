@@ -40,22 +40,22 @@ namespace Net.Myzuc.Minecraft.Common.Data.Structs
             data.OceanHeight = stream.ReadS32V();
             return data;
         }
-        static void IBinarySerializable<RespawnMetadata>.Serialize(RespawnMetadata data, Stream stream)
+        void IBinarySerializable<RespawnMetadata>.Serialize(Stream stream)
         {
-            stream.WriteS32V(data.CurrentDimensionTypeId);
-            stream.Write(data.CurrentDimensionName);
-            stream.WriteS64(data.NoiseSeed);
-            stream.WriteS8((sbyte)data.CurrentGamemode);
-            stream.WriteS8((sbyte)data.PreviousGamemode);
-            stream.WriteBool(data.IsDebugWorld);
-            stream.WriteBool(data.IsSuperflatWorld);
-            stream.WriteBool(data.DeathLocation is not null);
-            if (data.DeathLocation is not null)
+            stream.WriteS32V(CurrentDimensionTypeId);
+            stream.Write(CurrentDimensionName);
+            stream.WriteS64(NoiseSeed);
+            stream.WriteS8((sbyte)CurrentGamemode);
+            stream.WriteS8((sbyte)PreviousGamemode);
+            stream.WriteBool(IsDebugWorld);
+            stream.WriteBool(IsSuperflatWorld);
+            stream.WriteBool(DeathLocation is not null);
+            if (DeathLocation is not null)
             {
-                stream.Write(data.DeathLocation);
+                stream.Write(DeathLocation);
             }
-            stream.WriteS32V(data.PortalCooldown);
-            stream.WriteS32V(data.OceanHeight);
+            stream.WriteS32V(PortalCooldown);
+            stream.WriteS32V(OceanHeight);
         }
     }
 }
